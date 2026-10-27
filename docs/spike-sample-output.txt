@@ -1,0 +1,115 @@
+
+=== game 401584092: Brooklyn at Chicago, 2023-11-03 ===
+margin_home = home score minus away score; possession_after is inferred
+ secs_left  margin_home acting_team possession_after                      event                                                   text
+      38.2           -2         BKN             away           Pullup Jump Shot Cam Thomas misses 32-foot three point pullup jump shot
+      38.0           -2         BKN             away          Offensive Rebound                            Nets offensive team rebound
+      37.2           -2         BKN             away        Shot Clock Turnover                                   shot clock turnover 
+      37.2           -2         BKN             away               Substitution       Spencer Dinwiddie enters the game for Cam Thomas
+      21.1           -2         CHI             home           Pullup Jump Shot            Zach LaVine misses 12-foot pullup jump shot
+      20.1           -2         CHI             home          Offensive Rebound                           Coby White offensive rebound
+      20.1           -2         CHI             home               Full Timeout                                     Bulls Full timeout
+      14.1           -2         CHI             home Driving Floating Jump Shot          Zach LaVine misses driving floating jump shot
+      12.1           -2         BKN             away          Defensive Rebound                        Royce O'Neale defensive rebound
+      12.1           -2         CHI             away         Personal Take Foul                      Nikola Vucevic personal take foul
+      12.1           -2         BKN             away               Substitution             Cam Thomas enters the game for Ben Simmons
+      12.1           -2         CHI             home               Substitution        Torrey Craig enters the game for Nikola Vucevic
+      12.0           -2         CHI             away         Personal Take Foul                         Alex Caruso personal take foul
+      12.0           -3         BKN             home        Free Throw - 1 of 2                  Mikal Bridges makes free throw 1 of 2
+      12.0           -3         CHI             home               Substitution        Nikola Vucevic enters the game for Torrey Craig
+      12.0           -3         BKN             away               Substitution             Ben Simmons enters the game for Cam Thomas
+      12.0           -3         CHI             home               Substitution            Torrey Craig enters the game for Coby White
+      12.0           -3         BKN             away        Free Throw - 2 of 2                 Mikal Bridges misses free throw 2 of 2
+      10.1           -3         CHI             home          Defensive Rebound                          Alex Caruso defensive rebound
+      10.1           -3         CHI             home               Full Timeout                                     Bulls Full timeout
+      10.1           -3         CHI             home               Substitution            Coby White enters the game for Torrey Craig
+       4.2           -3         BKN             home              Personal Foul                              Ben Simmons personal foul
+       4.2           -2         CHI             away        Free Throw - 1 of 2                    Zach LaVine makes free throw 1 of 2
+       4.2           -2         CHI             home               Substitution          Andre Drummond enters the game for Coby White
+       4.2           -2         BKN             away               Substitution   Day'Ron Sharpe enters the game for Spencer Dinwiddie
+       4.2           -2         CHI             home        Free Throw - 2 of 2                   Zach LaVine misses free throw 2 of 2
+       4.2           -2         CHI             home          Offensive Rebound                          Zach LaVine offensive rebound
+       0.0           -2         CHI             home                  Jump Shot                      Zach LaVine misses 21-foot jumper
+       0.0           -2         BKN             away          Defensive Rebound                       Day'Ron Sharpe defensive rebound
+       0.0           -2                            ?                 End Period                                 End of the 4th Quarter
+       0.0           -2                            ?                   End Game                                            End of Game
+
+=== game 401584093: Golden State at Oklahoma City, 2023-11-03 ===
+margin_home = home score minus away score; possession_after is inferred
+ secs_left  margin_home acting_team possession_after                             event                                                                                   text
+      55.1            1          GS             home                Driving Layup Shot                                                      Stephen Curry makes driving layup
+      38.1            1         OKC             home                Lost Ball Turnover                                                      Jalen Williams lost ball turnover
+      38.1            1         OKC             away                   Loose Ball Foul                                                         Jalen Williams loose ball foul
+      38.1            1         OKC             home                      Substitution                                     Jaylin Williams enters the game for Jalen Williams
+      38.1            0          GS             home               Free Throw - 1 of 2                                                  Klay Thompson makes free throw 1 of 2
+      38.1            0          GS             away                      Substitution                                        Jonathan Kuminga enters the game for Chris Paul
+      38.1            0          GS             away                      Substitution                                       Andrew Wiggins enters the game for Stephen Curry
+      38.1           -1          GS             home               Free Throw - 2 of 2                                                  Klay Thompson makes free throw 2 of 2
+      38.1           -1         OKC             home                      Full Timeout                                                                   Thunder Full timeout
+      38.1           -1         OKC             home                      Substitution                                         Isaiah Joe enters the game for Jaylin Williams
+      32.1           -1          GS             home                     Personal Foul                                                           Draymond Green personal foul
+      32.1           -1          GS             away                      Full Timeout                                                                  Warriors Full timeout
+      32.1           -1          GS             away        Coach's Challenge (Stands) (00:32.5) [Warriors] COACH'S CHALLENGE (CALL STANDS) [Warriors] charged with a timeout
+      32.1            0         OKC             away               Free Throw - 1 of 2                                                  Chet Holmgren makes free throw 1 of 2
+      32.1            0         OKC             home                      Substitution                                           Aaron Wiggins enters the game for Isaiah Joe
+      32.1            0          GS             away                      Substitution                                     Stephen Curry enters the game for Jonathan Kuminga
+      32.1            0          GS             away                      Substitution                                          Chris Paul enters the game for Andrew Wiggins
+      32.1            1         OKC             away               Free Throw - 2 of 2                                                  Chet Holmgren makes free throw 2 of 2
+      21.0           -1          GS             home              Alley Oop Layup Shot                          Gary Payton II makes alley oop layup (Draymond Green assists)
+      21.0           -1         OKC             home                      Full Timeout                                                                   Thunder Full timeout
+      21.0           -1         OKC             home                      Substitution                                           Isaiah Joe enters the game for Aaron Wiggins
+      21.0           -1          GS             away                      Substitution                                     Jonathan Kuminga enters the game for Stephen Curry
+      21.0           -1          GS             away                      Substitution                                          Andrew Wiggins enters the game for Chris Paul
+      16.1           -1          GS             home                     Shooting Foul                                                           Draymond Green shooting foul
+      16.1           -1         OKC             home               Free Throw - 1 of 2                                                 Luguentz Dort misses free throw 1 of 2
+      16.1           -1         OKC             home                 Offensive Rebound                                                         Thunder offensive team rebound
+      16.1           -1         OKC             home                      Substitution                                           Aaron Wiggins enters the game for Isaiah Joe
+      16.1           -1          GS             away                      Substitution                                       Stephen Curry enters the game for Gary Payton II
+      16.1           -1          GS             away                      Substitution                                        Chris Paul enters the game for Jonathan Kuminga
+      16.1           -1          GS             away                      Substitution                                        Kevon Looney enters the game for Andrew Wiggins
+      16.1            0         OKC             away               Free Throw - 2 of 2                                                  Luguentz Dort makes free throw 2 of 2
+      16.1            0          GS             away                      Full Timeout                                                                  Warriors Full timeout
+      16.1            0          GS             away                      Substitution                                           Moses Moody enters the game for Kevon Looney
+       0.0            0                            ? Ref-Initiated Review (Overturned)                            (00:00.2) [Warriors] REF-INITIATED REVIEW (CALL OVERTURNED)
+       0.0           -2          GS             home                Driving Layup Shot                                                      Stephen Curry makes driving layup
+       0.0           -2          GS             away                      Substitution                                       Gary Payton II enters the game for Klay Thompson
+       0.0           -2                            ?                        End Period                                                                 End of the 4th Quarter
+       0.0           -2                            ?                          End Game                                                                            End of Game
+
+=== game 401584099: New Orleans at Houston, 2023-11-10 ===
+margin_home = home score minus away score; possession_after is inferred
+ secs_left  margin_home acting_team possession_after                              event                                                          text
+      58.1           -2          NO             away                 Lost Ball Turnover       Dyson Daniels lost ball turnover (Dillon Brooks steals)
+      55.1           -2         HOU             home                 Running Layup Shot Zion Williamson blocks Dillon Brooks 's 2-foot two point shot
+      55.1           -2         HOU             home                  Offensive Rebound                                Rockets offensive team rebound
+      47.1            1         HOU             away                   Pullup Jump Shot                     Fred VanVleet makes 28-foot three pointer
+      47.1            1          NO             away                       Full Timeout                                         Pelicans Full timeout
+      47.1            1         HOU             home                       Substitution                    Tari Eason enters the game for Jalen Green
+      34.1            1          NO             away                   Pullup Jump Shot    Brandon Ingram misses 25-foot three point pullup jump shot
+      32.1            1         HOU             home                  Defensive Rebound                              Alperen Sengun defensive rebound
+      15.1            1          NO             home                      Shooting Foul                                  Jordan Hawkins shooting foul
+      15.1            1          NO             away                       Substitution                Cody Zeller enters the game for Jordan Hawkins
+      15.1            2         HOU             away                Free Throw - 1 of 2                         Fred VanVleet makes free throw 1 of 2
+      15.1            3         HOU             away                Free Throw - 2 of 2                         Fred VanVleet makes free throw 2 of 2
+      15.1            3          NO             away                       Full Timeout                                         Pelicans Full timeout
+      15.1            3          NO             away                       Substitution                     Matt Ryan enters the game for Cody Zeller
+       3.0            3          NO             away                   Pullup Jump Shot    Brandon Ingram misses 24-foot three point pullup jump shot
+       3.0            3          NO             away                  Offensive Rebound                               Pelicans offensive team rebound
+       3.0            3         HOU             away                    Loose Ball Foul                                    Tari Eason loose ball foul
+       3.0            3          NO             away                Free Throw - 1 of 2                      Larry Nance Jr. misses free throw 1 of 2
+       3.0            3          NO             away                  Offensive Rebound                               Pelicans offensive team rebound
+       3.0            3          NO             away                       Substitution                 Cody Zeller enters the game for Dyson Daniels
+       3.0            2          NO             home                Free Throw - 2 of 2                       Larry Nance Jr. makes free throw 2 of 2
+       3.0            2         HOU             home                       Full Timeout                                          Rockets Full timeout
+       3.0            2         HOU             home                       Substitution                    Jalen Green enters the game for Tari Eason
+       3.0            2          NO             away                       Substitution                   Dyson Daniels enters the game for Matt Ryan
+       3.0            2          NO             away                       Substitution        Jeremiah Robinson-Earl enters the game for Cody Zeller
+       2.1            2          NO             home                 Personal Take Foul                     Jeremiah Robinson-Earl personal take foul
+       2.1            2         HOU             home                Free Throw - 1 of 2                          Jalen Green misses free throw 1 of 2
+       2.1            2         HOU             home                  Offensive Rebound                                Rockets offensive team rebound
+       2.1            2         HOU             home                       Substitution                 Tari Eason enters the game for Alperen Sengun
+       2.1            2          NO             away                       Substitution          Matt Ryan enters the game for Jeremiah Robinson-Earl
+       2.1            3         HOU             away                Free Throw - 2 of 2                           Jalen Green makes free throw 2 of 2
+       1.0            3          NO             away Out of Bounds - Lost Ball Turnover              Larry Nance Jr. out of bounds lost ball turnover
+       0.0            3                            ?                         End Period                                        End of the 4th Quarter
+       0.0            3                            ?                           End Game                                                   End of Game
