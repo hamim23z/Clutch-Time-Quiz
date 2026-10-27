@@ -29,10 +29,11 @@ Clutch Time Quiz: a daily basketball decision game. An offline Python pipeline t
 
 Filled in by sessions as they are built.
 
-- Pipeline: TBD
+- Install pipeline dependencies: `pip install -r pipeline/requirements.txt`
+- Pipeline (fetch + normalize, seasons 2002-2026): `python3 pipeline/run.py` from the repo root. Downloads one season at a time, deletes each raw file after use, writes `data/processed/events.parquet`, `games.parquet` and `summary.json`. Resumes if interrupted; `--force` redoes finished seasons, `--start 2024 --end 2024` picks seasons, `--keep-raw` keeps downloads. Rules are in docs/possession.md.
 - Data spike (session 1): download per docs/data-source.md, then `python3 pipeline/spike/sample_games.py data/raw/play_by_play_2024.parquet`
 - Website dev server: TBD
-- Tests: TBD
+- Tests: `cd pipeline && python3 -m pytest` (small samples in `pipeline/fixtures/`, no downloads needed)
 
 ## Conventions
 
