@@ -30,6 +30,7 @@ Clutch Time Quiz: a daily basketball decision game. An offline Python pipeline t
 Filled in by sessions as they are built.
 
 - Pipeline: TBD
+- Data spike (session 1): download per docs/data-source.md, then `python3 pipeline/spike/sample_games.py data/raw/play_by_play_2024.parquet`
 - Website dev server: TBD
 - Tests: TBD
 
