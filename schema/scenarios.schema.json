@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://clutch-time-quiz.local/schema/scenarios.schema.json",
+  "title": "Clutch Time Quiz scenarios",
+  "description": "The contract between the pipeline and the website: web/public/scenarios.json is an array of scenarios. Margin, possession and the question are written from the point of view of the team the player is coaching. Rules the schema cannot express (checked by tests): option keys are unique, actual.choice is one of the option keys, and every option has at least 30 samples (n >= 30).",
+  "type": "array",
+  "minItems": 1,
+  "items": { "$ref": "#/$defs/scenario" },
+  "$defs": {
+    "scenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "type", "state", "question", "options", "actual", "difficulty"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique and stable, for example foul3-0042. Mock data uses a mock- prefix.",
+          "pattern": "^[a-z0-9][a-z0-9-]*$"
+        },
+        "type": {
+          "type": "string",
+          "enum": ["foul_up_three", "down_three", "last_shot"]
+        },
+        "state": { "$ref": "#/$defs/state" },
+        "question": { "type": "string", "minLength": 1 },
+        "options": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 3,
+          "items": { "$ref": "#/$defs/option" }
+        },
+        "actual": { "$ref": "#/$defs/actual" },
+        "difficulty": {
+          "type": "string",
+          "enum": ["easy", "medium", "hard"],
+          "description": "Easy: a wide gap between the options. Hard: a narrow gap."
+        }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["quarter", "margin", "secondsLeft", "possession"],
+      "properties": {
+        "quarter": {
+          "type": "integer",
+          "minimum": 4,
+          "maximum": 10,
+          "description": "4 is the fourth quarter, 5 is the first overtime, and so on."
+        },
+        "margin": {
+          "type": "integer",
+          "description": "Score margin for the team you coach: positive means you lead, negative means you trail."
+        },
+        "secondsLeft": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 180,
+          "description": "Seconds left in the period."
+        },
+        "possession": {
+          "type": "string",
+          "enum": ["team", "opponent"],
+          "description": "Who has the ball: the team you coach, or the opponent."
+        }
+      }
+    },
+    "option": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["key", "label", "winRate", "n"],
+      "properties": {
+        "key": { "type": "string", "pattern": "^[a-z][a-z0-9_]*$" },
+        "label": { "type": "string", "minLength": 1 },
+        "winRate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Share of similar historical situations that the deciding team won, 0 to 1."
+        },
+        "n": {
+          "type": "integer",
+          "minimum": 30,
+          "description": "Number of historical situations behind the win rate. Buckets under 30 are dropped."
+        }
+      }
+    },
+    "actual": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["choice", "summary", "final", "game"],
+      "properties": {
+        "choice": { "type": "string", "description": "The key of the option the team really took." },
+        "summary": { "type": "string", "minLength": 1, "description": "What happened next." },
+        "final": { "type": "string", "minLength": 1, "description": "Final score." },
+        "game": { "type": "string", "minLength": 1, "description": "Teams and date. Hidden until the reveal." }
+      }
+    }
+  }
+}

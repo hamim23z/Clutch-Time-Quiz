@@ -31,8 +31,8 @@ Filled in by sessions as they are built.
 
 - Pipeline: TBD
 - Data spike (session 1): download per docs/data-source.md, then `python3 pipeline/spike/sample_games.py data/raw/play_by_play_2024.parquet`
-- Website dev server: TBD
-- Tests: TBD
+- Website: `cd web && npm install` once, then `npm run dev` (dev server), `npm run build` (typecheck + production build into `web/dist`), `npm run preview` (serve the build). It reads `web/public/scenarios.json`; the file in the repo is MOCK data (ids start with `mock-`) until session 5 exports the real one.
+- Tests: `cd web && npm test` (vitest, includes a check of `scenarios.json` against `schema/scenarios.schema.json`)
 
 ## Conventions
 

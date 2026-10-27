@@ -1,0 +1,172 @@
+[
+  {
+    "id": "mock-foul3-01",
+    "type": "foul_up_three",
+    "state": { "quarter": 4, "margin": 3, "secondsLeft": 8, "possession": "opponent" },
+    "question": "You lead by 3 and they have the ball. What do you do?",
+    "options": [
+      { "key": "foul", "label": "Foul before the shot", "winRate": 0.93, "n": 212 },
+      { "key": "defend", "label": "Play straight defense", "winRate": 0.81, "n": 1480 }
+    ],
+    "actual": {
+      "choice": "defend",
+      "summary": "Harbor City switched everything and the Rapids' three rimmed out. A scramble for the rebound ended the game.",
+      "final": "Harbor City 104, Lakeshore 101",
+      "game": "Mock game: Lakeshore Rapids vs Harbor City Gulls, 12 Jan 2019"
+    },
+    "difficulty": "easy"
+  },
+  {
+    "id": "mock-foul3-02",
+    "type": "foul_up_three",
+    "state": { "quarter": 4, "margin": 3, "secondsLeft": 5, "possession": "opponent" },
+    "question": "Up three with five seconds left and the ball going the other way. Foul or defend?",
+    "options": [
+      { "key": "foul", "label": "Foul before the shot", "winRate": 0.9, "n": 164 },
+      { "key": "defend", "label": "Play straight defense", "winRate": 0.88, "n": 920 }
+    ],
+    "actual": {
+      "choice": "foul",
+      "summary": "Ridgeview sent a hard foul on the inbound. Two free throws, one miss, and Ridgeview held on.",
+      "final": "Ridgeview 98, Summit 96",
+      "game": "Mock game: Summit Peaks at Ridgeview Bears, 3 Mar 2016"
+    },
+    "difficulty": "hard"
+  },
+  {
+    "id": "mock-foul3-03",
+    "type": "foul_up_three",
+    "state": { "quarter": 4, "margin": 3, "secondsLeft": 10, "possession": "opponent" },
+    "question": "Ten seconds left, you are up three and they have the ball. What is the call?",
+    "options": [
+      { "key": "foul", "label": "Foul before the shot", "winRate": 0.89, "n": 140 },
+      { "key": "defend", "label": "Play straight defense", "winRate": 0.82, "n": 1105 }
+    ],
+    "actual": {
+      "choice": "defend",
+      "summary": "Delta Bay stayed in front of the ball and forced a contested pull-up three that missed.",
+      "final": "Delta Bay 110, Cedar Falls 107",
+      "game": "Mock game: Cedar Falls Pines at Delta Bay Herons, 22 Nov 2021"
+    },
+    "difficulty": "medium"
+  },
+  {
+    "id": "mock-foul3-04",
+    "type": "foul_up_three",
+    "state": { "quarter": 5, "margin": 3, "secondsLeft": 6, "possession": "opponent" },
+    "question": "Overtime, up three with six seconds left, their ball. Foul or defend?",
+    "options": [
+      { "key": "foul", "label": "Foul before the shot", "winRate": 0.86, "n": 58 },
+      { "key": "defend", "label": "Play straight defense", "winRate": 0.9, "n": 310 }
+    ],
+    "actual": {
+      "choice": "foul",
+      "summary": "Fort Lowell fouled at half court, but the second free throw was made and a long pass led to a tying layup.",
+      "final": "Fort Lowell 121, Mesa Verde 122 (2OT)",
+      "game": "Mock game: Mesa Verde Ravens at Fort Lowell Comets, 8 Feb 2018"
+    },
+    "difficulty": "medium"
+  },
+  {
+    "id": "mock-down3-01",
+    "type": "down_three",
+    "state": { "quarter": 4, "margin": -3, "secondsLeft": 12, "possession": "team" },
+    "question": "You trail by 3 with the ball and 12 seconds left. Two or three?",
+    "options": [
+      { "key": "three", "label": "Take a three", "winRate": 0.27, "n": 640 },
+      { "key": "two", "label": "Take a two", "winRate": 0.14, "n": 380 }
+    ],
+    "actual": {
+      "choice": "three",
+      "summary": "A step-back three from the wing with two seconds left found nothing but the front rim.",
+      "final": "Prairie Lake 99, Granite 96",
+      "game": "Mock game: Granite Wolves at Prairie Lake Loons, 30 Oct 2017"
+    },
+    "difficulty": "easy"
+  },
+  {
+    "id": "mock-down3-02",
+    "type": "down_three",
+    "state": { "quarter": 4, "margin": -3, "secondsLeft": 6, "possession": "team" },
+    "question": "Down three, six seconds left, your ball. What shot do you want?",
+    "options": [
+      { "key": "three", "label": "Take a three", "winRate": 0.22, "n": 505 },
+      { "key": "two", "label": "Take a two", "winRate": 0.17, "n": 260 }
+    ],
+    "actual": {
+      "choice": "two",
+      "summary": "A quick driving layup cut it to one, but there was no time to foul and get the ball back.",
+      "final": "Old Port 88, Briar Hill 87",
+      "game": "Mock game: Old Port Anchors vs Briar Hill Foxes, 14 Apr 2015"
+    },
+    "difficulty": "hard"
+  },
+  {
+    "id": "mock-down3-03",
+    "type": "down_three",
+    "state": { "quarter": 4, "margin": -3, "secondsLeft": 20, "possession": "team" },
+    "question": "You are down three with 20 seconds left and the ball. Go for the tie or cut it to one?",
+    "options": [
+      { "key": "three", "label": "Take a three", "winRate": 0.31, "n": 410 },
+      { "key": "two", "label": "Take a two", "winRate": 0.24, "n": 295 }
+    ],
+    "actual": {
+      "choice": "three",
+      "summary": "A corner three tied the game with nine seconds left, and the team went on to win in overtime.",
+      "final": "Stonebridge 117, Harlan 112 (OT)",
+      "game": "Mock game: Harlan Miners at Stonebridge Wardens, 19 Dec 2022"
+    },
+    "difficulty": "medium"
+  },
+  {
+    "id": "mock-last3-01",
+    "type": "last_shot",
+    "state": { "quarter": 4, "margin": 0, "secondsLeft": 22, "possession": "team" },
+    "question": "Tie game, your ball, 22 seconds left. Shoot early or hold for the last shot?",
+    "options": [
+      { "key": "early", "label": "Shoot early", "winRate": 0.43, "n": 530 },
+      { "key": "hold", "label": "Hold for the last shot", "winRate": 0.52, "n": 1210 }
+    ],
+    "actual": {
+      "choice": "hold",
+      "summary": "The team ran the clock down and a fadeaway at the buzzer dropped through.",
+      "final": "Copper Ridge 101, Westfield 99",
+      "game": "Mock game: Westfield Hawks at Copper Ridge Smelters, 5 Jan 2020"
+    },
+    "difficulty": "medium"
+  },
+  {
+    "id": "mock-last3-02",
+    "type": "last_shot",
+    "state": { "quarter": 4, "margin": -1, "secondsLeft": 15, "possession": "team" },
+    "question": "Down one with the ball and 15 seconds left. Shoot early or wait for the last shot?",
+    "options": [
+      { "key": "early", "label": "Shoot early", "winRate": 0.4, "n": 355 },
+      { "key": "hold", "label": "Hold for the last shot", "winRate": 0.56, "n": 870 }
+    ],
+    "actual": {
+      "choice": "early",
+      "summary": "A pull-up jumper with 11 seconds left missed, and the other team ran out the clock after the rebound.",
+      "final": "Marlow 94, Eastgate 93",
+      "game": "Mock game: Eastgate Rovers at Marlow Anglers, 17 Mar 2013"
+    },
+    "difficulty": "easy"
+  },
+  {
+    "id": "mock-last3-03",
+    "type": "last_shot",
+    "state": { "quarter": 5, "margin": 0, "secondsLeft": 18, "possession": "team" },
+    "question": "Overtime, tied, your ball with 18 seconds left. Shoot early or hold?",
+    "options": [
+      { "key": "early", "label": "Shoot early", "winRate": 0.49, "n": 112 },
+      { "key": "hold", "label": "Hold for the last shot", "winRate": 0.5, "n": 247 }
+    ],
+    "actual": {
+      "choice": "hold",
+      "summary": "The possession ended with a contested jumper at the horn that bounced off the back rim, sending the game to a second overtime.",
+      "final": "Tidewater 133, Pinecrest 131 (2OT)",
+      "game": "Mock game: Pinecrest Cardinals at Tidewater Gulls, 27 Nov 2014"
+    },
+    "difficulty": "hard"
+  }
+]
