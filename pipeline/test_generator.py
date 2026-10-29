@@ -8,10 +8,10 @@ from fame import compute_fame
 from generator import (MAX_PLAYER_ANSWERS, MIN_PLAYER_ANSWERS, MIN_TEAM_ANSWERS, check_count, difficulty, era_text,
                        generate, season_label, validate, write_candidates)
 from templates import PLAYER, TEAM, Tables, Template, stat_in_game, wins_in_season
-from testtables import make_tables
+from testtables import NO_OVERRIDES, make_tables
 
 TABLES = make_tables()
-FAME = compute_fame(TABLES.player_games, TABLES.players, TABLES.min_season_games)
+FAME = compute_fame(TABLES.player_games, TABLES.players, TABLES.min_season_games, NO_OVERRIDES)
 
 
 # --- validity rules ---------------------------------------------------------------------------------------------
@@ -178,25 +178,26 @@ def test_season_labels_and_era_text():
 
 
 def test_difficulty_rule_for_players():
-    # size: 100+ answers = 0, 40-99 = 1, under 40 = 2.  depth (share at tier 4+): under 10% = 0, 10-25% = 1, 25%+ = 2.
+    # size: 100+ answers = 0, 40-99 = 1, under 40 = 2.  depth (share at tier 4+): under 3% = 0, 3-10% = 1, 10%+ = 2.
     # total 0-1 easy, 2 medium, 3-4 hard
     assert difficulty(PLAYER, [1] * 100) == "easy"
-    assert difficulty(PLAYER, [1] * 91 + [4] * 9) == "easy"  # 9% deep
-    assert difficulty(PLAYER, [1] * 90 + [4] * 10) == "easy"  # size 0 + depth 1
-    assert difficulty(PLAYER, [1] * 60 + [4] * 40) == "medium"  # size 0 + depth 2
+    assert difficulty(PLAYER, [1] * 97 + [4] * 3) == "easy"  # size 0 + depth 1
+    assert difficulty(PLAYER, [1] * 90 + [4] * 10) == "medium"  # 10% deep: size 0 + depth 2
     assert difficulty(PLAYER, [1] * 50) == "easy"  # size 1 + depth 0
-    assert difficulty(PLAYER, [1] * 45 + [4] * 5) == "medium"  # size 1 + depth 1 (10% deep)
+    assert difficulty(PLAYER, [1] * 48 + [4] * 2) == "medium"  # 4% deep: size 1 + depth 1
     assert difficulty(PLAYER, [1] * 20) == "medium"  # size 2 + depth 0
+    assert difficulty(PLAYER, [1] * 19 + [4]) == "hard"  # 5% deep: size 2 + depth 1
     assert difficulty(PLAYER, [1] * 15 + [6] * 5) == "hard"  # size 2 + depth 2
     assert difficulty(PLAYER, [1] * 30 + [3] * 5) == "medium"  # tier 3 is not a deep cut
 
 
 def test_difficulty_rule_for_teams():
-    assert difficulty(TEAM, [1] * 20) == "easy"
-    assert difficulty(TEAM, [1] * 10) == "easy"  # size 1 + depth 0
-    assert difficulty(TEAM, [1] * 8) == "medium"  # size 2
-    assert difficulty(TEAM, [1] * 9 + [4]) == "medium"  # size 1 + 10% deep: depth 1
-    assert difficulty(TEAM, [1] * 5 + [4] * 5) == "hard"  # size 1 + depth 2
+    assert difficulty(TEAM, [1] * 25) == "easy"
+    assert difficulty(TEAM, [1] * 12) == "easy"  # size 1 + depth 0
+    assert difficulty(TEAM, [1] * 11) == "medium"  # size 2
+    assert difficulty(TEAM, [1] * 11 + [4]) == "medium"  # 12 answers, 8% deep: size 1 + depth 1
+    assert difficulty(TEAM, [1] * 10 + [4]) == "hard"  # 11 answers, 9% deep: size 2 + depth 1
+    assert difficulty(TEAM, [1] * 6 + [4] * 6) == "hard"  # size 1 + depth 2
 
 
 def test_write_candidates_writes_valid_json_and_meta(tmp_path):

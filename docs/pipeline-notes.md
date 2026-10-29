@@ -94,10 +94,60 @@ A player counts as having played only if the `points` value is present. `did_not
 - id 3934620 = Trevon Scott (2026); id 4711005 = Trevon Scott (2022)
 - id 3059316 = Wayne Selden (2017-2019); id 4895499 = Wayne Selden (2022)
 
-**Aliases applied from `pipeline/data/aliases.csv`: 2 players.**
+**Aliases applied from `pipeline/data/aliases.csv`: 52 players.**
 
+- Metta World Peace (id 25): Ron Artest, Metta Artest, Metta Sandiford-Artest, Metta Sandiford Artest
+- Chauncey Billups (id 63): Mr. Big Shot
+- Kobe Bryant (id 110): Black Mamba, Mamba
+- Vince Carter (id 136): Vinsanity, Air Canada
+- Tim Duncan (id 215): The Big Fundamental, Big Fundamental
+- Kevin Garnett (id 261): KG
+- Manu Ginobili (id 272): Manu
+- Richard Hamilton (id 294): Rip Hamilton
+- Robert Horry (id 347): Big Shot Bob
+- Allen Iverson (id 366): The Answer
+- Jason Kidd (id 429): J-Kidd
+- Andrei Kirilenko (id 434): AK-47
+- Tracy McGrady (id 532): T-Mac
+- Dirk Nowitzki (id 609): Dirk
+- Shaquille O'Neal (id 614): Shaq, Shaq O'Neal, Diesel
+- Paul Pierce (id 662): The Truth
+- Rasheed Wallace (id 883): Sheed
+- Ben Wallace (id 885): Big Ben
+- Gilbert Arenas (id 974): Agent Zero
+- Michael Jordan (id 1035): MJ, Air Jordan, His Airness
 - Nene (id 1713): Nene Hilario
+- Yao Ming (id 1722): Yao
+- Amar'e Stoudemire (id 1727): STAT
+- LeBron James (id 1966): King James, LBJ, Bron
+- Dwyane Wade (id 1987): D-Wade, Dwayne Wade, Flash
+- Dwight Howard (id 2384): D12
+- Chris Paul (id 2779): CP3, The Point God
+- Lou Williams (id 2799): Sweet Lou
+- Kevin Durant (id 3202): KD, Slim Reaper
+- Nicolas Batum (id 3416): Nic Batum
+- Derrick Rose (id 3456): D-Rose
+- Russell Westbrook (id 3468): Russ, Brodie
+- Patrick Beverley (id 3964): Pat Bev
+- Stephen Curry (id 3975): Steph Curry, Chef Curry
+- James Harden (id 3992): The Beard
+- Jrue Holiday (id 3995): Jrue
+- Paul George (id 4251): PG13, Playoff P
+- DeMarcus Cousins (id 4258): Boogie Cousins, Boogie
+- Jimmy Butler III (id 6430): Jimmy Buckets
 - Enes Freedom (id 6447): Enes Kanter
+- Kawhi Leonard (id 6450): The Claw
+- Anthony Davis (id 6583): AD
+- Draymond Green (id 6589): Dray
+- Damian Lillard (id 6606): Dame, Dame Lillard
+- Giannis Antetokounmpo (id 3032977): Giannis, Greek Freak, The Greek Freak
+- Nikola Jokic (id 3112335): Joker, The Joker
+- Karl-Anthony Towns (id 3136195): KAT
+- Donovan Mitchell (id 3908809): Spida, Spida Mitchell
+- Shai Gilgeous-Alexander (id 4278073): SGA
+- Zion Williamson (id 4395628): Zion
+- Anthony Edwards (id 4594268): Ant-Man, Ant Edwards
+- Victor Wembanyama (id 5104157): Wemby
 
 Ron Artest is not in `aliases.csv` on purpose. The data only knows this player as Metta World Peace (athlete id 25, 2002-2017) and the name Artest appears nowhere in it, so the rename cannot be confirmed from the data. Add it by hand if you want it.
 

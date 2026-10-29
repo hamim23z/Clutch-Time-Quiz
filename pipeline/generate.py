@@ -16,7 +16,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from fame import compute_fame
+from fame import OVERRIDES_PATH, compute_fame, load_overrides
 from generator import generate, write_candidates
 from reports import write_reports
 from templates import TEMPLATES, Tables
@@ -32,27 +32,38 @@ def load_tables(processed_dir: Path) -> Tables:
     return Tables(*[pd.read_parquet(processed_dir / f"{n}.parquet") for n in TABLE_NAMES])
 
 
+def build(processed_dir: Path, out_dir: Path, docs_dir: Path, overrides: Path = OVERRIDES_PATH):
+    """Fame, tiers, candidates and the two reports. Returns (tables, fame, result)."""
+    tables = load_tables(processed_dir)
+    fame = compute_fame(tables.player_games, tables.players, tables.min_season_games, load_overrides(overrides))
+    out_dir.mkdir(parents=True, exist_ok=True)
+    fame.to_parquet(out_dir / "fame.parquet", compression="zstd", index=False)
+    result = generate(tables, fame)
+    write_candidates(result, out_dir)
+    write_reports(fame, result, docs_dir)
+    return tables, fame, result
+
+
+def summary(fame: pd.DataFrame, result) -> list[str]:
+    counts = fame["tier"].value_counts().sort_index()
+    none = [t.key for t in TEMPLATES if not any(m["template"] == t.key for m in result.meta)]
+    return [
+        "players per tier: " + ", ".join(f"tier {t}: {c}" for t, c in counts.items()) + f" (of {len(fame):,})",
+        f"candidates: {len(result.prompts)} ({sum(1 for p in result.prompts if p['answerType'] == 'player')} player, "
+        f"{sum(1 for p in result.prompts if p['answerType'] == 'team')} team); era: {result.era}",
+        "templates with no candidates: " + (", ".join(none) if none else "none"),
+    ]
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--processed-dir", type=Path, default=Path("data/processed"))
     ap.add_argument("--out-dir", type=Path, default=Path("data/generated"))
+    ap.add_argument("--overrides", type=Path, default=OVERRIDES_PATH, help="hand-set fame tiers (athlete_id,tier,reason)")
     ap.add_argument("--docs-dir", type=Path, default=HERE.parent / "docs")
     args = ap.parse_args(argv)
-
-    tables = load_tables(args.processed_dir)
-    fame = compute_fame(tables.player_games, tables.players, tables.min_season_games)
-    args.out_dir.mkdir(parents=True, exist_ok=True)
-    fame.to_parquet(args.out_dir / "fame.parquet", compression="zstd", index=False)
-    result = generate(tables, fame)
-    write_candidates(result, args.out_dir)
-    write_reports(fame, result, args.docs_dir)
-
-    counts = fame["tier"].value_counts().sort_index()
-    print("players per tier: " + ", ".join(f"tier {t}: {c}" for t, c in counts.items()) + f" (of {len(fame):,})")
-    none = [t.key for t in TEMPLATES if not any(m["template"] == t.key for m in result.meta)]
-    print(f"candidates: {len(result.prompts)} ({sum(1 for p in result.prompts if p['answerType'] == 'player')} player, "
-          f"{sum(1 for p in result.prompts if p['answerType'] == 'team')} team); era: {result.era}")
-    print("templates with no candidates: " + (", ".join(none) if none else "none"))
+    _, fame, result = build(args.processed_dir, args.out_dir, args.docs_dir, args.overrides)
+    print("\n".join(summary(fame, result)))
     return 0
 
 

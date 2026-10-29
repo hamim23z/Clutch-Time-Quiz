@@ -10,7 +10,7 @@ import pandas as pd
 from fame import MIN_SEASON_GAMES
 from generator import GenerationResult, MAX_PLAYER_ANSWERS, MIN_PLAYER_ANSWERS, MIN_TEAM_ANSWERS
 from templates import PLAYER, TEAM, TEMPLATES, Template
-from tiers import CUTOFFS, DEEP_TIER, LAST_TIER, TIER_LABELS, TIER_POINTS
+from tiers import CUTOFFS, DEEP_TIER, LAST_TIER, TIER_LABELS, TIER_POINTS, tier_for_rank
 
 SAMPLE_SEED = 2026
 REVIEW_NOTES = Path(__file__).resolve().parent / "data" / "fame-review.md"
@@ -56,13 +56,16 @@ def render_fame_report(fame: pd.DataFrame) -> str:
     L += [
         "## How the fame score works", "",
         f"- **Population:** {n:,} players with at least one game with a points value (2001-02 to the last season in the data).",
-        "- **Two metrics:** career points (regular season plus playoffs), and best single-season points per game "
-        f"(regular season only, at least {MIN_SEASON_GAMES} games that season, games for all teams added up).",
+        "- **Five metrics:** career points (regular season plus playoffs), career rebounds, career assists, career steals plus blocks, and best "
+        f"single-season points per game (regular season only, at least {MIN_SEASON_GAMES} games that season, games for all teams added up).",
         "- **Ranks:** each metric is ranked across all players (rank 1 = most famous; ties share the better rank). A player's fame rank is the "
-        "better (lower) of the two, so a short-career star is not rated obscure. Players with no 40-game season have no points-per-game rank "
-        "and are ranked by career points alone. Both percentiles divide by the same number of players, so they are on the same scale.",
+        "best (lowest) of the five, so a short-career star, a rebounder or a defender is not rated obscure. Players with no 40-game season have no "
+        "points-per-game rank, and a career total of zero in rebounds, assists or steals plus blocks is not ranked. All percentiles divide by the same "
+        "number of players, so they are on the same scale.",
         "- **Tier:** from the global percentile = fame rank / players: top 3% is tier 1 (10 points), 3 to 10% tier 2 (20), 10 to 25% tier 3 (35), "
         "25 to 50% tier 4 (55), 50 to 75% tier 5 (75), the rest tier 6 (100). A player exactly on a cutoff gets the better-known tier.",
+        "- **Hand-set tiers:** `pipeline/data/fame_overrides.csv` sets the tier for players the metrics get clearly wrong (listed below). The percentile "
+        "still shows what the metrics said.",
         "- **Only games in the data count**, so a player whose career started before 2001-02 is judged on his later years only.",
         "",
     ]
@@ -78,7 +81,7 @@ def render_fame_report(fame: pd.DataFrame) -> str:
     L += [
         "",
         f"The better-known tiers are fuller than the nominal shares ({counts.get(1, 0)} players in tier 1 against {0.03 * n:.0f}). That follows from the method: "
-        f"taking the better of two ranks lets a player in through either door, so up to twice as many players can sit in the top 3% (tier 1 and 2 together: {top}).",
+        f"taking the best of five ranks lets a player in through any of five doors, so more players than the nominal share sit in the top bands (tiers 1 and 2 together: {top}).",
         "",
     ]
 
@@ -87,6 +90,12 @@ def render_fame_report(fame: pd.DataFrame) -> str:
     for i, r in fame.head(40).iterrows():
         rows.append([i + 1, r["name"], f"{int(r['career_points']):,}", _ppg(r), f"{r['fame_pct']:.2f}%", r["tier"], r["fame_source"]])
     L += _md_table(["#", "player", "career points", "best points per game", "fame percentile", "tier", "decided by"], rows) + [""]
+
+    ov = fame[fame["override_reason"] != ""].sort_values("fame_rank")
+    if len(ov):
+        L += ["## Hand-set tiers", ""]
+        L += _md_table(["player", "metrics said", "tier set", "reason"],
+                       [[x["name"], f"{x['fame_pct']:.2f}% (tier {tier_for_rank(int(x['fame_rank']), n)})", x["tier"], x["override_reason"]] for _, x in ov.iterrows()]) + [""]
 
     L += [f"## 15 random players per tier (seed {SAMPLE_SEED})", ""]
     for t in range(1, 7):
