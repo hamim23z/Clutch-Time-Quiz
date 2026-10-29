@@ -3,124 +3,978 @@
 Written by `python3 pipeline/generate.py`; do not edit by hand.
 
 - **Era wording:** every prompt starts with "Since 2001-02 (through 2025-26)". The data's season 2002 is the 2001-02 season (the first game is on 2001-10-30), so "Since 2002" would leave out three months of games. The schema requires the text to start with "Since" and four digits, which this does.
-- **Valid answers:** players need 15 to 400; teams need at least 5.
+- **Valid answers:** the star-heavy templates (first table) need 15 to 400 players; broad-pool player families (second table) need 15 to 700; teams need at least 5 (parameterised team families at most 24 of the 30 franchises, so the answer is never nearly everyone).
 - **Player tiers** come from the fame score (docs/fame-report.md). **Team tiers:** a team is tier 1 (10 points) if it qualified under its current name in any qualifying season, tier 4 (55 points) if only under a historical name. Every team answer is the franchise, shown by its current name; the other names it used are aliases for the answer matcher.
 - **Difficulty:** from the number of valid answers and the share of tier 4 and above (see `difficulty()` in `pipeline/generator.py`).
 
 ## Totals
 
-- Candidates: **171** (118 player, 53 team).
-- Tried: 226 template and threshold combinations. Dropped for too few valid answers: 50. Dropped for too many: 5.
-- By difficulty: easy 92, hard 12, medium 67.
+- Candidates: **3945** (3360 player, 585 team).
+- Tried: 5652 template and threshold combinations. Dropped for too few valid answers: 1598. Dropped for too many: 109.
+- By difficulty: easy 1199, hard 1508, medium 1238.
 
 Templates that produced no candidates: `triple-double-finals`.
 
-## Candidates per template
+## Candidates per template (star-heavy templates, one prompt per threshold)
 
 | template | answers | thresholds tried | candidates | dropped: too few | dropped: too many |
 |---|---|---|---|---|---|
-| `points-regular` | player | 35, 40, 45, 50, 55, 60, 65 | 5 | 1 | 1 |
-| `points-playoff` | player | 25, 30, 35, 40, 45, 50 | 6 | 0 | 0 |
-| `points-finals` | player | 20, 25, 30, 35, 40 | 5 | 0 | 0 |
+| `points-regular` | player | 35.0, 40.0, 45.0, 50.0, 55.0, 60.0, 65.0 | 5 | 1 | 1 |
+| `points-playoff` | player | 25.0, 30.0, 35.0, 40.0, 45.0, 50.0 | 6 | 0 | 0 |
+| `points-finals` | player | 20.0, 25.0, 30.0, 35.0, 40.0 | 5 | 0 | 0 |
 | `triple-double-regular` | player | - | 1 | 0 | 0 |
 | `triple-double-playoff` | player | - | 1 | 0 | 0 |
 | `triple-double-finals` | player | - | 0 | 1 | 0 |
-| `rebounds` | player | 16, 18, 20, 22, 24, 25, 27 | 6 | 0 | 1 |
-| `assists` | player | 14, 15, 16, 18, 20, 22 | 5 | 1 | 0 |
-| `threes` | player | 8, 9, 10, 11, 12 | 4 | 1 | 0 |
-| `blocks` | player | 6, 7, 8, 9, 10, 11 | 5 | 1 | 0 |
-| `steals` | player | 5, 6, 7, 8, 9 | 3 | 1 | 1 |
-| `ppg-season` | player | 20, 22, 24, 25, 26, 27, 28, 30, 32 | 8 | 1 | 0 |
-| `franchises` | player | 4, 5, 6, 7, 8, 9 | 4 | 0 | 2 |
-| `wins-season` | team | 50, 55, 58, 60, 62, 65, 67 | 6 | 1 | 0 |
-| `wins-playoff` | team | 10, 12, 14, 15, 16 | 5 | 0 | 0 |
-| `points-regulation` | team | 140, 145, 150, 155, 160 | 4 | 1 | 0 |
-| `win-margin` | team | 40, 45, 50, 55, 60 | 4 | 1 | 0 |
-| `points-game7` | player | 30, 35, 40 | 2 | 1 | 0 |
-| `points-overtime-game` | player | 40, 45, 50, 55 | 4 | 0 | 0 |
-| `points-bench` | player | 30, 35, 40, 45 | 3 | 1 | 0 |
-| `points-loss` | player | 45, 50, 55, 60 | 3 | 1 | 0 |
-| `points-road` | player | 45, 50, 55, 60 | 3 | 1 | 0 |
-| `rebounds-playoff` | player | 16, 18, 20, 22 | 4 | 0 | 0 |
-| `rebounds-finals` | player | 14, 16, 18, 20 | 2 | 2 | 0 |
-| `assists-playoff` | player | 12, 14, 16, 18 | 3 | 1 | 0 |
-| `assists-finals` | player | 10, 12, 14 | 1 | 2 | 0 |
-| `threes-playoff` | player | 7, 8, 9, 10 | 2 | 2 | 0 |
-| `threes-finals` | player | 6, 7, 8 | 1 | 2 | 0 |
-| `blocks-playoff` | player | 5, 6, 7, 8 | 3 | 1 | 0 |
-| `steals-playoff` | player | 4, 5, 6, 7 | 3 | 1 | 0 |
-| `offensive-rebounds` | player | 9, 10, 11, 12, 14 | 4 | 1 | 0 |
-| `free-throws` | player | 18, 20, 22, 24 | 3 | 1 | 0 |
-| `turnovers` | player | 8, 9, 10, 11 | 4 | 0 | 0 |
-| `shots-taken` | player | 35, 38, 40, 42 | 2 | 2 | 0 |
-| `minutes` | player | 55, 58, 60 | 2 | 1 | 0 |
-| `perfect-shooting` | player | 8, 9, 10, 11 | 4 | 0 | 0 |
-| `five-by-n` | player | 3, 4, 5 | 2 | 1 | 0 |
+| `rebounds` | player | 16.0, 18.0, 20.0, 22.0, 24.0, 25.0, 27.0 | 6 | 0 | 1 |
+| `assists` | player | 14.0, 15.0, 16.0, 18.0, 20.0, 22.0 | 5 | 1 | 0 |
+| `threes` | player | 8.0, 9.0, 10.0, 11.0, 12.0 | 4 | 1 | 0 |
+| `blocks` | player | 6.0, 7.0, 8.0, 9.0, 10.0, 11.0 | 5 | 1 | 0 |
+| `steals` | player | 5.0, 6.0, 7.0, 8.0, 9.0 | 3 | 1 | 1 |
+| `ppg-season` | player | 20.0, 22.0, 24.0, 25.0, 26.0, 27.0, 28.0, 30.0, 32.0 | 8 | 1 | 0 |
+| `franchises` | player | 4.0, 5.0, 6.0, 7.0, 8.0, 9.0 | 4 | 0 | 2 |
+| `wins-season` | team | 50.0, 55.0, 58.0, 60.0, 62.0, 65.0, 67.0 | 6 | 1 | 0 |
+| `wins-playoff` | team | 10.0, 12.0, 14.0, 15.0, 16.0 | 5 | 0 | 0 |
+| `points-regulation` | team | 140.0, 145.0, 150.0, 155.0, 160.0 | 4 | 1 | 0 |
+| `win-margin` | team | 40.0, 45.0, 50.0, 55.0, 60.0 | 4 | 1 | 0 |
+| `points-game7` | player | 30.0, 35.0, 40.0 | 2 | 1 | 0 |
+| `points-overtime-game` | player | 40.0, 45.0, 50.0, 55.0 | 4 | 0 | 0 |
+| `points-bench` | player | 30.0, 35.0, 40.0, 45.0 | 3 | 1 | 0 |
+| `points-loss` | player | 45.0, 50.0, 55.0, 60.0 | 3 | 1 | 0 |
+| `points-road` | player | 45.0, 50.0, 55.0, 60.0 | 3 | 1 | 0 |
+| `rebounds-playoff` | player | 16.0, 18.0, 20.0, 22.0 | 4 | 0 | 0 |
+| `rebounds-finals` | player | 14.0, 16.0, 18.0, 20.0 | 2 | 2 | 0 |
+| `assists-playoff` | player | 12.0, 14.0, 16.0, 18.0 | 3 | 1 | 0 |
+| `assists-finals` | player | 10.0, 12.0, 14.0 | 1 | 2 | 0 |
+| `threes-playoff` | player | 7.0, 8.0, 9.0, 10.0 | 2 | 2 | 0 |
+| `threes-finals` | player | 6.0, 7.0, 8.0 | 1 | 2 | 0 |
+| `blocks-playoff` | player | 5.0, 6.0, 7.0, 8.0 | 3 | 1 | 0 |
+| `steals-playoff` | player | 4.0, 5.0, 6.0, 7.0 | 3 | 1 | 0 |
+| `offensive-rebounds` | player | 9.0, 10.0, 11.0, 12.0, 14.0 | 4 | 1 | 0 |
+| `free-throws` | player | 18.0, 20.0, 22.0, 24.0 | 3 | 1 | 0 |
+| `turnovers` | player | 8.0, 9.0, 10.0, 11.0 | 4 | 0 | 0 |
+| `shots-taken` | player | 35.0, 38.0, 40.0, 42.0 | 2 | 2 | 0 |
+| `minutes` | player | 55.0, 58.0, 60.0 | 2 | 1 | 0 |
+| `perfect-shooting` | player | 8.0, 9.0, 10.0, 11.0 | 4 | 0 | 0 |
+| `five-by-n` | player | 3.0, 4.0, 5.0 | 2 | 1 | 0 |
 | `points-and-rebounds` | player | - | 1 | 0 | 0 |
 | `points-and-assists` | player | - | 1 | 0 | 0 |
-| `rebounds-per-game` | player | 10, 11, 12, 13 | 3 | 1 | 0 |
-| `assists-per-game` | player | 8, 9, 10, 11 | 2 | 2 | 0 |
-| `steals-per-game` | player | 2, 3 | 1 | 1 | 0 |
-| `blocks-per-game` | player | 2, 3 | 1 | 1 | 0 |
+| `rebounds-per-game` | player | 10.0, 11.0, 12.0, 13.0 | 3 | 1 | 0 |
+| `assists-per-game` | player | 8.0, 9.0, 10.0, 11.0 | 2 | 2 | 0 |
+| `steals-per-game` | player | 2.0, 3.0 | 1 | 1 | 0 |
+| `blocks-per-game` | player | 2.0, 3.0 | 1 | 1 | 0 |
 | `double-double-average` | player | - | 1 | 0 | 0 |
-| `losses-season` | team | 55, 60, 62, 65, 67, 70 | 5 | 1 | 0 |
-| `road-wins` | team | 26, 28, 30, 32 | 3 | 1 | 0 |
-| `home-wins` | team | 36, 38, 39, 40 | 1 | 3 | 0 |
-| `points-playoff-team` | team | 130, 135, 140, 145, 150 | 4 | 1 | 0 |
-| `points-any-game` | team | 150, 155, 160, 165 | 3 | 1 | 0 |
-| `win-margin-playoff` | team | 35, 40, 45 | 3 | 0 | 0 |
-| `held-opponent` | team | 55, 60, 65, 70 | 3 | 1 | 0 |
-| `threes-team` | team | 24, 26, 28, 30 | 3 | 1 | 0 |
-| `steals-team` | team | 18, 20, 22, 24 | 2 | 2 | 0 |
-| `overtime-wins` | team | 2, 3, 4 | 2 | 1 | 0 |
-| `win-streak` | team | 14, 16, 18, 20, 22 | 3 | 2 | 0 |
+| `losses-season` | team | 55.0, 60.0, 62.0, 65.0, 67.0, 70.0 | 5 | 1 | 0 |
+| `road-wins` | team | 26.0, 28.0, 30.0, 32.0 | 3 | 1 | 0 |
+| `home-wins` | team | 36.0, 38.0, 39.0, 40.0 | 1 | 3 | 0 |
+| `points-playoff-team` | team | 130.0, 135.0, 140.0, 145.0, 150.0 | 4 | 1 | 0 |
+| `points-any-game` | team | 150.0, 155.0, 160.0, 165.0 | 3 | 1 | 0 |
+| `win-margin-playoff` | team | 35.0, 40.0, 45.0 | 3 | 0 | 0 |
+| `held-opponent` | team | 55.0, 60.0, 65.0, 70.0 | 3 | 1 | 0 |
+| `threes-team` | team | 24.0, 26.0, 28.0, 30.0 | 3 | 1 | 0 |
+| `steals-team` | team | 18.0, 20.0, 22.0, 24.0 | 2 | 2 | 0 |
+| `overtime-wins` | team | 2.0, 3.0, 4.0 | 2 | 1 | 0 |
+| `win-streak` | team | 14.0, 16.0, 18.0, 20.0, 22.0 | 3 | 2 | 0 |
 | `champion` | team | - | 1 | 0 | 0 |
 | `reached-finals` | team | - | 1 | 0 | 0 |
 
-## What was dropped
+## Candidates per family (pools.py: one prompt per franchise, season, month, star or threshold)
 
-- `points-regular`: n=35: 422 answers (too many); n=65: 7 answers (too few)
+Each family yields one candidate per parameter set that fits the answer window. 'tiers 1-2' and 'tiers 5-6' are shares of all valid answers over the family's candidates.
+
+| family | answers | pool | parameter sets tried | candidates | too few | too many | valid answers | tiers 1-2 | tiers 5-6 |
+|---|---|---|---|---|---|---|---|---|---|
+| `franchise-regular` | player | broad | 30 | 30 | 0 | 0 | 198-293 | 29% | 25% |
+| `franchise-playoff` | player | broad | 30 | 30 | 0 | 0 | 36-146 | 43% | 11% |
+| `franchise-season` | player | broad | 747 | 707 | 40 | 0 | 15-35 | 41% | 16% |
+| `franchise-start` | player | broad | 30 | 30 | 0 | 0 | 117-196 | 40% | 11% |
+| `franchise-bench` | player | broad | 30 | 30 | 0 | 0 | 190-287 | 27% | 26% |
+| `franchise-years` | player | broad | 150 | 150 | 0 | 0 | 26-87 | 34% | 22% |
+| `franchise-playoff-season` | player | broad | 400 | 57 | 343 | 0 | 15-18 | 47% | 12% |
+| `franchise-points` | player | broad | 120 | 98 | 22 | 0 | 15-84 | 65% | 2% |
+| `both-franchises` | player | broad | 435 | 422 | 13 | 0 | 15-49 | 42% | 10% |
+| `points-against` | player | broad | 120 | 116 | 4 | 0 | 15-237 | 91% | 0% |
+| `teammate` | player | broad | 100 | 100 | 0 | 0 | 55-249 | 36% | 19% |
+| `finals-appearance` | player | broad | 1 | 1 | 0 | 0 | 393-393 | 51% | 6% |
+| `finals-three` | player | broad | 1 | 1 | 0 | 0 | 227-227 | 59% | 1% |
+| `finals-steal-block` | player | broad | 1 | 1 | 0 | 0 | 296-296 | 63% | 1% |
+| `finals-year` | player | broad | 25 | 25 | 0 | 0 | 21-33 | 59% | 4% |
+| `month-points` | player | broad | 998 | 657 | 341 | 0 | 15-206 | 81% | 0% |
+| `month-threes` | player | broad | 810 | 471 | 339 | 0 | 15-200 | 67% | 1% |
+| `season-points` | player | broad | 125 | 84 | 41 | 0 | 15-161 | 87% | 0% |
+| `season-threes` | player | broad | 120 | 66 | 54 | 0 | 15-154 | 69% | 1% |
+| `season-rebounds` | player | broad | 100 | 97 | 3 | 0 | 15-110 | 77% | 1% |
+| `season-assists` | player | broad | 100 | 69 | 31 | 0 | 15-91 | 85% | 0% |
+| `made-playoffs` | team | - | 25 | 25 | 0 | 0 | 16-16 | 96% | 0% |
+| `wins-in-season` | team | - | 119 | 77 | 42 | 0 | 5-20 | 97% | 0% |
+| `home-wins-in-season` | team | - | 71 | 25 | 46 | 0 | 5-10 | 97% | 0% |
+| `road-wins-in-season` | team | - | 95 | 48 | 47 | 0 | 5-15 | 98% | 0% |
+| `playoff-wins-in-season` | team | - | 100 | 50 | 50 | 0 | 8-16 | 96% | 0% |
+| `regulation-points-in-season` | team | - | 119 | 60 | 38 | 21 | 5-24 | 99% | 0% |
+| `margin-in-season` | team | - | 123 | 81 | 23 | 19 | 5-24 | 96% | 0% |
+| `threes-in-season` | team | - | 91 | 37 | 30 | 24 | 5-24 | 97% | 0% |
+| `held-opponent-in-season` | team | - | 85 | 44 | 22 | 19 | 5-23 | 93% | 0% |
+| `overtime-wins-in-season` | team | - | 65 | 27 | 17 | 21 | 6-24 | 93% | 0% |
+| `played-playoff-against` | team | - | 30 | 29 | 1 | 0 | 7-19 | 95% | 0% |
+| `beat-in-playoffs` | team | - | 30 | 29 | 1 | 0 | 7-18 | 96% | 0% |
+
+### Examples
+
+Three candidates per family (shortest, middle and longest list); the ten best-known and ten rarest answers of each are shown as name (tier).
+
+#### `franchise-regular`
+
+**Since 2001-02 (through 2025-26), name a player who played for the San Antonio Spurs in a regular-season game.**
+
+198 valid answers, difficulty **medium**, tiers: 1: 22, 2: 34, 3: 50, 4: 41, 5: 34, 6: 17.
+
+Best known: Chris Paul (1), Tim Duncan (1), Pau Gasol (1), Tony Parker (1), DeMar DeRozan (1), Andre Miller (1), LaMarcus Aldridge (1), Kawhi Leonard (1), Manu Ginobili (1), David Lee (1).
+
+Rarest: Keith Langford (6), Derrick Byars (6), Eric Dawson (6), Marcus Williams (2008-2009) (6), Harrison Ingram (6), Matt Costello (6), Shane Heal (6), Riley Minix (6), Melvin Sanders (6), Justin Dentmon (6).
+
+**Since 2001-02 (through 2025-26), name a player who played for the Los Angeles Lakers in a regular-season game.**
+
+237 valid answers, difficulty **medium**, tiers: 1: 35, 2: 46, 3: 55, 4: 49, 5: 32, 6: 20.
+
+Best known: LeBron James (1), Dwight Howard (1), Kobe Bryant (1), Russell Westbrook (1), Luka Doncic (1), Pau Gasol (1), Steve Nash (1), Anthony Davis (1), Andre Drummond (1), Rajon Rondo (1).
+
+Rarest: Tony Bobbitt (6), Quincy Olivari (6), Elias Harris (6), Darius Johnson-Odom (6), Mike Penberthy (6), Sun Yue (6), Zach Norvell Jr. (6), Alex Fudge (6), D'Moi Hodge (6), Chaundee Brown Jr. (6).
+
+**Since 2001-02 (through 2025-26), name a player who played for the Brooklyn Nets in a regular-season game.**
+
+293 valid answers, difficulty **medium**, tiers: 1: 32, 2: 43, 3: 73, 4: 78, 5: 47, 6: 20.
+
+Best known: James Harden (1), Kevin Durant (1), Kevin Garnett (1), Andre Drummond (1), Brook Lopez (1), Jason Kidd (1), DeAndre Jordan (1), Paul Pierce (1), Deron Williams (1), Andrei Kirilenko (1).
+
+Rarest: Mile Ilic (6), Tahjere McCall (6), Yongxi Cui (6), Dennis Horner (6), Jacob Wiley (6), Kris Joseph (6), Andre Emmett (6), Kaniel Dickens (6), Steve Goodrich (6), Mitchell Creek (6).
+
+#### `franchise-playoff`
+
+**Since 2001-02 (through 2025-26), name a player who played for the Charlotte Hornets (including its time as the Bobcats) in a playoff game.**
+
+36 valid answers, difficulty **hard**, tiers: 1: 9, 2: 10, 3: 10, 4: 5, 5: 2.
+
+Best known: Tyson Chandler (1), Raymond Felton (1), Al Jefferson (1), Kemba Walker (1), Boris Diaw (1), Gerald Wallace (1), Nicolas Batum (1), D.J. Augustin (1), Luke Ridnour (1), Marvin Williams (2).
+
+Rarest: Aaron Harrison (5), Jorge Gutierrez (5), D.J. White (4), Stephen Graham (4), Derrick Brown (4), Chris Douglas-Roberts (4), Troy Daniels (4), Frank Kaminsky (3), Gary Neal (3), Josh McRoberts (3).
+
+**Since 2001-02 (through 2025-26), name a player who played for the Atlanta Hawks in a playoff game.**
+
+97 valid answers, difficulty **hard**, tiers: 1: 19, 2: 22, 3: 30, 4: 17, 5: 6, 6: 3.
+
+Best known: Dwight Howard (1), Tracy McGrady (1), Josh Smith (1), Al Horford (1), Trae Young (1), Joe Johnson (1), Paul Millsap (1), Elton Brand (1), Jamal Crawford (1), Jose Calderon (1).
+
+Rarest: Pape Sy (6), Thomas Gardner (6), Othello Hunter (6), Jeremy Richardson (5), Randolph Morris (5), Lamar Patterson (5), Mario West (5), Nathan Knight (5), Asa Newell (5), John Jenkins (4).
+
+**Since 2001-02 (through 2025-26), name a player who played for the Boston Celtics in a playoff game.**
+
+146 valid answers, difficulty **medium**, tiers: 1: 25, 2: 29, 3: 35, 4: 34, 5: 19, 6: 4.
+
+Best known: Kevin Garnett (1), Rajon Rondo (1), Nikola Vucevic (1), Paul Pierce (1), Al Horford (1), Jrue Holiday (1), Jayson Tatum (1), Isaiah Thomas (1), Jaylen Brown (1), Kyrie Irving (1).
+
+Rarest: Max Shulga (6), Malik Fitts (6), John Holland (6), Amari Williams (6), Vincent Poirier (5), RJ Hunter (5), Mark Bryant (5), Ron Harper Jr. (5), Juwan Morgan (5), Luigi Datome (5).
+
+#### `franchise-season`
+
+**Since 2001-02 (through 2025-26), name a player who played for the Atlanta Hawks in a regular-season game in the 2005-06 season.**
+
+15 valid answers, difficulty **hard**, tiers: 1: 3, 2: 2, 3: 3, 4: 2, 5: 4, 6: 1.
+
+Best known: Josh Smith (1), Joe Johnson (1), Zaza Pachulia (1), Marvin Williams (2), Al Harrington (2), Tyronn Lue (3), Josh Childress (3), Tony Delk (3), Royal Ivey (4), Salim Stoudamire (4).
+
+Rarest: Anthony Grundy (6), John Edwards (5), Donta Smith (5), John Thomas (5), Esteban Batista (5), Salim Stoudamire (4), Royal Ivey (4), Tony Delk (3), Josh Childress (3), Tyronn Lue (3).
+
+**Since 2001-02 (through 2025-26), name a player who played for the Charlotte Bobcats in a regular-season game in the 2006-07 season.**
+
+18 valid answers, difficulty **hard**, tiers: 1: 2, 2: 3, 3: 6, 4: 7.
+
+Best known: Raymond Felton (1), Gerald Wallace (1), Emeka Okafor (2), Brevin Knight (2), Jeff McInnis (2), Derek Anderson (3), Primoz Brezec (3), Matt Carroll (3), Othella Harrington (3), Jake Voskuhl (3).
+
+Rarest: Bernard Robinson (4), Sean May (4), Walter Herrmann Heinrich (4), Melvin Ely (4), Alan Anderson (4), Eric Williams (4), Ryan Hollins (4), Adam Morrison (3), Jake Voskuhl (3), Othella Harrington (3).
+
+**Since 2001-02 (through 2025-26), name a player who played for the Memphis Grizzlies in a regular-season game in the 2023-24 season.**
+
+35 valid answers, difficulty **hard**, tiers: 1: 3, 2: 4, 3: 5, 4: 14, 5: 5, 6: 4.
+
+Best known: Ja Morant (1), Derrick Rose (1), Marcus Smart (1), Desmond Bane (2), Victor Oladipo (2), Jaren Jackson Jr. (2), Bismack Biyombo (2), Luke Kennard (3), GG Jackson (3), Santi Aldama (3).
+
+Rarest: Timmy Allen (6), Matt Hurt (6), Jack White (6), Maozinha Pereira (6), Kenneth Lofton Jr. (5), Zavier Simpson (5), DeJon Jarreau (5), Tosan Evbuomwan (5), Trey Jemison III (5), Jacob Gilyard (4).
+
+#### `franchise-start`
+
+**Since 2001-02 (through 2025-26), name a player who started a game for the San Antonio Spurs.**
+
+117 valid answers, difficulty **medium**, tiers: 1: 22, 2: 30, 3: 31, 4: 22, 5: 12.
+
+Best known: Chris Paul (1), Tim Duncan (1), Pau Gasol (1), Tony Parker (1), DeMar DeRozan (1), Andre Miller (1), LaMarcus Aldridge (1), Kawhi Leonard (1), Manu Ginobili (1), David Lee (1).
+
+Rarest: Jeremy Richardson (5), Nicolas Laprovittola (5), Mark Bryant (5), Othyus Jeffers (5), James White (5), Brandon Paul (5), Damion James (5), Luka Samanic (5), Cherokee Parks (5), Danny Ferry (5).
+
+**Since 2001-02 (through 2025-26), name a player who started a game for the Miami Heat.**
+
+158 valid answers, difficulty **medium**, tiers: 1: 23, 2: 41, 3: 47, 4: 30, 5: 14, 6: 3.
+
+Best known: LeBron James (1), Kyle Lowry (1), Dwyane Wade (1), Shawn Marion (1), Kevin Love (1), Andre Iguodala (1), Joe Johnson (1), Chris Bosh (1), Ray Allen (1), Shaquille O'Neal (1).
+
+Rarest: Zoran Dragic (6), Tang Hamilton (6), Sam Mack (6), Kasib Powell (5), Terrel Harris (5), Dexter Pittman (5), Okaro White (5), Stephane Lasme (5), Jordan Mickey (5), Luke Jackson (5).
+
+**Since 2001-02 (through 2025-26), name a player who started a game for the Brooklyn Nets.**
+
+196 valid answers, difficulty **medium**, tiers: 1: 29, 2: 37, 3: 62, 4: 49, 5: 18, 6: 1.
+
+Best known: James Harden (1), Kevin Durant (1), Kevin Garnett (1), Andre Drummond (1), Brook Lopez (1), Jason Kidd (1), DeAndre Jordan (1), Paul Pierce (1), Deron Williams (1), Andrei Kirilenko (1).
+
+Rarest: Trevon Scott (2026) (6), Maxwell Lewis (5), E.J. Liddell (5), Chaney Johnson (5), Drew Timme (5), David Duke Jr. (5), Malachi Smith (5), Tyson Etienne (5), Tyshawn Taylor (5), Damion James (5).
+
+#### `franchise-bench`
+
+**Since 2001-02 (through 2025-26), name a player who came off the bench in a game for the Indiana Pacers.**
+
+190 valid answers, difficulty **medium**, tiers: 1: 16, 2: 32, 3: 49, 4: 41, 5: 37, 6: 15.
+
+Best known: Paul George (1), Al Jefferson (1), Myles Turner (1), David West (1), Domantas Sabonis (1), Metta World Peace (1), Tristan Thompson (1), Danny Granger (1), Monta Ellis (1), Jermaine O'Neal (1).
+
+Rarest: Trey McKinney-Jones (6), Ahmad Caver (6), Ben Moore (6), Courtney Sims (6), Tristen Newton (6), Brian Bowen II (6), Jalen Lecque (6), Norman Richardson (6), Ike Anigbogu (6), Amida Brimah (6).
+
+**Since 2001-02 (through 2025-26), name a player who came off the bench in a game for the Los Angeles Lakers.**
+
+231 valid answers, difficulty **medium**, tiers: 1: 32, 2: 42, 3: 55, 4: 50, 5: 32, 6: 20.
+
+Best known: LeBron James (1), Dwight Howard (1), Kobe Bryant (1), Russell Westbrook (1), Pau Gasol (1), Steve Nash (1), Anthony Davis (1), Rajon Rondo (1), Brook Lopez (1), Carmelo Anthony (1).
+
+Rarest: Tony Bobbitt (6), Quincy Olivari (6), Elias Harris (6), Darius Johnson-Odom (6), Mike Penberthy (6), Sun Yue (6), Zach Norvell Jr. (6), Alex Fudge (6), D'Moi Hodge (6), Chaundee Brown Jr. (6).
+
+**Since 2001-02 (through 2025-26), name a player who came off the bench in a game for the Brooklyn Nets.**
+
+287 valid answers, difficulty **medium**, tiers: 1: 27, 2: 42, 3: 73, 4: 78, 5: 47, 6: 20.
+
+Best known: James Harden (1), Kevin Durant (1), Brook Lopez (1), Jason Kidd (1), DeAndre Jordan (1), Paul Pierce (1), Deron Williams (1), Andrei Kirilenko (1), LaMarcus Aldridge (1), Vince Carter (1).
+
+Rarest: Mile Ilic (6), Tahjere McCall (6), Yongxi Cui (6), Dennis Horner (6), Jacob Wiley (6), Kris Joseph (6), Andre Emmett (6), Kaniel Dickens (6), Steve Goodrich (6), Mitchell Creek (6).
+
+#### `franchise-years`
+
+**Since 2001-02 (through 2025-26), name a player who played for the Charlotte Hornets (including its time as the Bobcats) in a regular-season game between the 2001-02 and 2005-06 seasons.**
+
+26 valid answers, difficulty **hard**, tiers: 1: 2, 2: 2, 3: 10, 4: 7, 5: 5.
+
+Best known: Raymond Felton (1), Gerald Wallace (1), Emeka Okafor (2), Brevin Knight (2), Eddie House (3), Keith Bogans (3), Primoz Brezec (3), Jumaine Jones (3), Jason Hart (3), Matt Carroll (3).
+
+Rarest: Cory Alexander (5), Tamar Slay (5), Kevin Burleson (5), Theron Smith (5), Jamal Sampson (5), Bernard Robinson (4), Lonny Baxter (4), Sean May (4), Jahidi White (4), Kareem Rush (4).
+
+**Since 2001-02 (through 2025-26), name a player who played for the Washington Wizards in a regular-season game between the 2006-07 and 2010-11 seasons.**
+
+54 valid answers, difficulty **hard**, tiers: 1: 6, 2: 12, 3: 13, 4: 10, 5: 9, 6: 4.
+
+Best known: John Wall (1), Gilbert Arenas (1), Kirk Hinrich (1), Mike Bibby (1), Antawn Jamison (1), JaVale McGee (1), Rashard Lewis (2), Brendan Haywood (2), Caron Butler (2), Shaun Livingston (2).
+
+Rarest: Mike Hall (6), James Lang (6), Hamady Ndiaye (6), Cedric Jackson (6), Larry Owens (5), Mustafa Shakur (5), Othyus Jeffers (5), Mike Harris (5), Paul Davis (5), Lester Hudson (5).
+
+**Since 2001-02 (through 2025-26), name a player who played for the Washington Wizards in a regular-season game between the 2021-22 and 2025-26 seasons.**
+
+87 valid answers, difficulty **hard**, tiers: 1: 8, 2: 15, 3: 20, 4: 18, 5: 16, 6: 10.
+
+Best known: Bradley Beal (1), Trae Young (1), Jonas Valanciunas (1), CJ McCollum (1), Deni Avdija (1), Taj Gibson (1), Marcus Smart (1), Khris Middleton (1), Kristaps Porzingis (2), Tyus Jones (2).
+
+Rarest: Jaime Echenique (6), Erik Stevenson (6), Jordan Schakel (6), Joel Ayayi (6), Craig Sword (6), Isaiah Todd (6), Kadary Richmond (6), Keshon Gilbert (6), Alondes Williams (6), Xavier Cooks (6).
+
+#### `franchise-playoff-season`
+
+**Since 2001-02 (through 2025-26), name a player who played for the Atlanta Hawks in a playoff game in the 2008-09 season.**
+
+15 valid answers, difficulty **hard**, tiers: 1: 5, 2: 1, 3: 3, 4: 2, 5: 2, 6: 2.
+
+Best known: Josh Smith (1), Al Horford (1), Joe Johnson (1), Mike Bibby (1), Zaza Pachulia (1), Marvin Williams (2), Speedy Claxton (3), Ronald Murray (3), Maurice Evans (3), Acie Law (4).
+
+Rarest: Thomas Gardner (6), Othello Hunter (6), Randolph Morris (5), Mario West (5), Solomon Jones (4), Acie Law (4), Maurice Evans (3), Ronald Murray (3), Speedy Claxton (3), Marvin Williams (2).
+
+**Since 2001-02 (through 2025-26), name a player who played for the Philadelphia 76ers in a playoff game in the 2018-19 season.**
+
+15 valid answers, difficulty **hard**, tiers: 1: 4, 2: 4, 3: 2, 4: 3, 5: 1, 6: 1.
+
+Best known: Joel Embiid (1), Jimmy Butler III (1), Tobias Harris (1), T.J. McConnell (1), JJ Redick (2), Greg Monroe (2), Amir Johnson (2), Ben Simmons (2), Jonathon Simmons (3), Mike Scott (3).
+
+Rarest: Zhaire Smith (6), Jonah Bolden (5), Furkan Korkmaz (4), Boban Marjanovic (4), James Ennis III (4), Mike Scott (3), Jonathon Simmons (3), Ben Simmons (2), Amir Johnson (2), Greg Monroe (2).
+
+**Since 2001-02 (through 2025-26), name a player who played for the New York Knicks in a playoff game in the 2025-26 season.**
+
+18 valid answers, difficulty **hard**, tiers: 1: 2, 2: 5, 3: 4, 4: 1, 5: 6.
+
+Best known: Jalen Brunson (1), Karl-Anthony Towns (1), Jordan Clarkson (2), Josh Hart (2), Mikal Bridges (2), OG Anunoby (2), Mitchell Robinson (2), Jose Alvarado (3), Landry Shamet (3), Miles McBride (3).
+
+Rarest: Pacome Dadiet (5), Kevin McCullar Jr. (5), Mohamed Diawara (5), Dillon Jones (5), Ariel Hukporti (5), Trey Jemison III (5), Tyler Kolek (4), Jeremy Sochan (3), Miles McBride (3), Landry Shamet (3).
+
+#### `franchise-points`
+
+**Since 2001-02 (through 2025-26), name a player who scored 35 or more points in a game for the Philadelphia 76ers.**
+
+15 valid answers, difficulty **medium**, tiers: 1: 8, 2: 1, 3: 5, 4: 1.
+
+Best known: James Harden (1), Joel Embiid (1), Allen Iverson (1), Jrue Holiday (1), Paul George (1), Tyrese Maxey (1), Jimmy Butler III (1), Tobias Harris (1), Ben Simmons (2), VJ Edgecombe (3).
+
+Rarest: James Anderson (4), Shake Milton (3), Quentin Grimes (3), Seth Curry (3), Willie Green (3), VJ Edgecombe (3), Ben Simmons (2), Tobias Harris (1), Jimmy Butler III (1), Tyrese Maxey (1).
+
+**Since 2001-02 (through 2025-26), name a player who scored 30 or more points in a game for the Brooklyn Nets.**
+
+41 valid answers, difficulty **easy**, tiers: 1: 16, 2: 10, 3: 13, 4: 2.
+
+Best known: James Harden (1), Kevin Durant (1), Brook Lopez (1), Jason Kidd (1), Paul Pierce (1), Deron Williams (1), Joe Johnson (1), Vince Carter (1), Kyrie Irving (1), Dennis Schroder (1).
+
+Rarest: Tyrese Martin (4), Chris Douglas-Roberts (4), Yi Jianlian (3), Mirza Teletovic (3), Noah Clowney (3), Landry Shamet (3), Sean Kilpatrick (3), Allen Crabbe (3), Shabazz Napier (3), Kerry Kittles (3).
+
+**Since 2001-02 (through 2025-26), name a player who scored 25 or more points in a game for the New York Knicks.**
+
+84 valid answers, difficulty **medium**, tiers: 1: 17, 2: 34, 3: 21, 4: 11, 5: 1.
+
+Best known: Carmelo Anthony (1), Tracy McGrady (1), Tyson Chandler (1), Zach Randolph (1), Chauncey Billups (1), Jalen Brunson (1), Marcus Camby (1), Karl-Anthony Towns (1), Jamal Crawford (1), Raymond Felton (1).
+
+Rarest: Kadeem Allen (5), Henry Walker (4), Chris Copeland (4), Shawne Williams (4), Steve Novak (4), Mario Hezonja (4), Shandon Anderson (4), Landry Fields (4), Alexey Shved (4), Cam Reddish (4).
+
+#### `both-franchises`
+
+**Since 2001-02 (through 2025-26), name a player who played for both the Indiana Pacers and the Miami Heat.**
+
+15 valid answers, difficulty **hard**, tiers: 1: 2, 2: 3, 3: 8, 4: 2.
+
+Best known: Danny Granger (1), Jermaine O'Neal (1), Victor Oladipo (2), James Johnson (2), James Posey (2), Gerald Green (3), Rasual Butler (3), Thomas Bryant (3), Josh McRoberts (3), Travis Best (3).
+
+Rarest: Shawne Williams (4), Samaki Walker (4), Solomon Hill (3), Luther Head (3), James Jones (3), Travis Best (3), Josh McRoberts (3), Thomas Bryant (3), Rasual Butler (3), Gerald Green (3).
+
+**Since 2001-02 (through 2025-26), name a player who played for both the Brooklyn Nets and the Charlotte Hornets (including its time as the Bobcats).**
+
+27 valid answers, difficulty **hard**, tiers: 1: 2, 2: 6, 3: 9, 4: 8, 5: 2.
+
+Best known: Gerald Wallace (1), Mason Plumlee (1), Shaun Livingston (2), Jeremy Lin (2), Courtney Lee (2), Jeff McInnis (2), Jared Dudley (2), DeSagana Diop (2), Garrett Temple (3), Dante Cunningham (3).
+
+Rarest: Tamar Slay (5), Jorge Gutierrez (5), Treveon Graham (4), Bernard Robinson (4), Justin Hamilton (4), Stephen Graham (4), Linton Johnson (4), Chris Douglas-Roberts (4), Alan Anderson (4), Eric Williams (4).
+
+**Since 2001-02 (through 2025-26), name a player who played for both the Dallas Mavericks and the Brooklyn Nets.**
+
+49 valid answers, difficulty **medium**, tiers: 1: 9, 2: 12, 3: 16, 4: 11, 5: 1.
+
+Best known: Jason Kidd (1), DeAndre Jordan (1), Deron Williams (1), Vince Carter (1), Kyrie Irving (1), Jason Terry (1), Richard Jefferson (1), Devin Harris (1), D'Angelo Russell (1), Troy Murphy (2).
+
+Rarest: Maurice Ager (5), Theo Pinson (4), Kessler Edwards (4), Justin Anderson (4), Sean Williams (4), Antoine Wright (4), Moses Brown (4), Donnell Harvey (4), Chris Douglas-Roberts (4), Shawne Williams (4).
+
+#### `points-against`
+
+**Since 2001-02 (through 2025-26), name a player who scored 45 or more points against the Cleveland Cavaliers in a game.**
+
+15 valid answers, difficulty **medium**, tiers: 1: 12, 2: 3.
+
+Best known: LeBron James (1), James Harden (1), Luka Doncic (1), Allen Iverson (1), Damian Lillard (1), Paul Pierce (1), Giannis Antetokounmpo (1), Jayson Tatum (1), Gilbert Arenas (1), Jalen Brunson (1).
+
+Rarest: Jordan Poole (2), Miles Bridges (2), Victor Oladipo (2), Jamal Murray (1), Manu Ginobili (1), Jalen Brunson (1), Gilbert Arenas (1), Jayson Tatum (1), Giannis Antetokounmpo (1), Paul Pierce (1).
+
+**Since 2001-02 (through 2025-26), name a player who scored 35 or more points against the Chicago Bulls in a game.**
+
+90 valid answers, difficulty **easy**, tiers: 1: 62, 2: 21, 3: 7.
+
+Best known: LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Chris Paul (1), Russell Westbrook (1), Luka Doncic (1), Joel Embiid (1), Dirk Nowitzki (1).
+
+Rarest: Stanley Johnson (3), Juan Dixon (3), Allen Crabbe (3), Chris Boucher (3), Brice Sensabaugh (3), Taurean Prince (3), Lamond Murray (3), Will Barton (2), Wally Szczerbiak (2), Kevin Porter Jr. (2).
+
+**Since 2001-02 (through 2025-26), name a player who scored 30 or more points against the New York Knicks in a game.**
+
+237 valid answers, difficulty **easy**, tiers: 1: 123, 2: 85, 3: 23, 4: 6.
+
+Best known: LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Chris Paul (1), Tim Duncan (1), Russell Westbrook (1), Luka Doncic (1), Pau Gasol (1).
+
+Rarest: Mike Taylor (4), Justin Champagnie (4), Tre Mann (4), Alan Anderson (4), Julian Champagnie (4), Sandro Mamukelashvili (4), Hamidou Diallo (3), Isaiah Joe (3), Moritz Wagner (3), Noah Clowney (3).
+
+#### `teammate`
+
+**Since 2001-02 (through 2025-26), name a player who played in the same game as Anthony Edwards for the same team.**
+
+55 valid answers, difficulty **hard**, tiers: 1: 6, 2: 8, 3: 13, 4: 15, 5: 9, 6: 4.
+
+Best known: Rudy Gobert (1), Mike Conley (1), Karl-Anthony Towns (1), Ricky Rubio (1), Julius Randle (1), D'Angelo Russell (1), Greg Monroe (2), Joe Ingles (2), Ed Davis (2), Kyle Anderson (2).
+
+Rarest: Jesse Edwards (6), Tristen Newton (6), Rocco Zikarsky (6), Enrique Freeman (6), Leandro Bolmaro (5), Ashton Hagans (5), McKinley Wright IV (5), Matt Ryan (5), Joan Beringer (5), Wendell Moore Jr. (5).
+
+**Since 2001-02 (through 2025-26), name a player who played in the same game as Kevin Garnett for the same team.**
+
+150 valid answers, difficulty **medium**, tiers: 1: 24, 2: 29, 3: 31, 4: 31, 5: 31, 6: 4.
+
+Best known: Rajon Rondo (1), Brook Lopez (1), Andre Miller (1), Paul Pierce (1), Deron Williams (1), Andrei Kirilenko (1), Joe Johnson (1), Chauncey Billups (1), Karl-Anthony Towns (1), Ricky Rubio (1).
+
+Rarest: Kris Joseph (6), Fab Melo (6), Ndudi Ebi (6), Marcus Landry (6), Tornike Shengelia (5), Reggie Slater (5), J.R. Giddens (5), Dean Garrett (5), JaJuan Johnson (5), Bracey Wright (5).
+
+**Since 2001-02 (through 2025-26), name a player who played in the same game as Chris Paul for the same team.**
+
+249 valid answers, difficulty **medium**, tiers: 1: 43, 2: 52, 3: 57, 4: 52, 5: 23, 6: 22.
+
+Best known: James Harden (1), Kevin Durant (1), Stephen Curry (1), Shai Gilgeous-Alexander (1), Brook Lopez (1), Carmelo Anthony (1), Josh Smith (1), DeAndre Jordan (1), Tyson Chandler (1), Paul Pierce (1).
+
+Rarest: Vincent Edwards (6), Jahmyl Telfort (6), Branden Dawson (6), Paris Bass (6), Diamond Stone (6), Patrick Ewing Jr. (6), MJ Walker (6), Aaron Jackson (6), Harrison Ingram (6), Travis Leslie (6).
+
+#### `finals-appearance`
+
+**Since 2001-02 (through 2025-26), name a player who appeared in an NBA Finals game.**
+
+393 valid answers, difficulty **easy**, tiers: 1: 97, 2: 102, 3: 104, 4: 65, 5: 19, 6: 6.
+
+Best known: LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Chris Paul (1), Tim Duncan (1), Russell Westbrook (1), Luka Doncic (1), Pau Gasol (1).
+
+Rarest: Ty-Shon Alexander (6), Elijah Bryant (6), Malik Fitts (6), Donny Marshall (6), Alex Ducas (6), Enrique Freeman (6), Adam Flagler (5), Malcolm Miller (5), Juwan Morgan (5), Terrel Harris (5).
+
+#### `finals-three`
+
+**Since 2001-02 (through 2025-26), name a player who made a three-pointer in an NBA Finals game.**
+
+227 valid answers, difficulty **easy**, tiers: 1: 72, 2: 62, 3: 65, 4: 26, 5: 1, 6: 1.
+
+Best known: LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Chris Paul (1), Russell Westbrook (1), Luka Doncic (1), Dirk Nowitzki (1), Stephen Curry (1).
+
+Rarest: Malik Fitts (6), Carter Bryant (5), Steve Kerr (4), Alfonzo McKinnie (4), Brian Shaw (4), Ousmane Dieng (4), Ben Sheppard (4), Patrick McCaw (4), Jordan Nwora (4), Quinn Cook (4).
+
+#### `finals-steal-block`
+
+**Since 2001-02 (through 2025-26), name a player who recorded a steal or a block in an NBA Finals game.**
+
+296 valid answers, difficulty **easy**, tiers: 1: 96, 2: 90, 3: 77, 4: 30, 5: 3.
+
+Best known: LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Chris Paul (1), Tim Duncan (1), Russell Westbrook (1), Luka Doncic (1), Pau Gasol (1).
+
+Rarest: Carter Bryant (5), Ariel Hukporti (5), James Michael McAdoo (5), Steve Kerr (4), Brian Shaw (4), Didier Ilunga-Mbenga (4), Ousmane Dieng (4), Ben Sheppard (4), Jordan Bell (4), Patrick McCaw (4).
+
+#### `finals-year`
+
+**Since 2001-02 (through 2025-26), name a player who appeared in the 2011 NBA Finals.**
+
+21 valid answers, difficulty **medium**, tiers: 1: 11, 2: 5, 3: 4, 4: 1.
+
+Best known: LeBron James (1), Dirk Nowitzki (1), Jason Kidd (1), Dwyane Wade (1), Tyson Chandler (1), Shawn Marion (1), Chris Bosh (1), Jason Terry (1), Mike Bibby (1), Udonis Haslem (1).
+
+Rarest: Brian Cardinal (4), Eddie House (3), Joel Anthony (3), DeShawn Stevenson (3), Ian Mahinmi (3), Juwan Howard (2), Mike Miller (2), Mario Chalmers (2), Brendan Haywood (2), J.J. Barea (2).
+
+**Since 2001-02 (through 2025-26), name a player who appeared in the 2010 NBA Finals.**
+
+25 valid answers, difficulty **hard**, tiers: 1: 10, 2: 5, 3: 7, 4: 3.
+
+Best known: Kobe Bryant (1), Pau Gasol (1), Kevin Garnett (1), Rajon Rondo (1), Paul Pierce (1), Ray Allen (1), Lamar Odom (1), Metta World Peace (1), Rasheed Wallace (1), Tony Allen (1).
+
+Rarest: Didier Ilunga-Mbenga (4), Josh Powell (4), Brian Scalabrine (4), Shannon Brown (3), Shelden Williams (3), Sasha Vujacic (3), Marquis Daniels (3), Glen Davis (3), Luke Walton (3), Jordan Farmar (3).
+
+**Since 2001-02 (through 2025-26), name a player who appeared in the 2025 NBA Finals.**
+
+33 valid answers, difficulty **hard**, tiers: 1: 4, 2: 5, 3: 12, 4: 5, 5: 5, 6: 2.
+
+Best known: Shai Gilgeous-Alexander (1), Myles Turner (1), T.J. McConnell (1), Pascal Siakam (1), Tyrese Haliburton (2), Jalen Williams (2), James Johnson (2), Alex Caruso (2), Isaiah Hartenstein (2), Bennedict Mathurin (3).
+
+Rarest: Alex Ducas (6), Enrique Freeman (6), Adam Flagler (5), RayJ Dennis (5), Dillon Jones (5), Johnny Furphy (5), Branden Carlson (5), Ousmane Dieng (4), Ben Sheppard (4), Quenton Jackson (4).
+
+#### `month-points`
+
+**Since 2001-02 (through 2025-26), name a player who scored 25 or more points in a regular-season game in October 2002.**
+
+15 valid answers, difficulty **medium**, tiers: 1: 9, 2: 5, 3: 1.
+
+Best known: Kobe Bryant (1), Pau Gasol (1), Allen Iverson (1), Tracy McGrady (1), Paul Pierce (1), Ray Allen (1), Antawn Jamison (1), Rasheed Wallace (1), Peja Stojakovic (1), Allan Houston (2).
+
+Rarest: Gordan Giricek (3), Brent Barry (2), Ricky Davis (2), Glenn Robinson (2), Steve Francis (2), Allan Houston (2), Peja Stojakovic (1), Rasheed Wallace (1), Antawn Jamison (1), Ray Allen (1).
+
+**Since 2001-02 (through 2025-26), name a player who scored 20 or more points in a regular-season game in October 2015.**
+
+63 valid answers, difficulty **easy**, tiers: 1: 43, 2: 16, 3: 4.
+
+Best known: LeBron James (1), James Harden (1), Kevin Durant (1), Kobe Bryant (1), Russell Westbrook (1), Stephen Curry (1), Anthony Davis (1), Andre Drummond (1), Rajon Rondo (1), Damian Lillard (1).
+
+Rarest: Derrick Williams (3), Nikola Mirotic (3), DeMarre Carroll (3), Jahlil Okafor (3), Michael Carter-Williams (2), Terrence Ross (2), Ryan Anderson (2), Brandon Knight (2), Evan Fournier (2), Marcus Morris Sr. (2).
+
+**Since 2001-02 (through 2025-26), name a player who scored 20 or more points in a regular-season game in March 2025.**
+
+206 valid answers, difficulty **easy**, tiers: 1: 55, 2: 56, 3: 61, 4: 29, 5: 5.
+
+Best known: LeBron James (1), James Harden (1), Kevin Durant (1), Russell Westbrook (1), Luka Doncic (1), Stephen Curry (1), Shai Gilgeous-Alexander (1), Andre Drummond (1), Damian Lillard (1), Brook Lopez (1).
+
+Rarest: Jared Rhoden (5), Colby Jones (5), A.J. Lawson (5), AJ Johnson (5), Kai Jones (5), Baylor Scheierman (4), DaQuan Jeffries (4), Kessler Edwards (4), Orlando Robinson (4), Jeff Dowtin Jr. (4).
+
+#### `month-threes`
+
+**Since 2001-02 (through 2025-26), name a player who made 4 or more three-pointers in a regular-season game in October 2013.**
+
+15 valid answers, difficulty **medium**, tiers: 1: 11, 2: 3, 3: 1.
+
+Best known: LeBron James (1), Dirk Nowitzki (1), Stephen Curry (1), Damian Lillard (1), Paul George (1), Chauncey Billups (1), Klay Thompson (1), Jason Terry (1), Ray Allen (1), Trevor Ariza (1).
+
+Rarest: Francisco Garcia (3), Michael Carter-Williams (2), Mario Chalmers (2), George Hill (2), Shane Battier (1), Trevor Ariza (1), Ray Allen (1), Jason Terry (1), Klay Thompson (1), Chauncey Billups (1).
+
+**Since 2001-02 (through 2025-26), name a player who made 5 or more three-pointers in a regular-season game in October 2022.**
+
+49 valid answers, difficulty **easy**, tiers: 1: 23, 2: 17, 3: 8, 4: 1.
+
+Best known: James Harden (1), Stephen Curry (1), Damian Lillard (1), Brook Lopez (1), Kyle Lowry (1), Nikola Vucevic (1), Mike Conley (1), Jrue Holiday (1), Kevin Love (1), Jayson Tatum (1).
+
+Rarest: Dean Wade (4), Bones Hyland (3), Chris Duarte (3), Max Strus (3), Doug McDermott (3), Davion Mitchell (3), Josh Richardson (3), Bennedict Mathurin (3), Kevin Huerter (3), Gary Trent Jr. (2).
+
+**Since 2001-02 (through 2025-26), name a player who made 4 or more three-pointers in a regular-season game in March 2025.**
+
+200 valid answers, difficulty **easy**, tiers: 1: 44, 2: 46, 3: 62, 4: 44, 5: 4.
+
+Best known: LeBron James (1), James Harden (1), Kevin Durant (1), Chris Paul (1), Russell Westbrook (1), Luka Doncic (1), Stephen Curry (1), Shai Gilgeous-Alexander (1), Damian Lillard (1), DeMar DeRozan (1).
+
+Rarest: Jalen Hood-Schifino (5), Jared Rhoden (5), Colby Jones (5), A.J. Lawson (5), Caleb Houstan (4), Baylor Scheierman (4), DaQuan Jeffries (4), Antonio Reeves (4), Jeff Dowtin Jr. (4), Jamison Battle (4).
+
+#### `season-points`
+
+**Since 2001-02 (through 2025-26), name a player who scored 45 or more points in a regular-season game in the 2008-09 season.**
+
+15 valid answers, difficulty **medium**, tiers: 1: 13, 2: 2.
+
+Best known: LeBron James (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Dirk Nowitzki (1), Carmelo Anthony (1), Tony Parker (1), Dwyane Wade (1), Jamal Crawford (1), Shaquille O'Neal (1).
+
+Rarest: Brandon Roy (2), JR Smith (2), Kevin Martin (1), Devin Harris (1), Amar'e Stoudemire (1), Shaquille O'Neal (1), Jamal Crawford (1), Dwyane Wade (1), Tony Parker (1), Carmelo Anthony (1).
+
+**Since 2001-02 (through 2025-26), name a player who scored 35 or more points in a regular-season game in the 2004-05 season.**
+
+54 valid answers, difficulty **easy**, tiers: 1: 34, 2: 16, 3: 4.
+
+Best known: LeBron James (1), Kobe Bryant (1), Tim Duncan (1), Dirk Nowitzki (1), Kevin Garnett (1), Allen Iverson (1), Jason Kidd (1), Carmelo Anthony (1), Tony Parker (1), Tracy McGrady (1).
+
+Rarest: Bob Sura (3), Darius Miles (3), Tim Thomas (3), Morris Peterson (3), Reggie Miller (2), Donyell Marshall (2), Quentin Richardson (2), Grant Hill (2), Damon Stoudamire (2), Ricky Davis (2).
+
+**Since 2001-02 (through 2025-26), name a player who scored 30 or more points in a regular-season game in the 2025-26 season.**
+
+161 valid answers, difficulty **easy**, tiers: 1: 53, 2: 47, 3: 41, 4: 16, 5: 4.
+
+Best known: LeBron James (1), James Harden (1), Kevin Durant (1), Luka Doncic (1), Joel Embiid (1), Stephen Curry (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), Brook Lopez (1), DeMar DeRozan (1).
+
+Rarest: Blake Hinson (5), Jett Howard (5), Terrence Shannon Jr. (5), Kennedy Chandler (5), Will Richard (4), Baylor Scheierman (4), Rayan Rupert (4), Ousmane Dieng (4), Nique Clifford (4), Cody Williams (4).
+
+#### `season-threes`
+
+**Since 2001-02 (through 2025-26), name a player who made 8 or more three-pointers in a regular-season game in the 2015-16 season.**
+
+15 valid answers, difficulty **medium**, tiers: 1: 7, 2: 4, 3: 3, 4: 1.
+
+Best known: Stephen Curry (1), Damian Lillard (1), Paul George (1), Klay Thompson (1), Trevor Ariza (1), D'Angelo Russell (1), Khris Middleton (1), JR Smith (2), JJ Redick (2), Wesley Matthews (2).
+
+Rarest: Troy Daniels (4), Rodney Hood (3), Omri Casspi (3), Nikola Mirotic (3), CJ Miles (2), Wesley Matthews (2), JJ Redick (2), JR Smith (2), Khris Middleton (1), D'Angelo Russell (1).
+
+**Since 2001-02 (through 2025-26), name a player who made 6 or more three-pointers in a regular-season game in the 2011-12 season.**
+
+44 valid answers, difficulty **easy**, tiers: 1: 18, 2: 16, 3: 7, 4: 2, 5: 1.
+
+Best known: Stephen Curry (1), Kyle Lowry (1), Deron Williams (1), Jrue Holiday (1), Kevin Love (1), Joe Johnson (1), Paul George (1), Chauncey Billups (1), Kyrie Irving (1), Ray Allen (1).
+
+Rarest: Lester Hudson (5), Henry Walker (4), Steve Novak (4), Shannon Brown (3), James Jones (3), Carlos Delfino (3), Anthony Morrow (3), Jodie Meeks (3), Dorell Wright (3), Jordan Farmar (3).
+
+**Since 2001-02 (through 2025-26), name a player who made 6 or more three-pointers in a regular-season game in the 2025-26 season.**
+
+154 valid answers, difficulty **easy**, tiers: 1: 37, 2: 34, 3: 47, 4: 29, 5: 6, 6: 1.
+
+Best known: James Harden (1), Kevin Durant (1), Russell Westbrook (1), Luka Doncic (1), Stephen Curry (1), Brook Lopez (1), Al Horford (1), Jrue Holiday (1), Trae Young (1), Paul George (1).
+
+Rarest: Koby Brea (6), Adama Bal (5), John Poulakidas (5), Ron Harper Jr. (5), Dariq Whitehead (5), Tyson Etienne (5), Daeqwon Plowden (5), Devin Carter (4), Kasparas Jakucionis (4), Baylor Scheierman (4).
+
+#### `season-rebounds`
+
+**Since 2001-02 (through 2025-26), name a player who grabbed 20 or more rebounds in a regular-season game in the 2001-02 season.**
+
+15 valid answers, difficulty **hard**, tiers: 1: 6, 2: 4, 3: 3, 4: 2.
+
+Best known: Tim Duncan (1), Dirk Nowitzki (1), Kevin Garnett (1), Ben Wallace (1), Elton Brand (1), Marcus Camby (1), Kurt Thomas (2), P.J. Brown (2), Donyell Marshall (2), Dikembe Mutombo (2).
+
+Rarest: Hakeem Olajuwon (4), Clarence Weatherspoon (4), Danny Fortson (3), Michael Olowokandi (3), Lorenzen Wright (3), Dikembe Mutombo (2), Donyell Marshall (2), P.J. Brown (2), Kurt Thomas (2), Marcus Camby (1).
+
+**Since 2001-02 (through 2025-26), name a player who grabbed 16 or more rebounds in a regular-season game in the 2011-12 season.**
+
+49 valid answers, difficulty **easy**, tiers: 1: 28, 2: 16, 3: 3, 4: 1, 5: 1.
+
+Best known: Dwight Howard (1), Kevin Durant (1), Tim Duncan (1), Pau Gasol (1), Dirk Nowitzki (1), Rajon Rondo (1), Josh Smith (1), DeAndre Jordan (1), Tyson Chandler (1), Kevin Love (1).
+
+Rarest: Solomon Alabi (5), Gustavo Alfonso Ayon (4), Glen Davis (3), Trevor Booker (3), Nikola Pekovic (3), Luc Mbah a Moute (2), Marreese Speights (2), Ryan Anderson (2), Andrew Bynum (2), Jason Thompson (2).
+
+**Since 2001-02 (through 2025-26), name a player who grabbed 14 or more rebounds in a regular-season game in the 2024-25 season.**
+
+110 valid answers, difficulty **easy**, tiers: 1: 32, 2: 28, 3: 26, 4: 21, 5: 3.
+
+Best known: LeBron James (1), Russell Westbrook (1), Luka Doncic (1), Joel Embiid (1), Anthony Davis (1), Andre Drummond (1), Rudy Gobert (1), DeAndre Jordan (1), Nikola Vucevic (1), Giannis Antetokounmpo (1).
+
+Rarest: Marcus Bagley (5), Colin Castleton (5), Oscar Tshiebwe (5), Jonathan Mogbo (4), Tidjane Salaun (4), Charles Bassey (4), Mouhamed Gueye (4), Adem Bona (4), Bol Bol (4), Trayce Jackson-Davis (4).
+
+#### `season-assists`
+
+**Since 2001-02 (through 2025-26), name a player who recorded 15 or more assists in a regular-season game in the 2002-03 season.**
+
+15 valid answers, difficulty **medium**, tiers: 1: 7, 2: 7, 3: 1.
+
+Best known: Steve Nash (1), Jason Kidd (1), Andre Miller (1), Gilbert Arenas (1), Jason Terry (1), Mike Bibby (1), Stephon Marbury (1), Jamaal Tinsley (2), Jason Williams (2), Gary Payton (2).
+
+Rarest: Troy Hudson (3), Anthony Carter (2), Brent Barry (2), Eric Snow (2), Sam Cassell (2), Gary Payton (2), Jason Williams (2), Jamaal Tinsley (2), Stephon Marbury (1), Mike Bibby (1).
+
+**Since 2001-02 (through 2025-26), name a player who recorded 13 or more assists in a regular-season game in the 2020-21 season.**
+
+36 valid answers, difficulty **medium**, tiers: 1: 28, 2: 7, 4: 1.
+
+Best known: LeBron James (1), James Harden (1), Kevin Durant (1), Chris Paul (1), Russell Westbrook (1), Luka Doncic (1), Rajon Rondo (1), Damian Lillard (1), DeMar DeRozan (1), Kyle Lowry (1).
+
+Rarest: Facundo Campazzo (4), Lonzo Ball (2), Kevin Porter Jr. (2), Coby White (2), Cory Joseph (2), Joe Ingles (2), Tyus Jones (2), Fred VanVleet (2), D'Angelo Russell (1), T.J. McConnell (1).
+
+**Since 2001-02 (through 2025-26), name a player who recorded 11 or more assists in a regular-season game in the 2023-24 season.**
+
+91 valid answers, difficulty **easy**, tiers: 1: 42, 2: 30, 3: 13, 4: 6.
+
+Best known: LeBron James (1), James Harden (1), Kevin Durant (1), Chris Paul (1), Russell Westbrook (1), Luka Doncic (1), Joel Embiid (1), Stephen Curry (1), Anthony Davis (1), Shai Gilgeous-Alexander (1).
+
+Rarest: Skylar Mays (4), Vasilije Micic (4), Craig Porter Jr. (4), Jared Butler (4), Marcus Sasser (4), Jaylin Williams (4), Bones Hyland (3), Jevon Carter (3), Grant Williams (3), Talen Horton-Tucker (3).
+
+#### `made-playoffs`
+
+**Since 2001-02 (through 2025-26), name a team that made the playoffs in the 2001-02 season.**
+
+16 valid answers, difficulty **hard**, tiers: 1: 13, 4: 3.
+
+Best known: Boston Celtics (1), Dallas Mavericks (1), Detroit Pistons (1), Indiana Pacers (1), Los Angeles Lakers (1), Minnesota Timberwolves (1), Orlando Magic (1), Philadelphia 76ers (1), Portland Trail Blazers (1), Sacramento Kings (1).
+
+Rarest: Oklahoma City Thunder (4), New Orleans Pelicans (4), Brooklyn Nets (4), Utah Jazz (1), Toronto Raptors (1), San Antonio Spurs (1), Sacramento Kings (1), Portland Trail Blazers (1), Philadelphia 76ers (1), Orlando Magic (1).
+
+**Since 2001-02 (through 2025-26), name a team that made the playoffs in the 2013-14 season.**
+
+16 valid answers, difficulty **medium**, tiers: 1: 15, 4: 1.
+
+Best known: Atlanta Hawks (1), Brooklyn Nets (1), Chicago Bulls (1), Dallas Mavericks (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Memphis Grizzlies (1), Miami Heat (1).
+
+Rarest: Charlotte Hornets (4), Washington Wizards (1), Toronto Raptors (1), San Antonio Spurs (1), Portland Trail Blazers (1), Oklahoma City Thunder (1), Miami Heat (1), Memphis Grizzlies (1), LA Clippers (1), Indiana Pacers (1).
+
+**Since 2001-02 (through 2025-26), name a team that made the playoffs in the 2025-26 season.**
+
+16 valid answers, difficulty **easy**, tiers: 1: 16.
+
+Best known: Atlanta Hawks (1), Boston Celtics (1), Cleveland Cavaliers (1), Denver Nuggets (1), Detroit Pistons (1), Houston Rockets (1), Los Angeles Lakers (1), Minnesota Timberwolves (1), New York Knicks (1), Oklahoma City Thunder (1).
+
+Rarest: Toronto Raptors (1), San Antonio Spurs (1), Portland Trail Blazers (1), Phoenix Suns (1), Philadelphia 76ers (1), Orlando Magic (1), Oklahoma City Thunder (1), New York Knicks (1), Minnesota Timberwolves (1), Los Angeles Lakers (1).
+
+#### `wins-in-season`
+
+**Since 2001-02 (through 2025-26), name a team that won 50 or more regular-season games in the 2005-06 season.**
+
+5 valid answers, difficulty **medium**, tiers: 1: 5.
+
+Best known: Cleveland Cavaliers (1), Dallas Mavericks (1), Detroit Pistons (1), Phoenix Suns (1), San Antonio Spurs (1).
+
+Rarest: San Antonio Spurs (1), Phoenix Suns (1), Detroit Pistons (1), Dallas Mavericks (1), Cleveland Cavaliers (1).
+
+**Since 2001-02 (through 2025-26), name a team that won 45 or more regular-season games in the 2010-11 season.**
+
+12 valid answers, difficulty **medium**, tiers: 1: 11, 4: 1.
+
+Best known: Boston Celtics (1), Chicago Bulls (1), Dallas Mavericks (1), Denver Nuggets (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1), Oklahoma City Thunder (1), Orlando Magic (1), Portland Trail Blazers (1).
+
+Rarest: New Orleans Pelicans (4), San Antonio Spurs (1), Portland Trail Blazers (1), Orlando Magic (1), Oklahoma City Thunder (1), Miami Heat (1), Memphis Grizzlies (1), Los Angeles Lakers (1), Denver Nuggets (1), Dallas Mavericks (1).
+
+**Since 2001-02 (through 2025-26), name a team that won 40 or more regular-season games in the 2022-23 season.**
+
+20 valid answers, difficulty **easy**, tiers: 1: 20.
+
+Best known: Atlanta Hawks (1), Boston Celtics (1), Brooklyn Nets (1), Chicago Bulls (1), Cleveland Cavaliers (1), Denver Nuggets (1), Golden State Warriors (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1).
+
+Rarest: Toronto Raptors (1), Sacramento Kings (1), Phoenix Suns (1), Philadelphia 76ers (1), Oklahoma City Thunder (1), New York Knicks (1), New Orleans Pelicans (1), Minnesota Timberwolves (1), Milwaukee Bucks (1), Miami Heat (1).
+
+#### `home-wins-in-season`
+
+**Since 2001-02 (through 2025-26), name a team that won 30 or more home games in the 2023-24 season.**
+
+5 valid answers, difficulty **medium**, tiers: 1: 5.
+
+Best known: Boston Celtics (1), Denver Nuggets (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), Oklahoma City Thunder (1).
+
+Rarest: Oklahoma City Thunder (1), Minnesota Timberwolves (1), Milwaukee Bucks (1), Denver Nuggets (1), Boston Celtics (1).
+
+**Since 2001-02 (through 2025-26), name a team that won 33 or more home games in the 2007-08 season.**
+
+6 valid answers, difficulty **medium**, tiers: 1: 6.
+
+Best known: Boston Celtics (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), San Antonio Spurs (1), Utah Jazz (1).
+
+Rarest: Utah Jazz (1), San Antonio Spurs (1), Detroit Pistons (1), Denver Nuggets (1), Dallas Mavericks (1), Boston Celtics (1).
+
+**Since 2001-02 (through 2025-26), name a team that won 30 or more home games in the 2008-09 season.**
+
+10 valid answers, difficulty **medium**, tiers: 1: 10.
+
+Best known: Atlanta Hawks (1), Boston Celtics (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Houston Rockets (1), Los Angeles Lakers (1), Orlando Magic (1), Portland Trail Blazers (1), Utah Jazz (1).
+
+Rarest: Utah Jazz (1), Portland Trail Blazers (1), Orlando Magic (1), Los Angeles Lakers (1), Houston Rockets (1), Denver Nuggets (1), Dallas Mavericks (1), Cleveland Cavaliers (1), Boston Celtics (1), Atlanta Hawks (1).
+
+#### `road-wins-in-season`
+
+**Since 2001-02 (through 2025-26), name a team that won 23 or more road games in the 2002-03 season.**
+
+5 valid answers, difficulty **medium**, tiers: 1: 5.
+
+Best known: Dallas Mavericks (1), Philadelphia 76ers (1), Portland Trail Blazers (1), Sacramento Kings (1), San Antonio Spurs (1).
+
+Rarest: San Antonio Spurs (1), Sacramento Kings (1), Portland Trail Blazers (1), Philadelphia 76ers (1), Dallas Mavericks (1).
+
+**Since 2001-02 (through 2025-26), name a team that won 23 or more road games in the 2010-11 season.**
+
+8 valid answers, difficulty **medium**, tiers: 1: 8.
+
+Best known: Boston Celtics (1), Chicago Bulls (1), Dallas Mavericks (1), Los Angeles Lakers (1), Miami Heat (1), Oklahoma City Thunder (1), Orlando Magic (1), San Antonio Spurs (1).
+
+Rarest: San Antonio Spurs (1), Orlando Magic (1), Oklahoma City Thunder (1), Miami Heat (1), Los Angeles Lakers (1), Dallas Mavericks (1), Chicago Bulls (1), Boston Celtics (1).
+
+**Since 2001-02 (through 2025-26), name a team that won 20 or more road games in the 2025-26 season.**
+
+15 valid answers, difficulty **easy**, tiers: 1: 15.
+
+Best known: Atlanta Hawks (1), Boston Celtics (1), Charlotte Hornets (1), Cleveland Cavaliers (1), Denver Nuggets (1), Detroit Pistons (1), Houston Rockets (1), Los Angeles Lakers (1), Minnesota Timberwolves (1), New York Knicks (1).
+
+Rarest: Toronto Raptors (1), San Antonio Spurs (1), Phoenix Suns (1), Philadelphia 76ers (1), Oklahoma City Thunder (1), New York Knicks (1), Minnesota Timberwolves (1), Los Angeles Lakers (1), Houston Rockets (1), Detroit Pistons (1).
+
+#### `playoff-wins-in-season`
+
+**Since 2001-02 (through 2025-26), name a team that won 4 or more playoff games in the 2001-02 postseason.**
+
+8 valid answers, difficulty **hard**, tiers: 1: 6, 4: 2.
+
+Best known: Boston Celtics (1), Dallas Mavericks (1), Detroit Pistons (1), Los Angeles Lakers (1), Sacramento Kings (1), San Antonio Spurs (1), Brooklyn Nets (4), New Orleans Pelicans (4).
+
+Rarest: New Orleans Pelicans (4), Brooklyn Nets (4), San Antonio Spurs (1), Sacramento Kings (1), Los Angeles Lakers (1), Detroit Pistons (1), Dallas Mavericks (1), Boston Celtics (1).
+
+**Since 2001-02 (through 2025-26), name a team that won 4 or more playoff games in the 2025-26 postseason.**
+
+8 valid answers, difficulty **medium**, tiers: 1: 8.
+
+Best known: Cleveland Cavaliers (1), Detroit Pistons (1), Los Angeles Lakers (1), Minnesota Timberwolves (1), New York Knicks (1), Oklahoma City Thunder (1), Philadelphia 76ers (1), San Antonio Spurs (1).
+
+Rarest: San Antonio Spurs (1), Philadelphia 76ers (1), Oklahoma City Thunder (1), New York Knicks (1), Minnesota Timberwolves (1), Los Angeles Lakers (1), Detroit Pistons (1), Cleveland Cavaliers (1).
+
+**Since 2001-02 (through 2025-26), name a team that won 1 or more playoff games in the 2002-03 postseason.**
+
+16 valid answers, difficulty **medium**, tiers: 1: 14, 4: 2.
+
+Best known: Boston Celtics (1), Dallas Mavericks (1), Detroit Pistons (1), Indiana Pacers (1), Los Angeles Lakers (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), Orlando Magic (1), Philadelphia 76ers (1), Phoenix Suns (1).
+
+Rarest: New Orleans Pelicans (4), Brooklyn Nets (4), Utah Jazz (1), San Antonio Spurs (1), Sacramento Kings (1), Portland Trail Blazers (1), Phoenix Suns (1), Philadelphia 76ers (1), Orlando Magic (1), Minnesota Timberwolves (1).
+
+#### `regulation-points-in-season`
+
+**Since 2001-02 (through 2025-26), name a team that scored 135 or more points in a regulation game in the 2006-07 season.**
+
+5 valid answers, difficulty **medium**, tiers: 1: 5.
+
+Best known: Denver Nuggets (1), Golden State Warriors (1), Memphis Grizzlies (1), Phoenix Suns (1), Sacramento Kings (1).
+
+Rarest: Sacramento Kings (1), Phoenix Suns (1), Memphis Grizzlies (1), Golden State Warriors (1), Denver Nuggets (1).
+
+**Since 2001-02 (through 2025-26), name a team that scored 130 or more points in a regulation game in the 2013-14 season.**
+
+12 valid answers, difficulty **easy**, tiers: 1: 12.
+
+Best known: Brooklyn Nets (1), Denver Nuggets (1), Golden State Warriors (1), Houston Rockets (1), LA Clippers (1), Los Angeles Lakers (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New Orleans Pelicans (1), Oklahoma City Thunder (1).
+
+Rarest: San Antonio Spurs (1), Portland Trail Blazers (1), Oklahoma City Thunder (1), New Orleans Pelicans (1), Minnesota Timberwolves (1), Milwaukee Bucks (1), Los Angeles Lakers (1), LA Clippers (1), Houston Rockets (1), Golden State Warriors (1).
+
+**Since 2001-02 (through 2025-26), name a team that scored 135 or more points in a regulation game in the 2024-25 season.**
+
+24 valid answers, difficulty **easy**, tiers: 1: 24.
+
+Best known: Atlanta Hawks (1), Boston Celtics (1), Charlotte Hornets (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Houston Rockets (1).
+
+Rarest: Utah Jazz (1), San Antonio Spurs (1), Sacramento Kings (1), Portland Trail Blazers (1), Oklahoma City Thunder (1), New York Knicks (1), New Orleans Pelicans (1), Minnesota Timberwolves (1), Milwaukee Bucks (1), Miami Heat (1).
+
+#### `margin-in-season`
+
+**Since 2001-02 (through 2025-26), name a team that won a game by 40 or more points in the 2009-10 season.**
+
+5 valid answers, difficulty **medium**, tiers: 1: 5.
+
+Best known: Dallas Mavericks (1), Golden State Warriors (1), Los Angeles Lakers (1), New York Knicks (1), Orlando Magic (1).
+
+Rarest: Orlando Magic (1), New York Knicks (1), Los Angeles Lakers (1), Golden State Warriors (1), Dallas Mavericks (1).
+
+**Since 2001-02 (through 2025-26), name a team that won a game by 35 or more points in the 2019-20 season.**
+
+14 valid answers, difficulty **easy**, tiers: 1: 14.
+
+Best known: Boston Celtics (1), Brooklyn Nets (1), Chicago Bulls (1), Dallas Mavericks (1), Denver Nuggets (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Memphis Grizzlies (1), Milwaukee Bucks (1).
+
+Rarest: Utah Jazz (1), Toronto Raptors (1), Phoenix Suns (1), Philadelphia 76ers (1), Milwaukee Bucks (1), Memphis Grizzlies (1), LA Clippers (1), Indiana Pacers (1), Houston Rockets (1), Denver Nuggets (1).
+
+**Since 2001-02 (through 2025-26), name a team that won a game by 30 or more points in the 2025-26 season.**
+
+24 valid answers, difficulty **easy**, tiers: 1: 24.
+
+Best known: Atlanta Hawks (1), Boston Celtics (1), Brooklyn Nets (1), Charlotte Hornets (1), Chicago Bulls (1), Cleveland Cavaliers (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Houston Rockets (1).
+
+Rarest: Utah Jazz (1), Toronto Raptors (1), San Antonio Spurs (1), Portland Trail Blazers (1), Phoenix Suns (1), Orlando Magic (1), Oklahoma City Thunder (1), New York Knicks (1), Minnesota Timberwolves (1), Miami Heat (1).
+
+#### `threes-in-season`
+
+**Since 2001-02 (through 2025-26), name a team that made 17 or more three-pointers as a team in a game in the 2004-05 season.**
+
+5 valid answers, difficulty **hard**, tiers: 1: 4, 4: 1.
+
+Best known: Golden State Warriors (1), New York Knicks (1), Phoenix Suns (1), Toronto Raptors (1), Oklahoma City Thunder (4).
+
+Rarest: Oklahoma City Thunder (4), Toronto Raptors (1), Phoenix Suns (1), New York Knicks (1), Golden State Warriors (1).
+
+**Since 2001-02 (through 2025-26), name a team that made 14 or more three-pointers as a team in a game in the 2001-02 season.**
+
+14 valid answers, difficulty **medium**, tiers: 1: 13, 4: 1.
+
+Best known: Boston Celtics (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Detroit Pistons (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Milwaukee Bucks (1), New York Knicks (1), Orlando Magic (1).
+
+Rarest: Brooklyn Nets (4), Toronto Raptors (1), San Antonio Spurs (1), Sacramento Kings (1), Orlando Magic (1), New York Knicks (1), Milwaukee Bucks (1), LA Clippers (1), Indiana Pacers (1), Houston Rockets (1).
+
+**Since 2001-02 (through 2025-26), name a team that made 14 or more three-pointers as a team in a game in the 2013-14 season.**
+
+24 valid answers, difficulty **easy**, tiers: 1: 24.
+
+Best known: Atlanta Hawks (1), Boston Celtics (1), Brooklyn Nets (1), Chicago Bulls (1), Dallas Mavericks (1), Denver Nuggets (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1).
+
+Rarest: Washington Wizards (1), Utah Jazz (1), Toronto Raptors (1), San Antonio Spurs (1), Sacramento Kings (1), Portland Trail Blazers (1), Phoenix Suns (1), Philadelphia 76ers (1), Orlando Magic (1), Oklahoma City Thunder (1).
+
+#### `held-opponent-in-season`
+
+**Since 2001-02 (through 2025-26), name a team that held an opponent to 65 or fewer points in a game in the 2001-02 season.**
+
+5 valid answers, difficulty **medium**, tiers: 1: 5.
+
+Best known: Boston Celtics (1), Detroit Pistons (1), New York Knicks (1), Portland Trail Blazers (1), Utah Jazz (1).
+
+Rarest: Utah Jazz (1), Portland Trail Blazers (1), New York Knicks (1), Detroit Pistons (1), Boston Celtics (1).
+
+**Since 2001-02 (through 2025-26), name a team that held an opponent to 65 or fewer points in a game in the 2003-04 season.**
+
+13 valid answers, difficulty **medium**, tiers: 1: 12, 4: 1.
+
+Best known: Boston Celtics (1), Detroit Pistons (1), Houston Rockets (1), Indiana Pacers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New York Knicks (1), Sacramento Kings (1).
+
+Rarest: Brooklyn Nets (4), Washington Wizards (1), San Antonio Spurs (1), Sacramento Kings (1), New York Knicks (1), Minnesota Timberwolves (1), Milwaukee Bucks (1), Miami Heat (1), Memphis Grizzlies (1), Indiana Pacers (1).
+
+**Since 2001-02 (through 2025-26), name a team that held an opponent to 75 or fewer points in a game in the 2006-07 season.**
+
+23 valid answers, difficulty **hard**, tiers: 1: 19, 4: 4.
+
+Best known: Atlanta Hawks (1), Boston Celtics (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1).
+
+Rarest: Oklahoma City Thunder (4), New Orleans Pelicans (4), Charlotte Hornets (4), Brooklyn Nets (4), Utah Jazz (1), San Antonio Spurs (1), Portland Trail Blazers (1), Philadelphia 76ers (1), Orlando Magic (1), New York Knicks (1).
+
+#### `overtime-wins-in-season`
+
+**Since 2001-02 (through 2025-26), name a team that won a game that went to 2 or more overtimes in the 2001-02 season.**
+
+6 valid answers, difficulty **hard**, tiers: 1: 5, 4: 1.
+
+Best known: Atlanta Hawks (1), Chicago Bulls (1), Dallas Mavericks (1), Miami Heat (1), Portland Trail Blazers (1), Brooklyn Nets (4).
+
+Rarest: Brooklyn Nets (4), Portland Trail Blazers (1), Miami Heat (1), Dallas Mavericks (1), Chicago Bulls (1), Atlanta Hawks (1).
+
+**Since 2001-02 (through 2025-26), name a team that won a game that went to 2 or more overtimes in the 2025-26 season.**
+
+8 valid answers, difficulty **medium**, tiers: 1: 8.
+
+Best known: Atlanta Hawks (1), Boston Celtics (1), LA Clippers (1), New York Knicks (1), Oklahoma City Thunder (1), Phoenix Suns (1), San Antonio Spurs (1), Utah Jazz (1).
+
+Rarest: Utah Jazz (1), San Antonio Spurs (1), Phoenix Suns (1), Oklahoma City Thunder (1), New York Knicks (1), LA Clippers (1), Boston Celtics (1), Atlanta Hawks (1).
+
+**Since 2001-02 (through 2025-26), name a team that won a game that went to 1 or more overtimes in the 2021-22 season.**
+
+24 valid answers, difficulty **easy**, tiers: 1: 24.
+
+Best known: Boston Celtics (1), Brooklyn Nets (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Houston Rockets (1), Indiana Pacers (1), Los Angeles Lakers (1).
+
+Rarest: Washington Wizards (1), Utah Jazz (1), Toronto Raptors (1), San Antonio Spurs (1), Sacramento Kings (1), Phoenix Suns (1), Philadelphia 76ers (1), Oklahoma City Thunder (1), New York Knicks (1), New Orleans Pelicans (1).
+
+#### `played-playoff-against`
+
+**Since 2001-02 (through 2025-26), name a team that played a playoff game against the Sacramento Kings.**
+
+7 valid answers, difficulty **hard**, tiers: 1: 6, 4: 1.
+
+Best known: Dallas Mavericks (1), Golden State Warriors (1), Los Angeles Lakers (1), Minnesota Timberwolves (1), San Antonio Spurs (1), Utah Jazz (1), Oklahoma City Thunder (4).
+
+Rarest: Oklahoma City Thunder (4), Utah Jazz (1), San Antonio Spurs (1), Minnesota Timberwolves (1), Los Angeles Lakers (1), Golden State Warriors (1), Dallas Mavericks (1).
+
+**Since 2001-02 (through 2025-26), name a team that played a playoff game against the Portland Trail Blazers.**
+
+11 valid answers, difficulty **medium**, tiers: 1: 11.
+
+Best known: Dallas Mavericks (1), Denver Nuggets (1), Golden State Warriors (1), Houston Rockets (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1), New Orleans Pelicans (1), Oklahoma City Thunder (1), Phoenix Suns (1).
+
+Rarest: San Antonio Spurs (1), Phoenix Suns (1), Oklahoma City Thunder (1), New Orleans Pelicans (1), Memphis Grizzlies (1), Los Angeles Lakers (1), LA Clippers (1), Houston Rockets (1), Golden State Warriors (1), Denver Nuggets (1).
+
+**Since 2001-02 (through 2025-26), name a team that played a playoff game against the San Antonio Spurs.**
+
+19 valid answers, difficulty **medium**, tiers: 1: 17, 4: 2.
+
+Best known: Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Houston Rockets (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1).
+
+Rarest: New Orleans Pelicans (4), Brooklyn Nets (4), Utah Jazz (1), Sacramento Kings (1), Portland Trail Blazers (1), Phoenix Suns (1), Oklahoma City Thunder (1), New York Knicks (1), Minnesota Timberwolves (1), Miami Heat (1).
+
+#### `beat-in-playoffs`
+
+**Since 2001-02 (through 2025-26), name a team that won a playoff game against the Sacramento Kings.**
+
+7 valid answers, difficulty **hard**, tiers: 1: 6, 4: 1.
+
+Best known: Dallas Mavericks (1), Golden State Warriors (1), Los Angeles Lakers (1), Minnesota Timberwolves (1), San Antonio Spurs (1), Utah Jazz (1), Oklahoma City Thunder (4).
+
+Rarest: Oklahoma City Thunder (4), Utah Jazz (1), San Antonio Spurs (1), Minnesota Timberwolves (1), Los Angeles Lakers (1), Golden State Warriors (1), Dallas Mavericks (1).
+
+**Since 2001-02 (through 2025-26), name a team that won a playoff game against the Cleveland Cavaliers.**
+
+11 valid answers, difficulty **hard**, tiers: 1: 10, 4: 1.
+
+Best known: Boston Celtics (1), Chicago Bulls (1), Detroit Pistons (1), Golden State Warriors (1), Indiana Pacers (1), New York Knicks (1), Orlando Magic (1), San Antonio Spurs (1), Toronto Raptors (1), Washington Wizards (1).
+
+Rarest: Brooklyn Nets (4), Washington Wizards (1), Toronto Raptors (1), San Antonio Spurs (1), Orlando Magic (1), New York Knicks (1), Indiana Pacers (1), Golden State Warriors (1), Detroit Pistons (1), Chicago Bulls (1).
+
+**Since 2001-02 (through 2025-26), name a team that won a playoff game against the San Antonio Spurs.**
+
+18 valid answers, difficulty **medium**, tiers: 1: 16, 4: 2.
+
+Best known: Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Houston Rockets (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1), Minnesota Timberwolves (1).
+
+Rarest: New Orleans Pelicans (4), Brooklyn Nets (4), Utah Jazz (1), Sacramento Kings (1), Portland Trail Blazers (1), Phoenix Suns (1), Oklahoma City Thunder (1), New York Knicks (1), Minnesota Timberwolves (1), Miami Heat (1).
+
+## What was dropped (star-heavy templates)
+
+- `points-regular`: n=35.0: 422 answers (too many); n=65.0: 7 answers (too few)
 - `triple-double-finals`: no threshold: 11 answers (too few)
-- `rebounds`: n=16: 452 answers (too many)
-- `assists`: n=22: 12 answers (too few)
-- `threes`: n=12: 8 answers (too few)
-- `blocks`: n=11: 7 answers (too few)
-- `steals`: n=5: 707 answers (too many); n=9: 12 answers (too few)
-- `ppg-season`: n=32: 9 answers (too few)
-- `franchises`: n=4: 766 answers (too many); n=5: 493 answers (too many)
-- `wins-season`: n=67: 4 answers (too few)
-- `points-regulation`: n=160: 2 answers (too few)
-- `win-margin`: n=60: 4 answers (too few)
-- `points-game7`: n=40: 10 answers (too few)
-- `points-bench`: n=45: 14 answers (too few)
-- `points-loss`: n=60: 9 answers (too few)
-- `points-road`: n=60: 11 answers (too few)
-- `rebounds-finals`: n=18: 11 answers (too few); n=20: 6 answers (too few)
-- `assists-playoff`: n=18: 6 answers (too few)
-- `assists-finals`: n=12: 10 answers (too few); n=14: 3 answers (too few)
-- `threes-playoff`: n=9: 11 answers (too few); n=10: 2 answers (too few)
-- `threes-finals`: n=7: 10 answers (too few); n=8: 2 answers (too few)
-- `blocks-playoff`: n=8: 9 answers (too few)
-- `steals-playoff`: n=7: 8 answers (too few)
-- `offensive-rebounds`: n=14: 8 answers (too few)
-- `free-throws`: n=24: 11 answers (too few)
-- `shots-taken`: n=40: 12 answers (too few); n=42: 7 answers (too few)
-- `minutes`: n=60: 8 answers (too few)
-- `five-by-n`: n=5: 8 answers (too few)
-- `rebounds-per-game`: n=13: 14 answers (too few)
-- `assists-per-game`: n=10: 13 answers (too few); n=11: 6 answers (too few)
-- `steals-per-game`: n=3: 1 answers (too few)
-- `blocks-per-game`: n=3: 9 answers (too few)
-- `losses-season`: n=70: 2 answers (too few)
-- `road-wins`: n=32: 4 answers (too few)
-- `home-wins`: n=38: 4 answers (too few); n=39: 3 answers (too few); n=40: 1 answers (too few)
-- `points-playoff-team`: n=150: 2 answers (too few)
-- `points-any-game`: n=165: 4 answers (too few)
-- `held-opponent`: n=55: 2 answers (too few)
-- `threes-team`: n=30: 0 answers (too few)
-- `steals-team`: n=22: 4 answers (too few); n=24: 0 answers (too few)
-- `overtime-wins`: n=4: 4 answers (too few)
-- `win-streak`: n=20: 3 answers (too few); n=22: 3 answers (too few)
+- `rebounds`: n=16.0: 452 answers (too many)
+- `assists`: n=22.0: 12 answers (too few)
+- `threes`: n=12.0: 8 answers (too few)
+- `blocks`: n=11.0: 7 answers (too few)
+- `steals`: n=5.0: 707 answers (too many); n=9.0: 12 answers (too few)
+- `ppg-season`: n=32.0: 9 answers (too few)
+- `franchises`: n=4.0: 766 answers (too many); n=5.0: 493 answers (too many)
+- `wins-season`: n=67.0: 4 answers (too few)
+- `points-regulation`: n=160.0: 2 answers (too few)
+- `win-margin`: n=60.0: 4 answers (too few)
+- `points-game7`: n=40.0: 10 answers (too few)
+- `points-bench`: n=45.0: 14 answers (too few)
+- `points-loss`: n=60.0: 9 answers (too few)
+- `points-road`: n=60.0: 11 answers (too few)
+- `rebounds-finals`: n=18.0: 11 answers (too few); n=20.0: 6 answers (too few)
+- `assists-playoff`: n=18.0: 6 answers (too few)
+- `assists-finals`: n=12.0: 10 answers (too few); n=14.0: 3 answers (too few)
+- `threes-playoff`: n=9.0: 11 answers (too few); n=10.0: 2 answers (too few)
+- `threes-finals`: n=7.0: 10 answers (too few); n=8.0: 2 answers (too few)
+- `blocks-playoff`: n=8.0: 9 answers (too few)
+- `steals-playoff`: n=7.0: 8 answers (too few)
+- `offensive-rebounds`: n=14.0: 8 answers (too few)
+- `free-throws`: n=24.0: 11 answers (too few)
+- `shots-taken`: n=40.0: 12 answers (too few); n=42.0: 7 answers (too few)
+- `minutes`: n=60.0: 8 answers (too few)
+- `five-by-n`: n=5.0: 8 answers (too few)
+- `rebounds-per-game`: n=13.0: 14 answers (too few)
+- `assists-per-game`: n=10.0: 13 answers (too few); n=11.0: 6 answers (too few)
+- `steals-per-game`: n=3.0: 1 answers (too few)
+- `blocks-per-game`: n=3.0: 9 answers (too few)
+- `losses-season`: n=70.0: 2 answers (too few)
+- `road-wins`: n=32.0: 4 answers (too few)
+- `home-wins`: n=38.0: 4 answers (too few); n=39.0: 3 answers (too few); n=40.0: 1 answers (too few)
+- `points-playoff-team`: n=150.0: 2 answers (too few)
+- `points-any-game`: n=165.0: 4 answers (too few)
+- `held-opponent`: n=55.0: 2 answers (too few)
+- `threes-team`: n=30.0: 0 answers (too few)
+- `steals-team`: n=22.0: 4 answers (too few); n=24.0: 0 answers (too few)
+- `overtime-wins`: n=4.0: 4 answers (too few)
+- `win-streak`: n=20.0: 3 answers (too few); n=22.0: 3 answers (too few)
 
 ## Player templates: examples
 
@@ -274,7 +1128,7 @@ Dwight Howard (1), Tim Duncan (1), Kevin Garnett (1), Ben Wallace (1), Anthony D
 
 **Since 2001-02 (through 2025-26), name a player who grabbed 18 or more rebounds in a game.**
 
-290 valid answers, difficulty **medium**, tiers: 1: 87, 2: 98, 3: 62, 4: 34, 5: 8, 6: 1 (43 at tier 4 or above).
+290 valid answers, difficulty **easy**, tiers: 1: 87, 2: 98, 3: 62, 4: 34, 5: 8, 6: 1 (43 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -286,7 +1140,7 @@ LeBron James (1), Dwight Howard (1), Kevin Durant (1), Tim Duncan (1), Russell W
 
 **Since 2001-02 (through 2025-26), name a player who recorded 20 or more assists in a game.**
 
-27 valid answers, difficulty **hard**, tiers: 1: 16, 2: 8, 3: 2, 4: 1 (1 at tier 4 or above).
+27 valid answers, difficulty **medium**, tiers: 1: 16, 2: 8, 3: 2, 4: 1 (1 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -318,7 +1172,7 @@ LeBron James (1), James Harden (1), Kevin Durant (1), Kobe Bryant (1), Chris Pau
 
 **Since 2001-02 (through 2025-26), name a player who made 11 or more three-pointers in a game.**
 
-21 valid answers, difficulty **hard**, tiers: 1: 9, 2: 7, 3: 3, 4: 2 (2 at tier 4 or above).
+21 valid answers, difficulty **medium**, tiers: 1: 9, 2: 7, 3: 3, 4: 2 (2 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -350,7 +1204,7 @@ LeBron James (1), James Harden (1), Kevin Durant (1), Kobe Bryant (1), Chris Pau
 
 **Since 2001-02 (through 2025-26), name a player who blocked 10 or more shots in a game.**
 
-20 valid answers, difficulty **hard**, tiers: 1: 13, 2: 5, 3: 1, 4: 1 (1 at tier 4 or above).
+20 valid answers, difficulty **medium**, tiers: 1: 13, 2: 5, 3: 1, 4: 1 (1 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -360,7 +1214,7 @@ Dwight Howard (1), Ben Wallace (1), Anthony Davis (1), Josh Smith (1), Andrei Ki
 
 **Since 2001-02 (through 2025-26), name a player who blocked 8 or more shots in a game.**
 
-65 valid answers, difficulty **medium**, tiers: 1: 25, 2: 20, 3: 14, 4: 5, 5: 1 (6 at tier 4 or above).
+65 valid answers, difficulty **easy**, tiers: 1: 25, 2: 20, 3: 14, 4: 5, 5: 1 (6 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -370,7 +1224,7 @@ Dwight Howard (1), Tim Duncan (1), Pau Gasol (1), Ben Wallace (1), Anthony Davis
 
 **Since 2001-02 (through 2025-26), name a player who blocked 6 or more shots in a game.**
 
-215 valid answers, difficulty **medium**, tiers: 1: 63, 2: 56, 3: 56, 4: 32, 5: 7, 6: 1 (40 at tier 4 or above).
+215 valid answers, difficulty **easy**, tiers: 1: 63, 2: 56, 3: 56, 4: 32, 5: 7, 6: 1 (40 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -446,7 +1300,7 @@ LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Br
 
 **Since 2001-02 (through 2025-26), name a player who played for 9 or more different franchises.**
 
-35 valid answers, difficulty **hard**, tiers: 1: 10, 2: 14, 3: 8, 4: 3 (3 at tier 4 or above).
+35 valid answers, difficulty **medium**, tiers: 1: 10, 2: 14, 3: 8, 4: 3 (3 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -456,7 +1310,7 @@ Rajon Rondo (1), Andre Miller (1), Isaiah Thomas (1), Jamal Crawford (1), Dennis
 
 **Since 2001-02 (through 2025-26), name a player who played for 7 or more different franchises.**
 
-159 valid answers, difficulty **medium**, tiers: 1: 28, 2: 64, 3: 44, 4: 22, 5: 1 (23 at tier 4 or above).
+159 valid answers, difficulty **easy**, tiers: 1: 28, 2: 64, 3: 44, 4: 22, 5: 1 (23 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -466,7 +1320,7 @@ Dwight Howard (1), Chris Paul (1), Russell Westbrook (1), Rajon Rondo (1), DeAnd
 
 **Since 2001-02 (through 2025-26), name a player who played for 6 or more different franchises.**
 
-284 valid answers, difficulty **medium**, tiers: 1: 46, 2: 102, 3: 88, 4: 43, 5: 5 (48 at tier 4 or above).
+284 valid answers, difficulty **easy**, tiers: 1: 46, 2: 102, 3: 88, 4: 43, 5: 5 (48 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -532,7 +1386,7 @@ LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Br
 
 **Since 2001-02 (through 2025-26), name a player who scored 30 or more points in a game he did not start.**
 
-313 valid answers, difficulty **medium**, tiers: 1: 73, 2: 102, 3: 95, 4: 35, 5: 7, 6: 1 (43 at tier 4 or above).
+313 valid answers, difficulty **easy**, tiers: 1: 73, 2: 102, 3: 95, 4: 35, 5: 7, 6: 1 (43 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -542,7 +1396,7 @@ LeBron James (1), James Harden (1), Kevin Durant (1), Kobe Bryant (1), Pau Gasol
 
 **Since 2001-02 (through 2025-26), name a player who scored 35 or more points in a game he did not start.**
 
-98 valid answers, difficulty **hard**, tiers: 1: 29, 2: 41, 3: 18, 4: 9, 6: 1 (10 at tier 4 or above).
+98 valid answers, difficulty **medium**, tiers: 1: 29, 2: 41, 3: 18, 4: 9, 6: 1 (10 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -552,7 +1406,7 @@ LeBron James (1), James Harden (1), Kobe Bryant (1), Allen Iverson (1), Stephen 
 
 **Since 2001-02 (through 2025-26), name a player who scored 40 or more points in a game he did not start.**
 
-35 valid answers, difficulty **hard**, tiers: 1: 13, 2: 14, 3: 6, 4: 2 (2 at tier 4 or above).
+35 valid answers, difficulty **medium**, tiers: 1: 13, 2: 14, 3: 6, 4: 2 (2 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -760,7 +1614,7 @@ LeBron James (1), Kevin Durant (1), Kobe Bryant (1), Stephen Curry (1), Al Horfo
 
 **Since 2001-02 (through 2025-26), name a player who blocked 5 or more shots in a playoff game.**
 
-87 valid answers, difficulty **medium**, tiers: 1: 46, 2: 19, 3: 19, 4: 3 (3 at tier 4 or above).
+87 valid answers, difficulty **easy**, tiers: 1: 46, 2: 19, 3: 19, 4: 3 (3 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -780,7 +1634,7 @@ Dwight Howard (1), Tim Duncan (1), Pau Gasol (1), Joel Embiid (1), Kevin Garnett
 
 **Since 2001-02 (through 2025-26), name a player who blocked 7 or more shots in a playoff game.**
 
-21 valid answers, difficulty **hard**, tiers: 1: 13, 2: 4, 3: 3, 4: 1 (1 at tier 4 or above).
+21 valid answers, difficulty **medium**, tiers: 1: 13, 2: 4, 3: 3, 4: 1 (1 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -834,7 +1688,7 @@ Tim Duncan (1), Ben Wallace (1), Andre Drummond (1), Rudy Gobert (1), Carmelo An
 
 **Since 2001-02 (through 2025-26), name a player who grabbed 10 or more offensive rebounds in a game.**
 
-137 valid answers, difficulty **medium**, tiers: 1: 51, 2: 47, 3: 22, 4: 13, 5: 2, 6: 2 (17 at tier 4 or above).
+137 valid answers, difficulty **easy**, tiers: 1: 51, 2: 47, 3: 22, 4: 13, 5: 2, 6: 2 (17 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -844,7 +1698,7 @@ Dwight Howard (1), Tim Duncan (1), Pau Gasol (1), Kevin Garnett (1), Ben Wallace
 
 **Since 2001-02 (through 2025-26), name a player who grabbed 9 or more offensive rebounds in a game.**
 
-236 valid answers, difficulty **medium**, tiers: 1: 67, 2: 74, 3: 52, 4: 35, 5: 6, 6: 2 (43 at tier 4 or above).
+236 valid answers, difficulty **easy**, tiers: 1: 67, 2: 74, 3: 52, 4: 35, 5: 6, 6: 2 (43 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -964,7 +1818,7 @@ Dirk Nowitzki (1), Stephen Curry (1), Rajon Rondo (1), Damian Lillard (1), DeMar
 
 **Since 2001-02 (through 2025-26), name a player who made 11 or more field goals in a game without a miss.**
 
-22 valid answers, difficulty **hard**, tiers: 1: 11, 2: 4, 3: 5, 4: 2 (2 at tier 4 or above).
+22 valid answers, difficulty **medium**, tiers: 1: 11, 2: 4, 3: 5, 4: 2 (2 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -974,7 +1828,7 @@ Dwight Howard (1), Chris Paul (1), Nikola Jokic (1), Serge Ibaka (1), Domantas S
 
 **Since 2001-02 (through 2025-26), name a player who made 9 or more field goals in a game without a miss.**
 
-91 valid answers, difficulty **hard**, tiers: 1: 34, 2: 23, 3: 23, 4: 10, 5: 1 (11 at tier 4 or above).
+91 valid answers, difficulty **medium**, tiers: 1: 34, 2: 23, 3: 23, 4: 10, 5: 1 (11 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -984,7 +1838,7 @@ Dwight Howard (1), Chris Paul (1), Pau Gasol (1), Andre Drummond (1), Rudy Gober
 
 **Since 2001-02 (through 2025-26), name a player who made 8 or more field goals in a game without a miss.**
 
-176 valid answers, difficulty **medium**, tiers: 1: 56, 2: 50, 3: 45, 4: 24, 5: 1 (25 at tier 4 or above).
+176 valid answers, difficulty **easy**, tiers: 1: 56, 2: 50, 3: 45, 4: 24, 5: 1 (25 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 
@@ -1006,7 +1860,7 @@ LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Br
 
 **Since 2001-02 (through 2025-26), name a player who recorded at least 4 points, rebounds, assists, steals and blocks in the same game.**
 
-40 valid answers, difficulty **medium**, tiers: 1: 29, 2: 4, 3: 5, 4: 2 (2 at tier 4 or above).
+40 valid answers, difficulty **easy**, tiers: 1: 29, 2: 4, 3: 5, 4: 2 (2 at tier 4 or above).
 
 <details><summary>All valid answers</summary>
 

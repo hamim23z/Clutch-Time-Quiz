@@ -84,3 +84,36 @@ def test_verify_sample_checks_the_requested_number_and_no_more_than_exist():
     items = [Item(copy.deepcopy(RESULT.prompts[0]), "points-regular", 30, "points")]
     checks = verify_sample(items, TABLES, FAME, k=10)
     assert len(checks) == 1 and checks[0].ok
+
+
+def test_pick_sample_takes_at_least_two_from_every_family_then_fills_up():
+    from verify import pick_sample
+    items = []
+    for fam, count in (("a", 1), ("b", 2), ("c", 30), ("d", 30)):
+        items += [Item({"id": f"{fam}{i}", "answers": []}, fam, i, fam) for i in range(count)]
+    picked = pick_sample(items, k=10, per_family=2)
+    by_family = {}
+    for i in picked:
+        by_family[i.template] = by_family.get(i.template, 0) + 1
+    assert len(picked) == 10 and len({i.prompt["id"] for i in picked}) == 10
+    assert by_family["a"] == 1 and by_family["b"] == 2 and by_family["c"] >= 2 and by_family["d"] >= 2
+    assert len(pick_sample(items, k=3, per_family=2)) == 7  # two per family is more than k: the families win
+    assert pick_sample(items, 10, 2, seed=1) == pick_sample(items, 10, 2, seed=1)
+
+
+def test_family_prompts_are_rechecked_with_their_parameters():
+    from pools import FAMILIES, make_ctx
+    import pools
+    family = next(f for f in FAMILIES if f.key == "finals-year")
+    ctx = make_ctx(TABLES, FAME)
+    result = generate_families_for_test(family, ctx)
+    p, m = result.prompts[0], result.meta[0]
+    c = check_prompt(p, "finals-year", None, ROWS, FAME, TABLES.teams, tuple(m["param"]))
+    assert c.ok and c.expected == len(p["answers"])
+    p["answers"] = p["answers"][1:]
+    assert not check_prompt(p, "finals-year", None, ROWS, FAME, TABLES.teams, tuple(m["param"])).ok
+
+
+def generate_families_for_test(family, ctx):
+    from generator import generate_families
+    return generate_families(TABLES, FAME, ctx, [family], broad_window=(1, 700))

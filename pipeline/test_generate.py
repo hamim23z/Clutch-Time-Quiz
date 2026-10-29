@@ -7,6 +7,7 @@ import pytest
 
 import generate
 import generator
+import pools
 import templates
 from templates import PLAYER, Template, stat_in_game
 from testtables import make_tables
@@ -15,12 +16,15 @@ from testtables import make_tables
 @pytest.fixture
 def small_templates():
     saved = list(templates.TEMPLATES)
+    saved_families = list(pools.FAMILIES)
+    pools.FAMILIES[:] = [f for f in saved_families if f.key == "finals-year"]  # one family, so the run stays small
     templates.TEMPLATES[:] = [
         Template("points-low", PLAYER, "scored {n} or more points in a regular-season game", (20, 30), stat_in_game("points", "regular"), "points"),
         Template("never", PLAYER, "scored {n} or more points in a regular-season game", (500,), stat_in_game("points", "regular"), "points"),
     ]
     yield
     templates.TEMPLATES[:] = saved
+    pools.FAMILIES[:] = saved_families
 
 
 def _write_processed(directory: Path) -> None:
@@ -38,15 +42,18 @@ def test_command_writes_candidates_fame_and_both_reports(tmp_path, small_templat
     assert code == 0
     prompts = json.loads((tmp_path / "out" / "candidates.json").read_text())
     generator.validate(prompts)
-    assert [p["id"] for p in prompts] == ["cand-points-low-20", "cand-points-low-30"]
+    ids = [p["id"] for p in prompts]
+    assert ids[:2] == ["cand-points-low-20", "cand-points-low-30"]
+    assert ids[2:] and all(i.startswith("cand-finals-year-") for i in ids[2:])  # the one family left in this run
     fame = pd.read_parquet(tmp_path / "out" / "fame.parquet")
     assert len(fame) == 40
     assert fame.set_index("player_id").loc[1, "override_reason"] == "test override"
-    assert json.loads((tmp_path / "out" / "candidates_meta.json").read_text())["attempts"][-1]["status"] == "too_few"
+    assert any(a["status"] == "too_few" and a["template"] == "never" for a in json.loads((tmp_path / "out" / "candidates_meta.json").read_text())["attempts"])
     assert "Fame" in (tmp_path / "docs" / "fame-report.md").read_text()
-    assert "points-low" in (tmp_path / "docs" / "prompt-candidates.md").read_text()
+    report = (tmp_path / "docs" / "prompt-candidates.md").read_text()
+    assert "points-low" in report and "finals-year" in report and "Candidates per family" in report
     out = capsys.readouterr().out
-    assert "players per tier" in out and "candidates: 2 (2 player, 0 team)" in out
+    assert "players per tier" in out and f"candidates: {len(ids)} ({len(ids)} player, 0 team)" in out
     assert "templates with no candidates: never" in out
 
 

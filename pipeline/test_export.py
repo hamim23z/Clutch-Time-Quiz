@@ -56,31 +56,52 @@ def test_the_outside_range_file_is_about_150_distinct_names():
     assert all(len(n.split()) >= 2 for n in names)
 
 
+def family_of(prompt_id: str) -> str:
+    """p-<family>[-<parameters>] back to the family key (longest key first, on a dash boundary)."""
+    from pools import FAMILIES
+    from templates import TEMPLATES
+    keys = sorted([t.key for t in TEMPLATES] + [f.key for f in FAMILIES], key=len, reverse=True)
+    body = prompt_id[2:]
+    return next(k for k in keys if body == k or body.startswith(k + "-"))
+
+
+def check_export_rules(prompts: list[dict], universe: dict) -> None:
+    from pools import FAMILIES
+    broad = {f.key for f in FAMILIES if f.broad}
+    assert len(prompts) >= 504 and len(prompts) % 7 == 0
+    assert len({p["id"] for p in prompts}) == len(prompts)
+    assert len({p["text"] for p in prompts}) == len(prompts)
+    check_all(prompts, universe)  # schemas, answer ids in the universe, points against tiers
+    for d in range(len(prompts) // 7):
+        dive = prompts[7 * d:7 * d + 7]
+        kinds = [p["answerType"] for p in dive]
+        assert kinds == ["player", "player", "team", "player", "team", "player", "player"], f"dive {d + 1}"
+        assert 4 <= kinds.count("player") <= 6 and 1 <= kinds.count("team") <= 3
+        families = [family_of(p["id"]) for p in dive]
+        assert len(set(families)) == 7, f"dive {d + 1} repeats a template family"
+        assert sum(1 for p, f in zip(dive, families) if p["answerType"] == "player" and f in broad) >= 2, f"dive {d + 1}"
+        assert {p["difficulty"] for p in dive} == {"easy", "medium", "hard"}, f"dive {d + 1}"
+    assert all(p["text"].startswith("Since 2001-02 (through 2025-26), name a ") for p in prompts)
+    counts = {}
+    for p in prompts:
+        counts[family_of(p["id"])] = counts.get(family_of(p["id"]), 0) + 1
+    assert max(counts.values()) <= 40  # no family dominates
+    answers = [a for p in prompts for a in p["answers"]]
+    low = sum(1 for a in answers if a["tier"] <= 2) / len(answers)
+    deep = sum(1 for a in answers if a["tier"] >= 5) / len(answers)
+    assert low <= 0.45 and deep >= 0.12, (low, deep)  # the rarity targets
+
+
 @needs_data
 def test_end_to_end_on_the_real_tables(tmp_path):
     code = export.main(["--processed-dir", str(REAL), "--out-dir", str(tmp_path / "gen"), "--export-dir", str(tmp_path / "export"),
-                        "--docs-dir", str(tmp_path / "docs"), "--check-count", "10"])
+                        "--docs-dir", str(tmp_path / "docs"), "--check-count", "5", "--per-family", "0"])
     assert code == 0
     prompts = json.loads((tmp_path / "export" / "prompts.json").read_text())
     universe = json.loads((tmp_path / "export" / "universe.json").read_text())
-    assert len(prompts) == 63
-    check_all(prompts, universe)  # schemas, answer ids in the universe, points against tiers
-    assert [p["answerType"] for p in prompts[:7]].count("team") == 2
-    assert len({p["id"] for p in prompts}) == 63
-    from templates import TEMPLATES
-
-    def family(pid):  # p-<template>[-<threshold>]
-        return next(t.key for t in sorted(TEMPLATES, key=lambda t: -len(t.key)) if pid[2:] == t.key or (pid[2:].startswith(t.key + "-") and pid[2:][len(t.key) + 1:].isdigit()))
-
-    for d in range(9):
-        dive = prompts[7 * d:7 * d + 7]
-        assert {p["difficulty"] for p in dive} == {"easy", "medium", "hard"}, f"dive {d + 1} lacks a difficulty"
-        assert len({family(p["id"]) for p in dive}) == 7, f"dive {d + 1} repeats a template"
-        assert [p["answerType"] for p in dive] == ["player", "player", "team", "player", "team", "player", "player"]
-    per_family = [family(p["id"]) for p in prompts]
-    assert max(per_family.count(f) for f in per_family) <= 2
-    assert all(p["text"].startswith("Since 2001-02 (through 2025-26), name a ") for p in prompts)
-    assert (tmp_path / "docs" / "prompts-sample.md").exists() and (tmp_path / "docs" / "curation-report.md").exists()
+    check_export_rules(prompts, universe)
+    for name in ("prompts-sample.md", "curation-report.md", "rarity-report.md"):
+        assert (tmp_path / "docs" / name).exists()
     # people who share a display name stay separate entries, told apart by the seasons in their name
     names = [e["name"] for e in universe["players"]]
     assert "Mike James (2002-2014)" in names and "Mike James (2018-2021)" in names and "Mike James" not in names
@@ -91,9 +112,9 @@ def test_end_to_end_on_the_real_tables(tmp_path):
 
 
 @needs_data
-def test_committed_export_files_validate_on_their_own():
+def test_committed_export_files_follow_every_rule_on_their_own():
     prompts = json.loads((ROOT / "data" / "export" / "prompts.json").read_text())
     universe = json.loads((ROOT / "data" / "export" / "universe.json").read_text())
-    validate(prompts)
-    check_all(prompts, universe)
-    assert len(prompts) >= 63 and len(prompts) % 7 == 0
+    check_export_rules(prompts, universe)
+    size = (ROOT / "data" / "export" / "prompts.json").stat().st_size + (ROOT / "data" / "export" / "universe.json").stat().st_size
+    assert size < 5_000_000

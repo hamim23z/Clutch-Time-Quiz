@@ -8,7 +8,7 @@ from pathlib import Path
 import pandas as pd
 
 from fame import MIN_SEASON_GAMES
-from generator import GenerationResult, MAX_PLAYER_ANSWERS, MIN_PLAYER_ANSWERS, MIN_TEAM_ANSWERS
+from generator import GenerationResult, MAX_BROAD_ANSWERS, MAX_PLAYER_ANSWERS, MIN_PLAYER_ANSWERS, MIN_TEAM_ANSWERS
 from templates import PLAYER, TEAM, TEMPLATES, Template
 from tiers import CUTOFFS, DEEP_TIER, LAST_TIER, TIER_LABELS, TIER_POINTS, tier_for_rank
 
@@ -144,13 +144,15 @@ def render_candidates_report(result: GenerationResult, templates: list[Template]
     L += [
         f"- **Era wording:** every prompt starts with \"{result.era}\". The data's season 2002 is the 2001-02 season (the first game is on 2001-10-30), "
         "so \"Since 2002\" would leave out three months of games. The schema requires the text to start with \"Since\" and four digits, which this does.",
-        f"- **Valid answers:** players need {MIN_PLAYER_ANSWERS} to {MAX_PLAYER_ANSWERS}; teams need at least {MIN_TEAM_ANSWERS}.",
+        f"- **Valid answers:** the star-heavy templates (first table) need {MIN_PLAYER_ANSWERS} to {MAX_PLAYER_ANSWERS} players; broad-pool player families (second table) need {MIN_PLAYER_ANSWERS} to {MAX_BROAD_ANSWERS}; "
+        f"teams need at least {MIN_TEAM_ANSWERS} (parameterised team families at most 24 of the 30 franchises, so the answer is never nearly everyone).",
         f"- **Player tiers** come from the fame score (docs/fame-report.md). **Team tiers:** a team is tier 1 (10 points) if it qualified under its current name "
         "in any qualifying season, tier 4 (55 points) if only under a historical name. Every team answer is the franchise, shown by its current name; the other names it used are aliases for the answer matcher.",
         "- **Difficulty:** from the number of valid answers and the share of tier 4 and above (see `difficulty()` in `pipeline/generator.py`).",
         "",
     ]
     kept = attempts[attempts["status"] == "kept"]
+    from pools import FAMILIES
     L += [
         "## Totals", "",
         f"- Candidates: **{len(result.prompts)}** ({sum(1 for p in result.prompts if p['answerType'] == PLAYER)} player, {sum(1 for p in result.prompts if p['answerType'] == TEAM)} team).",
@@ -159,10 +161,10 @@ def render_candidates_report(result: GenerationResult, templates: list[Template]
         "- By difficulty: " + ", ".join(f"{d} {c}" for d, c in sorted(Counter(p["difficulty"] for p in result.prompts).items())) + ".",
         "",
     ]
-    none = [t.key for t in templates if kept[kept["template"] == t.key].empty]
+    none = [t.key for t in templates if kept[kept["template"] == t.key].empty] + [f.key for f in FAMILIES if kept[kept["template"] == f.key].empty]
     L += ["Templates that produced no candidates: " + (", ".join(f"`{k}`" for k in none) if none else "none") + ".", ""]
 
-    L += ["## Candidates per template", ""]
+    L += ["## Candidates per template (star-heavy templates, one prompt per threshold)", ""]
     rows = []
     for t in templates:
         a = attempts[attempts["template"] == t.key]
@@ -172,7 +174,8 @@ def render_candidates_report(result: GenerationResult, templates: list[Template]
         rows.append([f"`{t.key}`", t.answer_type, ", ".join(str(x) for x in a["n"]) if "{n}" in t.wording else "-", len(ok), len(few), len(many)])
     L += _md_table(["template", "answers", "thresholds tried", "candidates", "dropped: too few", "dropped: too many"], rows) + [""]
 
-    L += ["## What was dropped", ""]
+    L += render_family_section(result, attempts)
+    L += ["## What was dropped (star-heavy templates)", ""]
     for t in templates:
         a = attempts[(attempts["template"] == t.key) & (attempts["status"] != "kept")]
         if len(a):
@@ -207,3 +210,41 @@ def write_reports(fame: pd.DataFrame, result: GenerationResult, docs_dir: Path) 
     docs_dir.mkdir(parents=True, exist_ok=True)
     (docs_dir / "fame-report.md").write_text(render_fame_report(fame))
     (docs_dir / "prompt-candidates.md").write_text(render_candidates_report(result))
+
+
+def _family_rows(result: GenerationResult, attempts: pd.DataFrame) -> list[list[object]]:
+    from pools import FAMILIES
+    rows = []
+    for f in FAMILIES:
+        a = attempts[attempts["template"] == f.key]
+        sizes = [m["valid_answers"] for m in result.meta if m["template"] == f.key]
+        tc = [sum(m["tier_counts"][str(t)] for m in result.meta if m["template"] == f.key) for t in range(1, 7)]
+        total = sum(tc) or 1
+        rows.append([f"`{f.key}`", f.answer_type, "broad" if f.broad else "-", len(a), int((a["status"] == "kept").sum()), int((a["status"] == "too_few").sum()),
+                     int((a["status"] == "too_many").sum()),
+                     f"{min(sizes)}-{max(sizes)}" if sizes else "-", f"{100 * (tc[0] + tc[1]) / total:.0f}%", f"{100 * (tc[4] + tc[5]) / total:.0f}%"])
+    return rows
+
+
+def render_family_section(result: GenerationResult, attempts: pd.DataFrame) -> list[str]:
+    """Families with parameters (pools.py): a table, then three examples each."""
+    from pools import FAMILIES
+    L = ["## Candidates per family (pools.py: one prompt per franchise, season, month, star or threshold)", "",
+         "Each family yields one candidate per parameter set that fits the answer window. 'tiers 1-2' and 'tiers 5-6' are shares of all valid answers over the family's candidates.", ""]
+    L += _md_table(["family", "answers", "pool", "parameter sets tried", "candidates", "too few", "too many", "valid answers", "tiers 1-2", "tiers 5-6"], _family_rows(result, attempts)) + [""]
+    L += ["### Examples", "", "Three candidates per family (shortest, middle and longest list); the ten best-known and ten rarest answers of each are shown as name (tier).", ""]
+    by_family: dict[str, list[tuple[dict, dict]]] = {}
+    for p, m in zip(result.prompts, result.meta):
+        by_family.setdefault(m["template"], []).append((p, m))
+    for f in FAMILIES:
+        items = by_family.get(f.key, [])
+        L += [f"#### `{f.key}`", ""]
+        if not items:
+            L += ["No candidates.", ""]
+            continue
+        for p, m in _examples(items):
+            answers = p["answers"]
+            L += [f"**{p['text']}**", "", f"{len(answers)} valid answers, difficulty **{p['difficulty']}**, tiers: " + ", ".join(f"{k}: {v}" for k, v in m["tier_counts"].items() if v) + ".", "",
+                  "Best known: " + ", ".join(f"{a['name']} ({a['tier']})" for a in answers[:10]) + ".", "",
+                  "Rarest: " + ", ".join(f"{a['name']} ({a['tier']})" for a in reversed(answers[-10:])) + ".", ""]
+    return L
