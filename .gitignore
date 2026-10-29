@@ -4,3 +4,9 @@ __pycache__/
 *.pyc
 .pytest_cache/
 data/generated/
+web/node_modules/
+web/dist/
+web/public/prompts.json
+web/public/universe.json
+web/public/outside_range.json
+web/tsconfig.tsbuildinfo

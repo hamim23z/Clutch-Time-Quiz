@@ -52,12 +52,25 @@ export function parsePrompts(data: unknown, universe: Universe): Prompt[] {
   });
 }
 
-export async function loadData(baseUrl: string): Promise<{ prompts: Prompt[]; universe: Universe }> {
+/** The names in outside_range.json. This file only drives a gentle message, so a missing or broken one means "no names". */
+export function parseOutsideNames(data: unknown): string[] {
+  return Array.isArray(data) ? data.filter((n): n is string => typeof n === 'string' && n.trim() !== '') : [];
+}
+
+export interface GameData {
+  prompts: Prompt[];
+  universe: Universe;
+  outsideNames: string[];
+}
+
+export async function loadData(baseUrl: string): Promise<GameData> {
   const get = async (file: string): Promise<unknown> => {
     const response = await fetch(`${baseUrl}${file}`);
     if (!response.ok) throw new Error(`Could not load ${file} (${response.status})`);
     return (await response.json()) as unknown;
   };
   const universe = parseUniverse(await get('universe.json'));
-  return { universe, prompts: parsePrompts(await get('prompts.json'), universe) };
+  const prompts = parsePrompts(await get('prompts.json'), universe);
+  const outsideNames = await get('outside_range.json').then(parseOutsideNames, () => []);
+  return { universe, prompts, outsideNames };
 }

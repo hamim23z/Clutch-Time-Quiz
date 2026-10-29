@@ -1,0 +1,895 @@
+{
+ "description": "Input-to-result cases shared by the website matcher (web/src/matching.ts) and the pipeline's normalization (pipeline/matchnorm.py). 'normalize' and 'baseName' run in both; 'match' runs against 'universe' in the website only. A change to either copy that breaks a case must change the other copy or this file.",
+ "universe": {
+  "players": [
+   {
+    "id": "pl-1",
+    "name": "LeBron James",
+    "aliases": [
+     "King James",
+     "LBJ"
+    ]
+   },
+   {
+    "id": "pl-2",
+    "name": "Metta World Peace",
+    "aliases": [
+     "Ron Artest",
+     "Metta Sandiford-Artest"
+    ]
+   },
+   {
+    "id": "pl-3",
+    "name": "Nene",
+    "aliases": [
+     "Nene Hilario"
+    ]
+   },
+   {
+    "id": "pl-4",
+    "name": "Jaren Jackson Jr.",
+    "aliases": []
+   },
+   {
+    "id": "pl-5",
+    "name": "Gary Payton II",
+    "aliases": []
+   },
+   {
+    "id": "pl-6",
+    "name": "Jimmy Butler III",
+    "aliases": []
+   },
+   {
+    "id": "pl-7",
+    "name": "Mike James (2002-2014)",
+    "aliases": []
+   },
+   {
+    "id": "pl-8",
+    "name": "Mike James (2018-2021)",
+    "aliases": []
+   },
+   {
+    "id": "pl-9",
+    "name": "Shai Gilgeous-Alexander",
+    "aliases": []
+   },
+   {
+    "id": "pl-10",
+    "name": "Luka Doncic",
+    "aliases": []
+   },
+   {
+    "id": "pl-11",
+    "name": "Amar'e Stoudemire",
+    "aliases": [
+     "STAT"
+    ]
+   },
+   {
+    "id": "pl-12",
+    "name": "J.J. Barea",
+    "aliases": []
+   },
+   {
+    "id": "pl-13",
+    "name": "Kevin Durant",
+    "aliases": [
+     "KD"
+    ]
+   },
+   {
+    "id": "pl-14",
+    "name": "Kevin Love",
+    "aliases": []
+   },
+   {
+    "id": "pl-15",
+    "name": "Nikola Jokic",
+    "aliases": [
+     "Joker"
+    ]
+   },
+   {
+    "id": "pl-16",
+    "name": "Giannis Antetokounmpo",
+    "aliases": [
+     "Greek Freak",
+     "Giannis"
+    ]
+   },
+   {
+    "id": "pl-17",
+    "name": "Willy Hernangómez",
+    "aliases": []
+   },
+   {
+    "id": "pl-18",
+    "name": "Juancho Hernangómez",
+    "aliases": []
+   },
+   {
+    "id": "pl-19",
+    "name": "Tim Duncan",
+    "aliases": []
+   },
+   {
+    "id": "pl-20",
+    "name": "Tim Hardaway Jr.",
+    "aliases": []
+   },
+   {
+    "id": "pl-21",
+    "name": "Anfernee Hardaway",
+    "aliases": []
+   },
+   {
+    "id": "pl-22",
+    "name": "Dwyane Wade",
+    "aliases": [
+     "D-Wade"
+    ]
+   },
+   {
+    "id": "pl-23",
+    "name": "Chris Paul",
+    "aliases": [
+     "CP3"
+    ]
+   },
+   {
+    "id": "pl-24",
+    "name": "Dennis Heat",
+    "aliases": []
+   }
+  ],
+  "teams": [
+   {
+    "id": "tm-1",
+    "name": "Los Angeles Lakers",
+    "aliases": [
+     "Lakers",
+     "LAL",
+     "LA Lakers"
+    ]
+   },
+   {
+    "id": "tm-2",
+    "name": "Boston Celtics",
+    "aliases": [
+     "Celtics"
+    ]
+   },
+   {
+    "id": "tm-3",
+    "name": "Oklahoma City Thunder",
+    "aliases": [
+     "Seattle SuperSonics",
+     "SuperSonics",
+     "Sonics"
+    ]
+   },
+   {
+    "id": "tm-4",
+    "name": "Golden State Warriors",
+    "aliases": [
+     "Warriors"
+    ]
+   },
+   {
+    "id": "tm-5",
+    "name": "Philadelphia 76ers",
+    "aliases": [
+     "Sixers",
+     "76ers"
+    ]
+   },
+   {
+    "id": "tm-6",
+    "name": "LA Clippers",
+    "aliases": [
+     "Los Angeles Clippers"
+    ]
+   },
+   {
+    "id": "tm-7",
+    "name": "Miami Heat",
+    "aliases": [
+     "Heat"
+    ]
+   }
+  ]
+ },
+ "normalize": [
+  {
+   "input": "Aldric ASHGROVE",
+   "expected": "aldric ashgrove",
+   "dropSuffix": false
+  },
+  {
+   "input": "  Aldric   Ashgrove ",
+   "expected": "aldric ashgrove",
+   "dropSuffix": false
+  },
+  {
+   "input": "J.J. Barea",
+   "expected": "jj barea",
+   "dropSuffix": false
+  },
+  {
+   "input": "J. J. Barea",
+   "expected": "jj barea",
+   "dropSuffix": false
+  },
+  {
+   "input": "JJ Barea",
+   "expected": "jj barea",
+   "dropSuffix": false
+  },
+  {
+   "input": "Caelan O'Brask",
+   "expected": "caelan obrask",
+   "dropSuffix": false
+  },
+  {
+   "input": "Caelan O’Brask",
+   "expected": "caelan obrask",
+   "dropSuffix": false
+  },
+  {
+   "input": "Amar’e Stoudemire",
+   "expected": "amare stoudemire",
+   "dropSuffix": false
+  },
+  {
+   "input": "Hollis-Jefferson",
+   "expected": "hollis jefferson",
+   "dropSuffix": false
+  },
+  {
+   "input": "Shai Gilgeous-Alexander",
+   "expected": "shai gilgeous alexander",
+   "dropSuffix": false
+  },
+  {
+   "input": "Nenê",
+   "expected": "nene",
+   "dropSuffix": false
+  },
+  {
+   "input": "NENÊ",
+   "expected": "nene",
+   "dropSuffix": false
+  },
+  {
+   "input": "Schröder",
+   "expected": "schroder",
+   "dropSuffix": false
+  },
+  {
+   "input": "Dončić",
+   "expected": "doncic",
+   "dropSuffix": false
+  },
+  {
+   "input": "José Calderón",
+   "expected": "jose calderon",
+   "dropSuffix": false
+  },
+  {
+   "input": "Mike J Smith",
+   "expected": "mike j smith",
+   "dropSuffix": false
+  },
+  {
+   "input": "D-Wade",
+   "expected": "d wade",
+   "dropSuffix": false
+  },
+  {
+   "input": "AK-47",
+   "expected": "ak 47",
+   "dropSuffix": false
+  },
+  {
+   "input": "O'Neal",
+   "expected": "oneal",
+   "dropSuffix": false
+  },
+  {
+   "input": "De'Aaron Fox",
+   "expected": "deaaron fox",
+   "dropSuffix": false
+  },
+  {
+   "input": "",
+   "expected": "",
+   "dropSuffix": false
+  },
+  {
+   "input": "  !!! ",
+   "expected": "",
+   "dropSuffix": false
+  },
+  {
+   "input": "Jaren Jackson Jr.",
+   "expected": "jaren jackson jr",
+   "dropSuffix": false
+  },
+  {
+   "input": "Jaren Jackson Jr.",
+   "expected": "jaren jackson",
+   "dropSuffix": true
+  },
+  {
+   "input": "Robert Williams III",
+   "expected": "robert williams",
+   "dropSuffix": true
+  },
+  {
+   "input": "Gary Payton II",
+   "expected": "gary payton",
+   "dropSuffix": true
+  },
+  {
+   "input": "Larry Nance Sr",
+   "expected": "larry nance",
+   "dropSuffix": true
+  },
+  {
+   "input": "III",
+   "expected": "iii",
+   "dropSuffix": true
+  },
+  {
+   "input": "Jr.",
+   "expected": "jr",
+   "dropSuffix": true
+  },
+  {
+   "input": "Ben V",
+   "expected": "ben",
+   "dropSuffix": true
+  },
+  {
+   "input": "Tim Hardaway Jr",
+   "expected": "tim hardaway jr",
+   "dropSuffix": false
+  },
+  {
+   "input": "J.R. Smith Jr.",
+   "expected": "jr smith",
+   "dropSuffix": true
+  }
+ ],
+ "baseName": [
+  {
+   "input": "Mike James (2002-2014)",
+   "expected": "Mike James"
+  },
+  {
+   "input": "Tony Mitchell (2014, id 2489010)",
+   "expected": "Tony Mitchell"
+  },
+  {
+   "input": "Harbor City Gulls",
+   "expected": "Harbor City Gulls"
+  },
+  {
+   "input": "Allen Iverson",
+   "expected": "Allen Iverson"
+  },
+  {
+   "input": "Mike James (2002-2014) ",
+   "expected": "Mike James"
+  }
+ ],
+ "match": [
+  {
+   "input": "LeBron James",
+   "expect": "match",
+   "id": "pl-1",
+   "via": "name"
+  },
+  {
+   "input": "lebron james",
+   "expect": "match",
+   "id": "pl-1",
+   "via": "name"
+  },
+  {
+   "input": "  LEBRON    JAMES ",
+   "expect": "match",
+   "id": "pl-1",
+   "via": "name"
+  },
+  {
+   "input": "Chris Paul",
+   "expect": "match",
+   "id": "pl-23",
+   "via": "name"
+  },
+  {
+   "input": "Luka Dončić",
+   "expect": "match",
+   "id": "pl-10",
+   "via": "name"
+  },
+  {
+   "input": "Luka Doncic",
+   "expect": "match",
+   "id": "pl-10",
+   "via": "name"
+  },
+  {
+   "input": "Nikola Jokić",
+   "expect": "match",
+   "id": "pl-15",
+   "via": "name"
+  },
+  {
+   "input": "Willy Hernangomez",
+   "expect": "match",
+   "id": "pl-17",
+   "via": "name"
+  },
+  {
+   "input": "Nenê",
+   "expect": "match",
+   "id": "pl-3",
+   "via": "name"
+  },
+  {
+   "input": "NENÊ",
+   "expect": "match",
+   "id": "pl-3",
+   "via": "name"
+  },
+  {
+   "input": "Nene",
+   "expect": "match",
+   "id": "pl-3",
+   "via": "name"
+  },
+  {
+   "input": "Nenê Hilario",
+   "expect": "match",
+   "id": "pl-3",
+   "via": "alias"
+  },
+  {
+   "input": "Nene Hilario",
+   "expect": "match",
+   "id": "pl-3",
+   "via": "alias"
+  },
+  {
+   "input": "Jaren Jackson Jr.",
+   "expect": "match",
+   "id": "pl-4",
+   "via": "name"
+  },
+  {
+   "input": "Jaren Jackson Jr",
+   "expect": "match",
+   "id": "pl-4",
+   "via": "name"
+  },
+  {
+   "input": "Jaren Jackson",
+   "expect": "match",
+   "id": "pl-4",
+   "via": "name"
+  },
+  {
+   "input": "Gary Payton",
+   "expect": "match",
+   "id": "pl-5",
+   "via": "name"
+  },
+  {
+   "input": "Gary Payton II",
+   "expect": "match",
+   "id": "pl-5",
+   "via": "name"
+  },
+  {
+   "input": "Jimmy Butler",
+   "expect": "match",
+   "id": "pl-6",
+   "via": "name"
+  },
+  {
+   "input": "Jimmy Butler III",
+   "expect": "match",
+   "id": "pl-6",
+   "via": "name"
+  },
+  {
+   "input": "Tim Hardaway",
+   "expect": "match",
+   "id": "pl-20",
+   "via": "name"
+  },
+  {
+   "input": "J.J. Barea",
+   "expect": "match",
+   "id": "pl-12",
+   "via": "name"
+  },
+  {
+   "input": "JJ Barea",
+   "expect": "match",
+   "id": "pl-12",
+   "via": "name"
+  },
+  {
+   "input": "J J Barea",
+   "expect": "match",
+   "id": "pl-12",
+   "via": "name"
+  },
+  {
+   "input": "King James",
+   "expect": "match",
+   "id": "pl-1",
+   "via": "alias"
+  },
+  {
+   "input": "LBJ",
+   "expect": "match",
+   "id": "pl-1",
+   "via": "alias"
+  },
+  {
+   "input": "lbj",
+   "expect": "match",
+   "id": "pl-1",
+   "via": "alias"
+  },
+  {
+   "input": "Ron Artest",
+   "expect": "match",
+   "id": "pl-2",
+   "via": "alias"
+  },
+  {
+   "input": "Metta Sandiford-Artest",
+   "expect": "match",
+   "id": "pl-2",
+   "via": "alias"
+  },
+  {
+   "input": "metta sandiford artest",
+   "expect": "match",
+   "id": "pl-2",
+   "via": "alias"
+  },
+  {
+   "input": "KD",
+   "expect": "match",
+   "id": "pl-13",
+   "via": "alias"
+  },
+  {
+   "input": "Joker",
+   "expect": "match",
+   "id": "pl-15",
+   "via": "alias"
+  },
+  {
+   "input": "Greek Freak",
+   "expect": "match",
+   "id": "pl-16",
+   "via": "alias"
+  },
+  {
+   "input": "Giannis",
+   "expect": "match",
+   "id": "pl-16",
+   "via": "alias"
+  },
+  {
+   "input": "STAT",
+   "expect": "match",
+   "id": "pl-11",
+   "via": "alias"
+  },
+  {
+   "input": "D-Wade",
+   "expect": "match",
+   "id": "pl-22",
+   "via": "alias"
+  },
+  {
+   "input": "D Wade",
+   "expect": "match",
+   "id": "pl-22",
+   "via": "alias"
+  },
+  {
+   "input": "CP3",
+   "expect": "match",
+   "id": "pl-23",
+   "via": "alias"
+  },
+  {
+   "input": "Los Angeles Lakers",
+   "expect": "match",
+   "id": "tm-1",
+   "via": "name"
+  },
+  {
+   "input": "Lakers",
+   "expect": "match",
+   "id": "tm-1",
+   "via": "alias"
+  },
+  {
+   "input": "LA Lakers",
+   "expect": "match",
+   "id": "tm-1",
+   "via": "alias"
+  },
+  {
+   "input": "L.A. Lakers",
+   "expect": "match",
+   "id": "tm-1",
+   "via": "alias"
+  },
+  {
+   "input": "LAL",
+   "expect": "match",
+   "id": "tm-1",
+   "via": "alias"
+  },
+  {
+   "input": "Celtics",
+   "expect": "match",
+   "id": "tm-2",
+   "via": "alias"
+  },
+  {
+   "input": "Seattle SuperSonics",
+   "expect": "match",
+   "id": "tm-3",
+   "via": "alias"
+  },
+  {
+   "input": "Sonics",
+   "expect": "match",
+   "id": "tm-3",
+   "via": "alias"
+  },
+  {
+   "input": "Sixers",
+   "expect": "match",
+   "id": "tm-5",
+   "via": "alias"
+  },
+  {
+   "input": "Los Angeles Clippers",
+   "expect": "match",
+   "id": "tm-6",
+   "via": "alias"
+  },
+  {
+   "input": "LA Clippers",
+   "expect": "match",
+   "id": "tm-6",
+   "via": "name"
+  },
+  {
+   "input": "Heat",
+   "expect": "match",
+   "id": "tm-7",
+   "via": "alias"
+  },
+  {
+   "input": "Doncic",
+   "expect": "match",
+   "id": "pl-10",
+   "via": "last-name"
+  },
+  {
+   "input": "Antetokounmpo",
+   "expect": "match",
+   "id": "pl-16",
+   "via": "last-name"
+  },
+  {
+   "input": "Duncan",
+   "expect": "match",
+   "id": "pl-19",
+   "via": "last-name"
+  },
+  {
+   "input": "Durant",
+   "expect": "match",
+   "id": "pl-13",
+   "via": "last-name"
+  },
+  {
+   "input": "Love",
+   "expect": "match",
+   "id": "pl-14",
+   "via": "last-name"
+  },
+  {
+   "input": "Jackson",
+   "expect": "match",
+   "id": "pl-4",
+   "via": "last-name"
+  },
+  {
+   "input": "Payton",
+   "expect": "match",
+   "id": "pl-5",
+   "via": "last-name"
+  },
+  {
+   "input": "Butler",
+   "expect": "match",
+   "id": "pl-6",
+   "via": "last-name"
+  },
+  {
+   "input": "Stoudemire",
+   "expect": "match",
+   "id": "pl-11",
+   "via": "last-name"
+  },
+  {
+   "input": "Alexander",
+   "expect": "match",
+   "id": "pl-9",
+   "via": "last-name"
+  },
+  {
+   "input": "James",
+   "expect": "ambiguous",
+   "ids": [
+    "pl-1",
+    "pl-7",
+    "pl-8"
+   ]
+  },
+  {
+   "input": "Hardaway",
+   "expect": "ambiguous",
+   "ids": [
+    "pl-20",
+    "pl-21"
+   ]
+  },
+  {
+   "input": "Hernangómez",
+   "expect": "ambiguous",
+   "ids": [
+    "pl-17",
+    "pl-18"
+   ]
+  },
+  {
+   "input": "Hernangomez",
+   "expect": "ambiguous",
+   "ids": [
+    "pl-17",
+    "pl-18"
+   ]
+  },
+  {
+   "input": "Mike James",
+   "expect": "ambiguous",
+   "ids": [
+    "pl-7",
+    "pl-8"
+   ]
+  },
+  {
+   "input": "Mike James (2002-2014)",
+   "expect": "match",
+   "id": "pl-7",
+   "via": "name"
+  },
+  {
+   "input": "Mike James (2018-2021)",
+   "expect": "match",
+   "id": "pl-8",
+   "via": "name"
+  },
+  {
+   "input": "Lebrn James",
+   "expect": "match",
+   "id": "pl-1",
+   "via": "typo"
+  },
+  {
+   "input": "Giannis Antetokoumpo",
+   "expect": "match",
+   "id": "pl-16",
+   "via": "typo"
+  },
+  {
+   "input": "Luka Doncik",
+   "expect": "match",
+   "id": "pl-10",
+   "via": "typo"
+  },
+  {
+   "input": "Tim Dunkan",
+   "expect": "match",
+   "id": "pl-19",
+   "via": "typo"
+  },
+  {
+   "input": "Kevin Lovee",
+   "expect": "match",
+   "id": "pl-14",
+   "via": "typo"
+  },
+  {
+   "input": "Mike Jamez",
+   "expect": "ambiguous",
+   "ids": [
+    "pl-7",
+    "pl-8"
+   ]
+  },
+  {
+   "input": "Celtcs",
+   "expect": "match",
+   "id": "tm-2",
+   "via": "typo"
+  },
+  {
+   "input": "Michael Jordan",
+   "expect": "none"
+  },
+  {
+   "input": "Larry Bird",
+   "expect": "none"
+  },
+  {
+   "input": "Kevin",
+   "expect": "none"
+  },
+  {
+   "input": "Qwerty",
+   "expect": "none"
+  },
+  {
+   "input": "",
+   "expect": "none"
+  },
+  {
+   "input": "   ",
+   "expect": "none"
+  },
+  {
+   "input": "!!!",
+   "expect": "none"
+  },
+  {
+   "input": "Boston",
+   "expect": "none"
+  },
+  {
+   "input": "Gilgeous-Alexander",
+   "expect": "none"
+  },
+  {
+   "input": "KDD",
+   "expect": "none"
+  },
+  {
+   "input": "Lak",
+   "expect": "none"
+  },
+  {
+   "input": "LB",
+   "expect": "none"
+  }
+ ]
+}
