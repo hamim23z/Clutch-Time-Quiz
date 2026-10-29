@@ -1,0 +1,15 @@
+{
+ "source": "data/export/prompts.json as exported by session 5 (63 prompts, 9 dives)",
+ "prompts": 63,
+ "dives": 9,
+ "answers": 4672,
+ "tier_counts": {
+  "1": 2390,
+  "2": 1328,
+  "3": 717,
+  "4": 213,
+  "5": 20,
+  "6": 4
+ },
+ "total_points": 89170
+}

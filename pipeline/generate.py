@@ -17,8 +17,9 @@ from pathlib import Path
 import pandas as pd
 
 from fame import OVERRIDES_PATH, compute_fame, load_overrides
-from generator import generate, write_candidates
+from generator import generate, generate_families, write_candidates
 from reports import write_reports
+from pools import FAMILIES, make_ctx
 from templates import TEMPLATES, Tables
 
 HERE = Path(__file__).resolve().parent
@@ -39,6 +40,7 @@ def build(processed_dir: Path, out_dir: Path, docs_dir: Path, overrides: Path = 
     out_dir.mkdir(parents=True, exist_ok=True)
     fame.to_parquet(out_dir / "fame.parquet", compression="zstd", index=False)
     result = generate(tables, fame)
+    generate_families(tables, fame, make_ctx(tables, fame), result=result)
     write_candidates(result, out_dir)
     write_reports(fame, result, docs_dir)
     return tables, fame, result
@@ -46,7 +48,7 @@ def build(processed_dir: Path, out_dir: Path, docs_dir: Path, overrides: Path = 
 
 def summary(fame: pd.DataFrame, result) -> list[str]:
     counts = fame["tier"].value_counts().sort_index()
-    none = [t.key for t in TEMPLATES if not any(m["template"] == t.key for m in result.meta)]
+    none = [k for k in [t.key for t in TEMPLATES] + [f.key for f in FAMILIES] if not any(m["template"] == k for m in result.meta)]
     return [
         "players per tier: " + ", ".join(f"tier {t}: {c}" for t, c in counts.items()) + f" (of {len(fame):,})",
         f"candidates: {len(result.prompts)} ({sum(1 for p in result.prompts if p['answerType'] == 'player')} player, "

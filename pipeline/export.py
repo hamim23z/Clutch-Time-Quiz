@@ -20,9 +20,10 @@ from pathlib import Path
 
 import pandas as pd
 
-from curate import curate
+from curate import Config, TARGET_TIER12, TARGET_TIER56, curate, violations
 from exportcheck import check_all
 from exportreport import write_reports
+from rarity import load_baseline, targets_met, tier_stats
 from fame import OVERRIDES_PATH
 from generate import build, summary
 from matchnorm import base_name, normalize
@@ -35,6 +36,8 @@ HERE = Path(__file__).resolve().parent
 ALIASES_PATH = HERE / "data" / "aliases.csv"
 OUTSIDE_RANGE_PATH = HERE / "data" / "outside_range.csv"
 PROMPT_SLUG_PREFIX = "cand-"
+MAX_BYTES = 5_000_000
+MAX_GZIP = 800_000
 
 
 def prompt_id(candidate_id: str) -> str:
@@ -75,25 +78,36 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--aliases", type=Path, default=ALIASES_PATH)
     ap.add_argument("--team-aliases", type=Path, default=TEAM_ALIASES_PATH)
     ap.add_argument("--outside-range", type=Path, default=OUTSIDE_RANGE_PATH)
-    ap.add_argument("--check-count", type=int, default=10, help="how many random prompts to recheck against the tables")
+    ap.add_argument("--check-count", type=int, default=60, help="how many random prompts to recheck against the tables (at least 2 from every template family)")
+    ap.add_argument("--per-family", type=int, default=2, help="the recheck takes at least this many prompts from every template family")
     args = ap.parse_args(argv)
 
     tables, fame, result = build(args.processed_dir, args.out_dir, args.docs_dir, args.overrides)
     print("\n".join(summary(fame, result)))
 
     groups = {t.key: t.stat_group for t in TEMPLATES}
-    curated = curate(result.prompts, result.meta, groups)
+    cfg = Config()
+    curated = curate(result.prompts, result.meta, groups, cfg)
+    problems = violations(curated, cfg)
+    if problems:
+        raise SystemExit("curation breaks its own rules: " + "; ".join(problems[:5]))
     renamed = {i.prompt["id"]: prompt_id(i.prompt["id"]) for i in curated.items}
     for item in curated.items:
         item.prompt = {**item.prompt, "id": renamed[item.prompt["id"]]}
     prompts = curated.prompts
+    stats = tier_stats(prompts)
+    ok12, ok56 = targets_met(stats)
+    print(f"curated: {len(prompts)} prompts in {len(prompts) // 7} dives; tiers 1-2 {100 * (stats['tier_counts'][1] + stats['tier_counts'][2]) / stats['answers']:.1f}% "
+          f"(target at most {100 * TARGET_TIER12:.0f}%), tiers 5-6 {100 * (stats['tier_counts'][5] + stats['tier_counts'][6]) / stats['answers']:.1f}% (target at least {100 * TARGET_TIER56:.0f}%)")
+    if not (ok12 and ok56):
+        raise SystemExit("the rarity targets are not met: widen the pool or recalibrate the tiers (see docs/rarity-report.md)")
 
     universe, dropped = build_universe(tables.players, tables.teams, load_aliases(args.aliases), load_team_aliases(args.team_aliases))
     check_all(prompts, universe)
     outside = pd.read_csv(args.outside_range)["name"].tolist()
     check_outside_range(outside, universe)
 
-    checks = verify_sample(curated.items, tables, fame, k=args.check_count)
+    checks = verify_sample(curated.items, tables, fame, k=args.check_count, per_family=args.per_family)
 
     args.export_dir.mkdir(parents=True, exist_ok=True)
     files = {"prompts.json": render_prompts(prompts), "universe.json": render_universe(universe)}
@@ -103,7 +117,12 @@ def main(argv: list[str] | None = None) -> int:
         (args.export_dir / name).write_bytes(data)
         sizes[name] = (len(data), len(gzip.compress(data, 9)))
     sizes["both files"] = (sum(s[0] for s in sizes.values()), sum(s[1] for s in sizes.values()))
-    write_reports(curated, checks, sizes, len(result.prompts), args.docs_dir)
+    biggest = sorted(prompts, key=lambda p: -len(json.dumps(p, ensure_ascii=False, separators=(",", ":")).encode()))[:5]
+    largest = [(p["id"], len(p["answers"]), len(json.dumps(p, ensure_ascii=False, separators=(",", ":")).encode())) for p in biggest]
+    write_reports(curated, checks, sizes, largest, len(result.prompts), args.docs_dir, load_baseline(), set())
+    over = sizes["both files"][0] > MAX_BYTES or sizes["both files"][1] > MAX_GZIP
+    if over:
+        print(f"WARNING: the export is over {MAX_BYTES:,} bytes or {MAX_GZIP:,} gzipped; largest prompts: " + ", ".join(f"{a} ({b} answers)" for a, b, _ in largest))
 
     print(f"export: {len(prompts)} prompts, {len(universe['players']):,} players, {len(universe['teams'])} teams; "
           f"{sizes['both files'][0]:,} bytes ({sizes['both files'][1]:,} gzipped)")

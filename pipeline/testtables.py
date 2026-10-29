@@ -90,7 +90,7 @@ def make_tables(seed: int = 7, min_season_games: int = 3) -> Tables:
                 series_game = None
             else:
                 series_game = [1, 2, 3, 7, 7][number - 12] if not finals else number - 16  # 1 to 4 in the Finals
-            date = (pd.Timestamp(f"{season - 1}-11-01") + pd.Timedelta(days=number)).strftime("%Y-%m-%d")
+            date = (pd.Timestamp(f"{season - 1}-11-01") + pd.Timedelta(days=number * 7)).strftime("%Y-%m-%d")
             games.append({"game_id": gid, "season": season, "season_type": season_type, "game_date": date,
                           "home_team_id": home, "away_team_id": away, "home_score": scores[home],
                           "away_score": scores[away], "periods": periods, "overtime": periods > 4,

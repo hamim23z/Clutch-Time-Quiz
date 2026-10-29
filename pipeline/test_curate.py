@@ -2,137 +2,170 @@ import functools
 
 import pytest
 
-import curate
-from curate import DIVE_SIZE, DIVES, MAX_PER_FAMILY, PLAYER_PER_DIVE, RANK, TEAM_SLOTS, Item, build_items, curate as run_curate, deal, order_dive, pool_for, select
+import curate as cu
+from curate import Config, Item, RANK, build_items, deal, order_dive, select, shares, totals, violations
 
 DIFFS = ["easy", "medium", "hard"]
+CFG = Config(dives=12, family_cap=12, team_family_cap=4, tag_cap=5, star_style_range=(4, 14), select_steps=8000, deal_steps_per_dive=1500)
 
 
-def _prompt(kind, template, n, difficulty, size=20, points=10):
-    answers = [{"id": f"{'pl' if kind == 'player' else 'tm'}-{i}", "name": f"N{i}", "tier": 1, "points": points} for i in range(size)]
-    return {"id": f"cand-{template}-{n}", "answerType": kind, "text": "Since 2001-02, name x.", "answers": answers, "difficulty": difficulty}, {"id": f"cand-{template}-{n}", "template": template, "n": n}
+def make_item(kind, family, param, difficulty, broad, tags=(), size=40, tiers=(10, 10, 10, 4, 4, 2), group=None, dup=None):
+    answers = [{"id": f"{'pl' if kind == 'player' else 'tm'}-{i}", "name": f"N{i}", "tier": 1, "points": 10} for i in range(size)]
+    pid = f"cand-{family}-{'-'.join(str(p) for p in param)}"
+    prompt = {"id": pid, "answerType": kind, "text": "Since 2001-02, name x.", "answers": answers, "difficulty": difficulty}
+    meta = {"id": pid, "template": family, "n": None, "param": list(param), "valid_answers": size, "broad": broad, "tags": sorted(tags),
+            "dup": list(dup if dup is not None else (family, *param)), "group": group or family,
+            "tier_counts": {str(t + 1): c for t, c in enumerate(tiers)}}
+    return prompt, meta
 
 
-MIXED = [("easy", "hard"), ("easy", "medium"), ("medium", "hard")]  # what a two-threshold family offers
-
-
-def make_pool(player_families=30, team_families=12, per_family=2):
-    """Families with per_family thresholds each. With 2 the difficulties are mixed so every level is available;
-    with more they cycle through the three levels."""
+def make_pool(seed_families=12):
+    """Broad player families keyed by franchise, star-style player families, and team families."""
     prompts, meta = [], []
-    for kind, families in (("player", player_families), ("team", team_families)):
-        for f in range(families):
-            for k in range(per_family):
-                difficulty = MIXED[f % 3][k] if per_family == 2 else DIFFS[(f + k) % 3]
-                p, m = _prompt(kind, f"{kind}-fam{f}", k + 1, difficulty, size=10 + 7 * k)
-                prompts.append(p)
-                meta.append(m)
-    groups = {m["template"]: f"group{int(m['template'].split('fam')[1]) % 12}" for m in meta}
-    return prompts, meta, groups
+
+    def add(pm):
+        prompts.append(pm[0])
+        meta.append(pm[1])
+
+    for f in range(seed_families):  # broad, franchise-tagged: 30 franchises each
+        for tid in range(1, 31):
+            deep = f % 2 == 0
+            add(make_item("player", f"broad{f}", (tid,), DIFFS[(f + tid) % 3], True, [f"f:{tid}"], size=60,
+                          tiers=(8, 12, 14, 12, 8, 6) if deep else (20, 20, 12, 4, 2, 2)))
+    for f in range(10):  # star-style: no tags, one question each
+        for n in (20, 30, 40):
+            add(make_item("player", f"star{f}", (), DIFFS[(f + n) % 3], False, size=50, tiers=(25, 15, 6, 2, 1, 1), dup=(f"star{f}",)))
+    for f in range(8):  # teams, mostly tier 1
+        for season in range(2002, 2020):
+            add(make_item("team", f"team{f}", (season,), DIFFS[(f + season) % 3], False, size=12, tiers=(12, 0, 0, 0, 0, 0)))
+    return prompts, meta
 
 
 @functools.lru_cache(maxsize=None)
-def default_result():
-    prompts, meta, groups = make_pool()
-    return run_curate(prompts, meta, groups)
+def default():
+    prompts, meta = make_pool()
+    return cu.curate(prompts, meta, {}, CFG), CFG
 
 
-def test_curation_gives_63_prompts_in_9_dives_of_5_player_and_2_team_prompts():
-    result = default_result()
-    assert len(result.items) == DIVES * DIVE_SIZE == 63
-    for d in range(DIVES):
+def test_hard_rules_hold_on_a_synthetic_pool():
+    result, cfg = default()
+    assert violations(result, cfg) == []
+    assert len(result.items) == cfg.dives * 7
+
+
+def test_each_dive_is_five_player_and_two_team_prompts_with_teams_in_slots_3_and_5():
+    result, cfg = default()
+    for d in range(cfg.dives):
         dive = result.dive(d)
-        assert [i.answer_type for i in dive].count("team") == 2 and [i.answer_type for i in dive].count("player") == PLAYER_PER_DIVE
-        assert [slot for slot, i in enumerate(dive) if i.answer_type == "team"] == list(TEAM_SLOTS)
+        assert [i.answer_type for i in dive] == ["player", "player", "team", "player", "team", "player", "player"]
+        assert sum(1 for i in dive if i.answer_type == "player" and i.broad) >= cfg.min_broad_per_dive
 
 
-def test_no_repeated_prompts_and_at_most_two_per_family():
-    result = default_result()
-    ids = [i.prompt["id"] for i in result.items]
-    assert len(set(ids)) == len(ids)
-    per_family = {}
-    for i in result.items:
-        per_family[i.template] = per_family.get(i.template, 0) + 1
-    assert max(per_family.values()) <= MAX_PER_FAMILY
-    assert result.extended == []
-
-
-def test_a_family_keeps_its_easiest_and_hardest_prompt():
-    prompts, meta, groups = make_pool(player_families=1, team_families=0, per_family=4)
-    items = build_items(prompts, meta, groups)
-    kept = pool_for(items)
-    assert len(kept) == 2
-    ranks = sorted(RANK[i.difficulty] for i in items)
-    assert RANK[kept[0].difficulty] == ranks[0] and RANK[kept[1].difficulty] == ranks[-1]
-
-
-def test_dives_do_not_repeat_a_template_and_mostly_not_a_stat():
-    result = default_result()
-    for d in range(DIVES):
+def test_no_repeated_family_franchise_or_star_inside_a_dive():
+    result, cfg = default()
+    for d in range(cfg.dives):
         dive = result.dive(d)
-        assert len({i.template for i in dive}) == DIVE_SIZE
-    repeats = sum(DIVE_SIZE - len({i.group for i in result.dive(d)}) for d in range(DIVES))
-    assert repeats == 0  # 12 stat groups are plenty for 7 prompts a dive
+        assert len({i.template for i in dive}) == 7
+        tags = [t for i in dive for t in i.tags]
+        assert len(tags) == len(set(tags))
 
 
-def test_each_dive_has_easy_medium_and_hard_when_the_pool_allows():
-    result = default_result()
-    for d in range(DIVES):
+def test_neighbouring_dives_share_no_franchise_or_star():
+    result, cfg = default()
+    for d in range(cfg.dives - 1):
+        assert not ({t for i in result.dive(d) for t in i.tags} & {t for i in result.dive(d + 1) for t in i.tags})
+
+
+def test_every_dive_mixes_easy_medium_and_hard():
+    result, cfg = default()
+    for d in range(cfg.dives):
         assert {i.difficulty for i in result.dive(d)} == set(DIFFS)
 
 
-def test_a_dive_runs_from_easy_to_hard():
-    dive = default_result().dive(0)
-    players = [RANK[i.difficulty] for i in dive if i.answer_type == "player"]
-    teams = [RANK[i.difficulty] for i in dive if i.answer_type == "team"]
-    assert players == sorted(players) and teams == sorted(teams)
+def test_no_near_duplicates_and_no_repeated_prompt():
+    result, _ = default()
+    dups = [i.dup for i in result.items]
+    assert len(set(dups)) == len(dups)
+    ids = [i.prompt["id"] for i in result.items]
+    assert len(set(ids)) == len(ids)
+
+
+def test_a_star_style_family_is_used_once_not_at_several_thresholds():
+    result, _ = default()
+    star = [i.template for i in result.items if not i.broad and i.answer_type == "player"]
+    assert len(star) == len(set(star))
+
+
+def test_caps_are_respected():
+    result, cfg = default()
+    counts = {}
+    tag_counts = {}
+    for i in result.items:
+        counts[i.template] = counts.get(i.template, 0) + 1
+        for t in i.tags:
+            tag_counts[t] = tag_counts.get(t, 0) + 1
+    assert max(c for k, c in counts.items() if k.startswith("broad")) <= cfg.family_cap
+    assert max(c for k, c in counts.items() if k.startswith("team")) <= cfg.team_family_cap
+    assert max(tag_counts.values()) <= cfg.tag_cap
+    star_style = sum(1 for i in result.items if i.answer_type == "player" and not i.broad)
+    assert cfg.star_style_range[0] <= star_style <= cfg.star_style_range[1]
+
+
+def test_the_rarity_targets_are_reached_when_the_pool_allows():
+    result, _ = default()
+    t12, t56 = shares(result.items)
+    assert t12 <= cu.TARGET_TIER12 and t56 >= cu.TARGET_TIER56
+
+
+def test_curation_prefers_rare_prompts_when_over_the_target():
+    # a pool whose star-style prompts are all tier 1: the broad deep prompts must carry the rarity
+    result, _ = default()
+    deep = [i for i in result.items if i.broad and i.template in {f"broad{f}" for f in range(12) if f % 2 == 0}]
+    assert len(deep) > 12
 
 
 def test_curation_is_deterministic():
-    prompts, meta, groups = make_pool()
-    a = [i.prompt["id"] for i in default_result().items]
-    b = [i.prompt["id"] for i in run_curate(prompts, meta, groups).items]
-    assert a == b
+    prompts, meta = make_pool()
+    again = cu.curate(prompts, meta, {}, CFG)
+    assert [i.prompt["id"] for i in again.items] == [i.prompt["id"] for i in default()[0].items]
 
 
-def test_more_thresholds_are_added_only_when_two_per_family_is_not_enough():
-    # 20 player families x 2 = 40 < 45 player slots, so some families must give a third prompt
-    prompts, meta, groups = make_pool(player_families=20, team_families=12, per_family=4)
-    result = run_curate(prompts, meta, groups)
-    assert len(result.items) == 63
-    assert result.extended
-    per_family = {}
-    for i in result.items:
-        per_family[i.template] = per_family.get(i.template, 0) + 1
-    assert set(result.extended) == {k for k, c in per_family.items() if c > MAX_PER_FAMILY}
-
-
-def test_too_few_candidates_is_an_error():
-    prompts, meta, groups = make_pool(player_families=3, team_families=12, per_family=3)
+def test_too_few_distinct_prompts_is_an_error():
+    prompts, meta = make_pool(seed_families=1)
     with pytest.raises(ValueError):
-        run_curate(prompts, meta, groups)
+        cu.curate(prompts, meta, {}, CFG)
 
 
-def test_difficulty_quotas_follow_what_the_pool_has():
-    prompts, meta, groups = make_pool()
-    players, teams, _ = select(build_items(prompts, meta, groups))
-    counts = {d: sum(1 for i in players if i.difficulty == d) for d in DIFFS}
-    assert counts["hard"] == round(0.2 * 45) and counts["medium"] == round(0.4 * 45) and sum(counts.values()) == 45
+def test_violations_finds_planted_problems():
+    result, cfg = default()
+    broken = cu.Curated(items=list(result.items))
+    broken.items[1] = Item(broken.items[0].prompt, broken.items[0].template, None, "g", True, broken.items[0].tags, ("x",), (1,) * 6)
+    assert any("repeats a template family" in v or "same franchise" in v for v in violations(broken, cfg))
+    short = cu.Curated(items=result.items[:-1])
+    assert any("prompts, expected" in v for v in violations(short, cfg))
 
 
-def test_order_dive_puts_teams_in_slots_3_and_5():
-    prompts, meta, groups = make_pool()
-    items = build_items(prompts, meta, groups)
+def test_order_dive_runs_easy_to_hard_with_teams_in_slots_3_and_5():
+    prompts, meta = make_pool()
+    items = build_items(prompts, meta, {})
     dive = [i for i in items if i.answer_type == "player"][:5] + [i for i in items if i.answer_type == "team"][:2]
     ordered = order_dive(dive)
     assert [i.answer_type for i in ordered] == ["player", "player", "team", "player", "team", "player", "player"]
+    players = [RANK[i.difficulty] for i in ordered if i.answer_type == "player"]
+    assert players == sorted(players)
 
 
-def test_a_shortage_of_hard_prompts_is_passed_to_the_other_levels():
-    prompts, meta, groups = make_pool()
-    for p in prompts:
-        if p["difficulty"] == "hard":
-            p["difficulty"] = "medium"
-    players, teams, _ = select(build_items(prompts, meta, groups))
-    assert len(players) == 45 and len(teams) == 18
-    assert not any(i.difficulty == "hard" for i in players + teams)
+def test_deal_keeps_every_prompt_exactly_once():
+    prompts, meta = make_pool()
+    items = build_items(prompts, meta, {})
+    players, teams = select(items, CFG)
+    dives = deal(players, teams, CFG)
+    flat = [i.prompt["id"] for d in dives for i in d]
+    assert sorted(flat) == sorted(i.prompt["id"] for i in players + teams)
+
+
+def test_tier_totals():
+    prompts, meta = make_pool()
+    items = build_items(prompts, meta, {})
+    t = totals(items[:2])
+    assert t["answers"] == 120 and t["tier12"] == items[0].tier12 + items[1].tier12

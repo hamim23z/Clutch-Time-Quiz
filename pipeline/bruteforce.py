@@ -256,3 +256,123 @@ BRUTE: dict[str, Callable[[Rows, int], set]] = {
     "champion": lambda rows, n: {k for k, w in finals_wins(rows).items() if w >= 4},
     "reached-finals": lambda rows, n: set(finals_wins(rows)),
 }
+
+
+# --- parameterised families (pools.py): one query per (family, parameters), plain loops ----------------------------
+
+def _players_where(rows: Rows, cols: tuple, test: Callable) -> set:
+    """Player ids of rows where test(player_id, *values) is true."""
+    return {int(pid) for pid, *values in rows.player("player_id", *cols) if test(*values)}
+
+
+def _franchise_scope(scope: str) -> Callable:
+    return lambda rows, p: _players_where(rows, ("team_id", "season_type"), lambda team, stype: team == p[0] and (scope == "any" or stype == scope))
+
+
+def _two_franchises(rows: Rows, p: tuple) -> set:
+    a, b = set(), set()
+    for pid, team in rows.player("player_id", "team_id"):
+        if team == p[0]:
+            a.add(int(pid))
+        elif team == p[1]:
+            b.add(int(pid))
+    return a & b
+
+
+def _teammates(rows: Rows, p: tuple) -> set:
+    star = p[0]
+    together = {(gid, team) for pid, gid, team in rows.player("player_id", "game_id", "team_id") if pid == star}
+    return {int(pid) for pid, gid, team in rows.player("player_id", "game_id", "team_id") if (gid, team) in together} - {star}
+
+
+def _finals(test: Callable) -> Callable:
+    return lambda rows, p: {int(pid) for pid, gid, three, stl, blk, season in rows.player("player_id", "game_id", "fg3m", "stl", "blk", "season")
+                            if rows.game[gid]["finals"] and test(three, stl, blk, season, p)}
+
+
+def _month(col: str) -> Callable:
+    def brute(rows: Rows, p: tuple) -> set:
+        year, month, n = p
+        prefix = f"{year:04d}-{month:02d}-"
+        return {int(pid) for pid, value, gid, stype in rows.player("player_id", col, "game_id", "season_type")
+                if stype == "regular" and value >= n and rows.game[gid]["date"].startswith(prefix)}
+    return brute
+
+
+def _season(col: str) -> Callable:
+    return lambda rows, p: _players_where(rows, (col, "season", "season_type"), lambda value, season, stype: stype == "regular" and season == p[0] and value >= p[1])
+
+
+def _years(rows: Rows, p: tuple) -> set:
+    return _players_where(rows, ("team_id", "season", "season_type"), lambda team, season, stype: team == p[0] and stype == "regular" and p[1] <= season <= p[2])
+
+
+def _team_season_games(test: Callable) -> Callable:
+    """Teams with a game of the given season where test(n, game_info, row) holds."""
+    def brute(rows: Rows, p: tuple) -> set:
+        season, n = p
+        found = set()
+        for gid, team, s, stype, side, score, opp, won, fg3m in rows.team("game_id", "team_id", "season", "season_type", "home_away", "team_score", "opponent_score", "won", "fg3m"):
+            if s == season and test(n, rows.game[gid], stype, side, score, opp, bool(won), fg3m):
+                found.add((int(team), int(s)))
+        return found
+    return brute
+
+
+def _wins_threshold(side: str | None, season_type: str) -> Callable:
+    def brute(rows: Rows, p: tuple) -> set:
+        season, n = p
+        wins: dict = {}
+        for team, s, stype, hv, won in rows.team("team_id", "season", "season_type", "home_away", "won"):
+            if s == season and stype == season_type and (side is None or hv == side):
+                wins[int(team)] = wins.get(int(team), 0) + (1 if won else 0)
+        return {(t, int(season)) for t, w in wins.items() if w >= n}
+    return brute
+
+
+def _made_playoffs(rows: Rows, p: tuple) -> set:
+    return {(int(team), int(s)) for team, s, stype in rows.team("team_id", "season", "season_type") if s == p[0] and stype == "playoffs"}
+
+
+def _against(kind: str) -> Callable:
+    def brute(rows: Rows, p: tuple) -> set:
+        return {(int(team), int(s)) for team, s, stype, opp, won in rows.team("team_id", "season", "season_type", "opponent_team_id", "won")
+                if stype == "playoffs" and opp == p[0] and (kind == "played" or won)}
+    return brute
+
+
+BRUTE_FAMILY: dict[str, Callable[[Rows, tuple], set]] = {
+    "franchise-regular": _franchise_scope("regular"),
+    "franchise-playoff": _franchise_scope("playoffs"),
+    "franchise-season": lambda rows, p: _players_where(rows, ("team_id", "season", "season_type"), lambda team, season, stype: team == p[0] and season == p[1] and stype == "regular"),
+    "franchise-start": lambda rows, p: _players_where(rows, ("team_id", "started"), lambda team, started: team == p[0] and bool(started)),
+    "franchise-bench": lambda rows, p: _players_where(rows, ("team_id", "started"), lambda team, started: team == p[0] and not started),
+    "franchise-points": lambda rows, p: _players_where(rows, ("team_id", "points"), lambda team, pts: team == p[0] and pts >= p[1]),
+    "franchise-years": _years,
+    "franchise-playoff-season": lambda rows, p: _players_where(rows, ("team_id", "season", "season_type"), lambda team, season, stype: team == p[0] and season == p[1] and stype == "playoffs"),
+    "both-franchises": _two_franchises,
+    "points-against": lambda rows, p: _players_where(rows, ("opponent_team_id", "points"), lambda opp, pts: opp == p[0] and pts >= p[1]),
+    "teammate": _teammates,
+    "finals-appearance": _finals(lambda three, stl, blk, season, p: True),
+    "finals-three": _finals(lambda three, stl, blk, season, p: three >= 1),
+    "finals-steal-block": _finals(lambda three, stl, blk, season, p: stl >= 1 or blk >= 1),
+    "finals-year": _finals(lambda three, stl, blk, season, p: season == p[0]),
+    "month-points": _month("points"),
+    "month-threes": _month("fg3m"),
+    "season-points": _season("points"),
+    "season-threes": _season("fg3m"),
+    "season-rebounds": _season("reb"),
+    "season-assists": _season("ast"),
+    "made-playoffs": _made_playoffs,
+    "wins-in-season": _wins_threshold(None, "regular"),
+    "home-wins-in-season": _wins_threshold("home", "regular"),
+    "road-wins-in-season": _wins_threshold("away", "regular"),
+    "playoff-wins-in-season": _wins_threshold(None, "playoffs"),
+    "regulation-points-in-season": _team_season_games(lambda n, g, st, side, score, opp, won, f3: g["periods"] == 4 and score >= n),
+    "margin-in-season": _team_season_games(lambda n, g, st, side, score, opp, won, f3: won and score - opp >= n),
+    "threes-in-season": _team_season_games(lambda n, g, st, side, score, opp, won, f3: f3 >= n),
+    "held-opponent-in-season": _team_season_games(lambda n, g, st, side, score, opp, won, f3: opp <= n),
+    "overtime-wins-in-season": _team_season_games(lambda n, g, st, side, score, opp, won, f3: won and g["periods"] - 4 >= n),
+    "played-playoff-against": _against("played"),
+    "beat-in-playoffs": _against("won"),
+}

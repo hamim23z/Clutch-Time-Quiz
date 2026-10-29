@@ -20,6 +20,7 @@ MIN_PLAYER_ANSWERS = 15
 MAX_PLAYER_ANSWERS = 400
 MIN_TEAM_ANSWERS = 5
 MAX_TEAM_ANSWERS = None  # the brief sets no maximum for teams (there are only 30 franchises)
+MAX_BROAD_ANSWERS = 700  # broad-pool player prompts (pools.py) may have up to this many valid answers
 
 PLAYER_ID_PREFIX, TEAM_ID_PREFIX = "pl-", "tm-"
 SCHEMA_PATH = Path(__file__).resolve().parent.parent / "schema" / "prompts.schema.json"
@@ -53,16 +54,16 @@ def difficulty(answer_type: str, tiers: list[int]) -> str:
     A short list is harder, and so is a list with many deep cuts. Each gets 0 to 2 points of hardness:
       size  - players: 100 or more answers = 0, 40 to 99 = 1, fewer than 40 = 2;
               teams: 25 or more = 0, 12 to 24 = 1, fewer than 12 = 2
-      depth - share of answers in tier 4 or above; players: under 3% = 0, 3 to 10% = 1, 10% or more = 2;
+      depth - share of answers in tier 4 or above; players: under 10% = 0, 10 to 25% = 1, 25% or more = 2;
               teams: under 5% = 0, 5 to 15% = 1, 15% or more = 2
     Total 0 or 1 is easy, 2 is medium, 3 or 4 is hard. The cutoffs are set to the spread of the real candidate lists
-    under the five-metric fame score (session 5): lists are mostly well-known players, so even 10% deep cuts is a high share.
+    with broad pools (session 5b), where role players are valid answers and a quarter deep cuts is common.
     """
     n = len(tiers)
     deep = sum(1 for t in tiers if t >= DEEP_TIER) / n
     if answer_type == PLAYER:
         size = 0 if n >= 100 else 1 if n >= 40 else 2
-        depth = 0 if deep < 0.03 else 1 if deep < 0.10 else 2
+        depth = 0 if deep < 0.10 else 1 if deep < 0.25 else 2
     else:
         size = 0 if n >= 25 else 1 if n >= 12 else 2
         depth = 0 if deep < 0.05 else 1 if deep < 0.15 else 2
@@ -74,9 +75,14 @@ def limits_for(answer_type: str) -> tuple[int, int | None]:
     return (MIN_PLAYER_ANSWERS, MAX_PLAYER_ANSWERS) if answer_type == PLAYER else (MIN_TEAM_ANSWERS, MAX_TEAM_ANSWERS)
 
 
-def check_count(answer_type: str, count: int) -> str | None:
-    """None if a prompt with this many valid answers is allowed, else 'too_few' or 'too_many'."""
+def check_count(answer_type: str, count: int, max_player_answers: int = MAX_PLAYER_ANSWERS) -> str | None:
+    """None if a prompt with this many valid answers is allowed, else 'too_few' or 'too_many'.
+
+    max_player_answers is 400 for the star-heavy templates and MAX_BROAD_ANSWERS for broad pools.
+    """
     low, high = limits_for(answer_type)
+    if answer_type == PLAYER:
+        high = max_player_answers
     if count < low:
         return "too_few"
     if high is not None and count > high:
@@ -155,7 +161,7 @@ def generate(tables: Tables, fame: pd.DataFrame, templates: list[Template] | Non
     return result
 
 
-def validate(prompts: list[dict], schema_path: Path = SCHEMA_PATH) -> None:
+def validate(prompts: list[dict], schema_path: Path = SCHEMA_PATH, max_player_answers: int = MAX_BROAD_ANSWERS) -> None:
     """Raise if the prompts do not follow schema/prompts.schema.json, or break a rule the schema cannot express."""
     schema = json.loads(schema_path.read_text())
     jsonschema.Draft202012Validator(schema).validate(prompts)
@@ -166,7 +172,7 @@ def validate(prompts: list[dict], schema_path: Path = SCHEMA_PATH) -> None:
         answer_ids = [a["id"] for a in p["answers"]]
         if len(set(answer_ids)) != len(answer_ids):
             raise ValueError(f"{p['id']}: duplicate answer ids")
-        problem = check_count(p["answerType"], len(p["answers"]))
+        problem = check_count(p["answerType"], len(p["answers"]), max_player_answers)
         if problem:
             raise ValueError(f"{p['id']}: {problem}")
 
@@ -178,3 +184,47 @@ def write_candidates(result: GenerationResult, out_dir: Path) -> None:
     (out_dir / "candidates_meta.json").write_text(
         json.dumps({"era": result.era, "prompts": result.meta, "attempts": result.attempts}, indent=1, ensure_ascii=False) + "\n"
     )
+
+
+def generate_families(tables: Tables, fame: pd.DataFrame, ctx, families=None, result: GenerationResult | None = None,
+                      broad_window: tuple[int, int] = (15, MAX_BROAD_ANSWERS), team_window: tuple[int, int] = (5, 24)) -> GenerationResult:
+    """Candidate prompts for every parameter set of every family in pools.py, added to `result` (a new one if None).
+
+    A pool outside its window is recorded as 'too_few' or 'too_many' and dropped. Team pools count franchises.
+    """
+    from pools import FAMILIES, duplicate_key, threshold_of  # imported here: pools.py imports templates.py, as this module does
+
+    result = result if result is not None else GenerationResult(era=era_text(int(tables.games["season"].min()), int(tables.games["season"].max())))
+    for family in families if families is not None else FAMILIES:
+        low, high = broad_window if family.answer_type == PLAYER else team_window
+        for param, pool in family.enumerate(tables, ctx):
+            if family.answer_type == PLAYER:
+                size = len(pool)
+            else:
+                size = len({t for t, _ in pool})
+            attempt = {"template": family.key, "param": list(param), "answer_type": family.answer_type, "valid_answers": size,
+                       "status": "too_few" if size < low else "too_many" if size > high else "kept"}
+            result.attempts.append(attempt)
+            if attempt["status"] != "kept":
+                continue
+            if family.answer_type == PLAYER:
+                answers = _player_answers(pd.DataFrame({"player_id": sorted(pool)}), fame)
+            else:
+                answers = _team_answers(pd.DataFrame(sorted(pool), columns=["team_id", "season"]), tables.teams)
+            tiers = [a["tier"] for a in answers]
+            prompt_id = "cand-" + "-".join([family.key] + [str(p) for p in param])
+            result.prompts.append({
+                "id": prompt_id, "answerType": family.answer_type, "text": family.text(result.era, ctx, param),
+                "answers": answers, "difficulty": difficulty(family.answer_type, tiers),
+            })
+            meta = {
+                "id": prompt_id, "template": family.key, "n": threshold_of(family.key, param), "param": list(param), "valid_answers": len(answers),
+                "dup": list(duplicate_key(family.key, param)),
+                "tier_counts": {str(t): tiers.count(t) for t in range(1, 7)}, "broad": family.broad,
+                "tags": sorted(family.tags(param)), "group": family.group,
+            }
+            if family.answer_type == TEAM:
+                meta["historical_only"] = [a["name"] for a in answers if a["tier"] > 1]
+                meta["historical_names"] = {}
+            result.meta.append(meta)
+    return result

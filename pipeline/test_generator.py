@@ -178,15 +178,16 @@ def test_season_labels_and_era_text():
 
 
 def test_difficulty_rule_for_players():
-    # size: 100+ answers = 0, 40-99 = 1, under 40 = 2.  depth (share at tier 4+): under 3% = 0, 3-10% = 1, 10%+ = 2.
+    # size: 100+ answers = 0, 40-99 = 1, under 40 = 2.  depth (share at tier 4+): under 10% = 0, 10-25% = 1, 25%+ = 2.
     # total 0-1 easy, 2 medium, 3-4 hard
     assert difficulty(PLAYER, [1] * 100) == "easy"
-    assert difficulty(PLAYER, [1] * 97 + [4] * 3) == "easy"  # size 0 + depth 1
-    assert difficulty(PLAYER, [1] * 90 + [4] * 10) == "medium"  # 10% deep: size 0 + depth 2
+    assert difficulty(PLAYER, [1] * 91 + [4] * 9) == "easy"  # 9% deep: size 0 + depth 0
+    assert difficulty(PLAYER, [1] * 90 + [4] * 10) == "easy"  # 10% deep: size 0 + depth 1
+    assert difficulty(PLAYER, [1] * 70 + [4] * 30) == "medium"  # 30% deep: size 0 + depth 2
     assert difficulty(PLAYER, [1] * 50) == "easy"  # size 1 + depth 0
-    assert difficulty(PLAYER, [1] * 48 + [4] * 2) == "medium"  # 4% deep: size 1 + depth 1
+    assert difficulty(PLAYER, [1] * 45 + [4] * 5) == "medium"  # 10% deep: size 1 + depth 1
     assert difficulty(PLAYER, [1] * 20) == "medium"  # size 2 + depth 0
-    assert difficulty(PLAYER, [1] * 19 + [4]) == "hard"  # 5% deep: size 2 + depth 1
+    assert difficulty(PLAYER, [1] * 17 + [4] * 3) == "hard"  # 15% deep: size 2 + depth 1
     assert difficulty(PLAYER, [1] * 15 + [6] * 5) == "hard"  # size 2 + depth 2
     assert difficulty(PLAYER, [1] * 30 + [3] * 5) == "medium"  # tier 3 is not a deep cut
 

@@ -11,7 +11,7 @@ from dataclasses import dataclass
 
 import pandas as pd
 
-from bruteforce import BRUTE, Rows
+from bruteforce import BRUTE, BRUTE_FAMILY, Rows
 from tiers import TIER_POINTS
 
 
@@ -39,8 +39,8 @@ def _team_tier(teams: pd.DataFrame, team_id: int, seasons: set[int]) -> int:
     return 4
 
 
-def check_prompt(prompt: dict, template: str, n: int | None, rows: Rows, fame: pd.DataFrame, teams: pd.DataFrame) -> Check:
-    found = BRUTE[template](rows, n or 0)
+def check_prompt(prompt: dict, template: str, n: int | None, rows: Rows, fame: pd.DataFrame, teams: pd.DataFrame, param: tuple = ()) -> Check:
+    found = BRUTE_FAMILY[template](rows, tuple(param)) if template in BRUTE_FAMILY else BRUTE[template](rows, n or 0)
     exported = {a["id"]: a for a in prompt["answers"]}
     problems: list[str] = []
     if prompt["answerType"] == "player":
@@ -62,8 +62,21 @@ def check_prompt(prompt: dict, template: str, n: int | None, rows: Rows, fame: p
     return Check(prompt["id"], template, len(want), len(exported), sorted(want - set(exported)), sorted(set(exported) - want), problems)
 
 
-def verify_sample(items, tables, fame: pd.DataFrame, k: int = 10, seed: int = 2026) -> list[Check]:
-    """Check k randomly chosen curated items (curate.Item) against the tables."""
+def pick_sample(items, k: int = 60, per_family: int = 2, seed: int = 2026) -> list:
+    """At least `per_family` prompts from every template family (all of them if it has fewer), then random ones up to k."""
+    rng = random.Random(seed)
+    by_family: dict[str, list] = {}
+    for i in items:
+        by_family.setdefault(i.template, []).append(i)
+    chosen = []
+    for key in sorted(by_family):
+        chosen += rng.sample(by_family[key], min(per_family, len(by_family[key])))
+    rest = [i for i in items if i not in chosen]
+    rng.shuffle(rest)
+    return chosen + rest[:max(0, k - len(chosen))]
+
+
+def verify_sample(items, tables, fame: pd.DataFrame, k: int = 60, per_family: int = 2, seed: int = 2026) -> list[Check]:
+    """Check a sample of curated items (curate.Item): k prompts, at least per_family from every template family."""
     rows = Rows(tables)
-    sample = random.Random(seed).sample(list(items), min(k, len(items)))
-    return [check_prompt(i.prompt, i.template, i.n, rows, fame, tables.teams) for i in sample]
+    return [check_prompt(i.prompt, i.template, i.n, rows, fame, tables.teams, i.param) for i in pick_sample(list(items), k, per_family, seed)]
