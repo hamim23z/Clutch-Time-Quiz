@@ -10,7 +10,8 @@ interface Props {
   results: readonly PromptResult[];
   diveNumber: number;
   headingRef: Ref<HTMLHeadingElement>;
-  onPlayAgain: () => void;
+  onHome: () => void;
+  onArchive: () => void;
   onHowTo: () => void;
 }
 
@@ -21,7 +22,7 @@ function describe(r: PromptResult): string {
   return 'not a valid answer, 0 points';
 }
 
-export function Final({ prompts, results, diveNumber, headingRef, onPlayAgain, onHowTo }: Props) {
+export function Final({ prompts, results, diveNumber, headingRef, onHome, onArchive, onHowTo }: Props) {
   const announce = useAnnounce();
   const [copyFailed, setCopyFailed] = useState(false);
   const total = totalPoints(results);
@@ -38,6 +39,7 @@ export function Final({ prompts, results, diveNumber, headingRef, onPlayAgain, o
       <h2 id="final-heading" tabIndex={-1} ref={headingRef}>
         Dive complete
       </h2>
+      <p className="final__number">Dive #{diveNumber}</p>
       <p className="final__score" aria-label={`Total ${total} out of ${MAX_DIVE_POINTS}`}>
         {total}
         <span className="final__max"> / {MAX_DIVE_POINTS}</span>
@@ -88,8 +90,11 @@ export function Final({ prompts, results, diveNumber, headingRef, onPlayAgain, o
       </ul>
 
       <div className="actions">
-        <button type="button" className="primary" onClick={onPlayAgain}>
-          Play again
+        <button type="button" className="primary" onClick={onHome}>
+          Home
+        </button>
+        <button type="button" className="secondary" onClick={onArchive}>
+          Archive
         </button>
         <button type="button" className="secondary" onClick={onHowTo}>
           How to play

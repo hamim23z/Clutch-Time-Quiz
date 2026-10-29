@@ -18,7 +18,7 @@ export function HowToPlay({ onPlay, onBack }: Props) {
           The more obscure a correct answer, the more it scores. A wrong answer, or running out of time, scores <strong>0</strong>.
         </li>
         <li>After each prompt you see your tier and points, plus the most famous and the rarest valid answers.</li>
-        <li>At the end, copy your score and seven colored squares to share.</li>
+        <li>At the end, copy your score and seven colored squares to share. Miss a day and your streak starts again; past dives are in the archive, and they do not count for the streak.</li>
       </ol>
       <table className="tiers">
         <caption>Points by tier</caption>
@@ -42,10 +42,13 @@ export function HowToPlay({ onPlay, onBack }: Props) {
         </tbody>
       </table>
       <p className="caveat">
-        Obscurity comes from a fame score computed from the data. It is a stand-in for real answer frequencies, so it is an approximation.
+        How rare an answer is comes from an estimate of how famous the player is over their career. It is an approximation, not a count of what other players typed, so a few players will feel too high or too low.
       </p>
       <p className="caveat">
-        Every prompt says which years it covers, for example &ldquo;Since 2002&rdquo;. A real player from before that gets an &ldquo;outside the data range&rdquo; message, not a miss.
+        Every prompt covers the 2001-02 season onward, and says so. A real player from before that gets an &ldquo;outside the data range&rdquo; message, not a miss.
+      </p>
+      <p className="caveat">
+        There is one new dive each day. Your finished dives, streaks and archive are kept in this browser only.
       </p>
       <div className="actions">
         <button type="button" className="primary" onClick={onPlay}>

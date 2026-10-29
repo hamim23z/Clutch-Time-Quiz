@@ -5,8 +5,8 @@ import { buildIndex, type Index } from './matching';
 import type { Prompt, Universe } from './types';
 
 // Tests run from web/ (npm test), so paths are relative to that folder.
-export const PROMPTS_PATH = resolve(process.cwd(), 'public/prompts.json');
-export const UNIVERSE_PATH = resolve(process.cwd(), 'public/universe.json');
+export const PROMPTS_PATH = resolve(process.cwd(), 'src/__fixtures__/prompts.json');
+export const UNIVERSE_PATH = resolve(process.cwd(), 'src/__fixtures__/universe.json');
 export const PROMPTS_SCHEMA_PATH = resolve(process.cwd(), '../schema/prompts.schema.json');
 export const UNIVERSE_SCHEMA_PATH = resolve(process.cwd(), '../schema/universe.schema.json');
 
