@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnnouncerProvider } from './announcer';
+import { SoundProvider, useSound } from './sound';
 import { Dive } from './Dive';
 import { Archive } from './components/Archive';
 import { ComingSoon } from './components/ComingSoon';
@@ -68,6 +69,13 @@ export default function App({ now = () => new Date(), storage, search, launchDat
   const streaks = useMemo(() => computeStreaks(history, today), [history, today]);
   const total = load.status === 'ready' ? diveCount(load.prompts) : 0;
 
+  // The streak pops on the home screen when it has gone up since that screen was last shown.
+  const streakBaseline = useRef<number | null>(null);
+  const streakUp = streakBaseline.current !== null && streaks.current > streakBaseline.current;
+  useEffect(() => {
+    if (view?.name === 'home') streakBaseline.current = streaks.current;
+  }, [view, streaks.current]);
+
   // Open on the results screen if today's dive is already finished on this device.
   const opened = useRef(false);
   useEffect(() => {
@@ -95,6 +103,7 @@ export default function App({ now = () => new Date(), storage, search, launchDat
 
   return (
     <AnnouncerProvider>
+      <SoundProvider storage={store}>
       <main className="app">
         <header className="top">
           <h1 className="title">
@@ -102,6 +111,7 @@ export default function App({ now = () => new Date(), storage, search, launchDat
               Deep Cut
             </button>
           </h1>
+          <SoundToggle />
         </header>
         {load.status === 'loading' && <p>Loading prompts…</p>}
         {load.status === 'error' && (
@@ -128,6 +138,7 @@ export default function App({ now = () => new Date(), storage, search, launchDat
                 number={today}
                 played={Boolean(history[today])}
                 streaks={streaks}
+                streakUp={streakUp}
                 saving={saving}
                 onPlay={() => startDive(today)}
                 onResults={() => go({ name: 'results', number: today })}
@@ -147,6 +158,7 @@ export default function App({ now = () => new Date(), storage, search, launchDat
                 results={history[view.number]?.results ?? []}
                 diveNumber={view.number}
                 headingRef={focusOnMount}
+                streak={view.number === today ? { value: streaks.current, increased: false } : undefined}
                 {...nav}
               />
             )}
@@ -157,6 +169,7 @@ export default function App({ now = () => new Date(), storage, search, launchDat
                 index={index}
                 diveNumber={view.number}
                 outsideNames={names}
+                streak={view.mode === 'daily' ? { value: streaks.current, increased: true } : undefined}
                 onFinish={(results) => finish(view.number, view.mode, results)}
                 {...nav}
               />
@@ -165,6 +178,7 @@ export default function App({ now = () => new Date(), storage, search, launchDat
         )}
         {isMock && <p className="mock-note">Test data: the players, teams and prompts in this version are made up for the tests.</p>}
       </main>
+      </SoundProvider>
     </AnnouncerProvider>
   );
 }
@@ -172,4 +186,14 @@ export default function App({ now = () => new Date(), storage, search, launchDat
 /** A ref callback that moves focus to a heading when the results screen opens straight away. */
 function focusOnMount(node: HTMLHeadingElement | null): void {
   node?.focus();
+}
+
+/** Off by default; remembers its setting. Nothing plays before the visitor's first interaction. */
+function SoundToggle() {
+  const { enabled, toggle } = useSound();
+  return (
+    <button type="button" className="sound-toggle" aria-pressed={enabled} onClick={toggle}>
+      <span aria-hidden="true">{enabled ? '🔊' : '🔈'}</span> Sound {enabled ? 'on' : 'off'}
+    </button>
+  );
 }

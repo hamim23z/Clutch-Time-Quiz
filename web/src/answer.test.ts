@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { resolveEntry, resolveText, timeoutResult } from './answer';
 import { MOCK_OUTSIDE_RANGE_NAMES, isOutsideRange } from './outsideRange';
 import { idOf, mockIndex, mockPrompts, mockUniverse } from './testUtils';
-import { pointsMatchTier } from './dive';
+import { pointsMatchTier } from './dive2';
 import type { Prompt, PromptResult } from './types';
 
 const index = mockIndex();

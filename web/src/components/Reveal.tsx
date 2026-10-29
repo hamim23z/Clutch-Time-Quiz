@@ -1,6 +1,12 @@
-import type { Ref } from 'react';
+import { useEffect, type Ref } from 'react';
+import { useAnnounce } from '../announcer';
+import { useReducedMotion } from '../motion';
+import { shotForResult } from '../shots';
+import { useSound } from '../sound';
 import { TIER_RANGES } from '../tiers';
 import type { Answer, Prompt, PromptResult } from '../types';
+import { ShotAnimation } from './ShotAnimation';
+import { ShotLabel } from './ShotLabel';
 
 interface Props {
   prompt: Prompt;
@@ -8,6 +14,9 @@ interface Props {
   isLast: boolean;
   headingRef: Ref<HTMLHeadingElement>;
   onNext: () => void;
+  /** The player tapped or pressed Enter to skip the shot. */
+  skipped: boolean;
+  onSkip: () => void;
 }
 
 /** The three most famous valid answers: lowest tier first, then the order of the file. */
@@ -65,40 +74,74 @@ function AnswerList({ title, answers }: { title: string; answers: readonly Answe
   );
 }
 
-export function Reveal({ prompt, result, isLast, headingRef, onNext }: Props) {
+export function Reveal({ prompt, result, isLast, headingRef, onNext, skipped, onSkip }: Props) {
   const byTier = [...prompt.answers].sort((a, b) => a.tier - b.tier);
+  const shot = shotForResult(result);
+  const reduced = useReducedMotion();
+  const announce = useAnnounce();
+  const { play } = useSound();
+
+  // Say the result once, and play its sound. The page text below carries the same words for everyone else.
+  useEffect(() => {
+    announce(`${headline(result)}. ${shot.label}.`);
+    if (!reduced) play(shot.name);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once per result
+  }, [result.promptId]);
+
+  // A tap anywhere, or Enter, skips to the end of the shot. Neither blocks anything: buttons and typing work as before.
+  useEffect(() => {
+    if (skipped) return;
+    const onKey = (e: KeyboardEvent): void => {
+      if (e.key === 'Enter') onSkip();
+    };
+    document.addEventListener('keydown', onKey);
+    return () => document.removeEventListener('keydown', onKey);
+  }, [skipped, onSkip]);
+
+  const classes = ['card', 'reveal', `reveal--${shot.name}`, skipped ? 'is-skipped' : '', reduced ? 'is-reduced' : ''].filter(Boolean).join(' ');
   return (
-    <section className="card reveal" aria-labelledby="result-heading">
+    <section className={classes} aria-labelledby="result-heading" onPointerDown={skipped ? undefined : onSkip}>
+      <div className="reveal__stage">
+        <ShotAnimation shot={shot} reduced={reduced} skipped={skipped} />
+        <ShotLabel shot={shot} skipped={skipped} />
+      </div>
       <p className="eyebrow">{prompt.text}</p>
-      <h3 id="result-heading" className={`result result--${result.status === 'valid' && result.tier ? `t${result.tier}` : result.status}`} tabIndex={-1} ref={headingRef}>
+      <h3
+        id="result-heading"
+        className={`result result--${result.status === 'valid' && result.tier ? `t${result.tier}` : result.status}${result.status === 'outside_range' ? ' shake shake--0' : ''}`}
+        tabIndex={-1}
+        ref={headingRef}
+      >
         {headline(result)}
       </h3>
-      <p>{explanation(prompt, result)}</p>
+      <div className="reveal__rest">
+        <p>{explanation(prompt, result)}</p>
 
-      <AnswerList title="The most famous valid answers" answers={mostFamous(prompt.answers)} />
-      <AnswerList title="The rarest valid answers" answers={rarest(prompt.answers)} />
+        <AnswerList title="The most famous valid answers" answers={mostFamous(prompt.answers)} />
+        <AnswerList title="The rarest valid answers" answers={rarest(prompt.answers)} />
 
-      <details className="all-answers">
-        <summary>All {prompt.answers.length} valid answers</summary>
-        <ol className="answers answers--all">
-          {byTier.map((a) => (
-            <li key={a.id} className="answers__item">
-              <span className={`chip chip--t${a.tier}`} aria-hidden="true">{a.tier}</span>
-              <span className="answers__name">{a.name}</span>
-              <span className="answers__points">
-                <span className="visually-hidden">tier {a.tier}, </span>
-                {a.points}
-              </span>
-            </li>
-          ))}
-        </ol>
-      </details>
-      <p className="caveat">
-        Obscurity is estimated from how famous an answer is across the whole data set, not from what other players typed.
-      </p>
-      <button type="button" className="primary" onClick={onNext}>
-        {isLast ? 'See results' : 'Next prompt'}
-      </button>
+        <details className="all-answers">
+          <summary>All {prompt.answers.length} valid answers</summary>
+          <ol className="answers answers--all">
+            {byTier.map((a) => (
+              <li key={a.id} className="answers__item">
+                <span className={`chip chip--t${a.tier}`} aria-hidden="true">{a.tier}</span>
+                <span className="answers__name">{a.name}</span>
+                <span className="answers__points">
+                  <span className="visually-hidden">tier {a.tier}, </span>
+                  {a.points}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </details>
+        <p className="caveat">
+          Obscurity is estimated from how famous an answer is across the whole data set, not from what other players typed.
+        </p>
+        <button type="button" className="primary" onClick={onNext}>
+          {isLast ? 'See results' : 'Next prompt'}
+        </button>
+      </div>
     </section>
   );
 }

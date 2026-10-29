@@ -10,17 +10,13 @@ import { AnswerInput } from './AnswerInput';
 interface Props {
   prompt: Prompt;
   index: Index;
-  /** 1-based number of this prompt, and how many there are. */
-  number: number;
-  total: number;
-  points: number;
   outsideNames?: readonly string[];
   onResult: (result: PromptResult) => void;
 }
 
 const WARNINGS = [10, 5];
 
-export function PromptScreen({ prompt, index, number, total, points, outsideNames, onResult }: Props) {
+export function PromptScreen({ prompt, index, outsideNames, onResult }: Props) {
   const announce = useAnnounce();
   const typed = useRef('');
   const done = useRef(false);
@@ -63,19 +59,16 @@ export function PromptScreen({ prompt, index, number, total, points, outsideName
   const urgency = seconds <= 5 ? 'danger' : seconds <= 10 ? 'warning' : 'calm';
   const promptId = `prompt-text-${prompt.id}`;
   return (
-    <section className="card" aria-labelledby={promptId}>
-      <div className="timer">
-        <p className="timer__count" role="timer" aria-live="off">
+    <section className="card prompt-card" aria-labelledby={promptId}>
+      <div className={`shotclock shotclock--${urgency}`}>
+        <p className="shotclock__digits timer__count" role="timer" aria-live="off">
           <span className={`timer__seconds timer__seconds--${urgency}`}>{seconds}</span>
           <span className="visually-hidden"> seconds left</span>
         </p>
-        <div className="timer__track" aria-hidden="true">
-          <div className={`timer__fill timer__fill--${urgency}`} style={{ width: `${(remainingMs / (SECONDS_PER_PROMPT * 1000)) * 100}%` }} />
+        <div className="shotclock__track" aria-hidden="true">
+          <div className="shotclock__fill" style={{ transform: `scaleX(${remainingMs / (SECONDS_PER_PROMPT * 1000)})` }} />
         </div>
       </div>
-      <p className="eyebrow">
-        Prompt {number} of {total} · {points} points so far
-      </p>
       <h2 id={promptId} className="prompt">
         {prompt.text}
       </h2>

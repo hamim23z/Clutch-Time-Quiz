@@ -1,4 +1,4 @@
-import { totalPoints } from '../dive';
+import { totalPoints } from '../dive2';
 import { squareFor } from '../share';
 import type { History } from '../storage';
 import { MAX_DIVE_POINTS } from '../tiers';
