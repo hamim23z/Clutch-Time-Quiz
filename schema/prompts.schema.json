@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deep-cut.local/schema/prompts.schema.json",
+  "title": "Deep Cut prompts",
+  "description": "The contract between the pipeline and the website: web/public/prompts.json is an array of prompts. Rules the schema cannot express (checked by tests): answer ids are unique within a prompt, every answer id exists in universe.json with the same name, and prompt ids are unique.",
+  "type": "array",
+  "minItems": 1,
+  "items": { "$ref": "#/$defs/prompt" },
+  "$defs": {
+    "prompt": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "answerType", "text", "answers", "difficulty"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$", "description": "Unique and stable. Mock data uses a mock- prefix." },
+        "answerType": { "type": "string", "enum": ["player", "team"] },
+        "text": {
+          "type": "string",
+          "pattern": "^Since (19|20)[0-9]{2}\\b",
+          "description": "Must state its era, for example 'Since 2002, name a player who ...', so the valid-answer list is complete by construction."
+        },
+        "answers": { "type": "array", "items": { "$ref": "#/$defs/answer" } },
+        "difficulty": { "type": "string", "enum": ["easy", "medium", "hard"] }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "answerType": { "const": "player" } }, "required": ["answerType"] },
+          "then": { "properties": { "answers": { "type": "array", "minItems": 15 } } }
+        },
+        {
+          "if": { "properties": { "answerType": { "const": "team" } }, "required": ["answerType"] },
+          "then": { "properties": { "answers": { "type": "array", "minItems": 5 } } }
+        }
+      ]
+    },
+    "answer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "tier", "points"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$", "description": "The id of the matching entry in universe.json." },
+        "name": { "type": "string", "minLength": 1 },
+        "tier": { "type": "integer", "minimum": 1, "maximum": 6, "description": "1 is the most famous (top 3%), 6 the most obscure (bottom 25%)." },
+        "points": { "type": "integer", "enum": [10, 20, 35, 55, 75, 100] }
+      },
+      "anyOf": [
+        { "properties": { "tier": { "const": 1 }, "points": { "const": 10 } } },
+        { "properties": { "tier": { "const": 2 }, "points": { "const": 20 } } },
+        { "properties": { "tier": { "const": 3 }, "points": { "const": 35 } } },
+        { "properties": { "tier": { "const": 4 }, "points": { "const": 55 } } },
+        { "properties": { "tier": { "const": 5 }, "points": { "const": 75 } } },
+        { "properties": { "tier": { "const": 6 }, "points": { "const": 100 } } }
+      ]
+    }
+  }
+}

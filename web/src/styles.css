@@ -1,0 +1,483 @@
+/* Mobile first: one column, large tap targets, 16px+ text in inputs so phones do not zoom. */
+:root {
+  color-scheme: light dark;
+
+  --bg: #f3f5f8;
+  --surface: #ffffff;
+  --text: #141a24;
+  --muted: #536070;
+  --border: #d2d9e2;
+  --accent: #5b2fc7;
+  --on-accent: #ffffff;
+  --focus: #5b2fc7;
+  --danger: #b42318;
+  --warning: #9a5b00;
+
+  /* one color per tier, from the most famous answer (1) to the deepest cut (6); miss = no points */
+  --t1: #d9dee6;
+  --t2: #8bb8ff;
+  --t3: #6fcf97;
+  --t4: #f5d04a;
+  --t5: #f4963a;
+  --t6: #b58af0;
+  --miss: #2a2f38;
+  --on-t1: #141a24;
+  --on-t2: #0b1b33;
+  --on-t3: #0b2a17;
+  --on-t4: #2b2200;
+  --on-t5: #2e1500;
+  --on-t6: #1b0b33;
+  --on-miss: #f3f5f8;
+
+  font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  font-size: 100%;
+  line-height: 1.45;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0f1319;
+    --surface: #191f28;
+    --text: #e9edf3;
+    --muted: #a5b0bf;
+    --border: #2e3846;
+    --accent: #b79cff;
+    --on-accent: #190a3a;
+    --focus: #c9b6ff;
+    --danger: #ff8a7a;
+    --warning: #f0b24a;
+
+    --t1: #3a4352;
+    --t2: #4a78c9;
+    --t3: #3a9b66;
+    --t4: #c9a227;
+    --t5: #d9772a;
+    --t6: #8a5cd6;
+    --miss: #0a0c10;
+    --on-t1: #e9edf3;
+    --on-t2: #ffffff;
+    --on-t3: #ffffff;
+    --on-t4: #ffffff;
+    --on-t5: #ffffff;
+    --on-t6: #ffffff;
+    --on-miss: #e9edf3;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.app {
+  max-width: 36rem;
+  margin: 0 auto;
+  padding: 1rem 1rem 3rem;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.top {
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  margin: 0.25rem 0;
+  font-size: 1.4rem;
+  letter-spacing: 0.02em;
+}
+
+.title__button {
+  padding: 0.25rem 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+h2,
+h3,
+h4 {
+  line-height: 1.25;
+}
+
+h2:focus,
+h3:focus {
+  outline: none;
+}
+
+:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.card {
+  margin-bottom: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 0.9rem;
+  background: var(--surface);
+}
+
+.eyebrow,
+.caveat,
+.mock-note,
+.answer__hint {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+
+.mock-note {
+  margin-top: 2rem;
+  text-align: center;
+}
+
+.error {
+  color: var(--danger);
+}
+
+/* buttons */
+.primary,
+.secondary {
+  min-height: 3rem;
+  padding: 0.7rem 1.1rem;
+  border: 2px solid var(--accent);
+  border-radius: 0.8rem;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.primary {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+.secondary {
+  background: transparent;
+  color: var(--text);
+}
+
+.actions {
+  display: grid;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+/* timer */
+.timer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.timer__count {
+  min-width: 2.2rem;
+  margin: 0;
+  font-size: 1.6rem;
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.timer__seconds--warning {
+  color: var(--warning);
+}
+
+.timer__seconds--danger {
+  color: var(--danger);
+}
+
+.timer__track {
+  flex: 1;
+  height: 0.6rem;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--border);
+}
+
+.timer__fill {
+  height: 100%;
+  background: var(--accent);
+}
+
+.timer__fill--warning {
+  background: var(--warning);
+}
+
+.timer__fill--danger {
+  background: var(--danger);
+}
+
+.prompt {
+  margin: 0.25rem 0 1rem;
+  font-size: 1.25rem;
+}
+
+/* answer input and suggestions */
+.answer__label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: 650;
+}
+
+.answer__row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem;
+}
+
+.answer__input {
+  width: 100%;
+  min-height: 3rem;
+  padding: 0.6rem 0.8rem;
+  border: 2px solid var(--border);
+  border-radius: 0.7rem;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.125rem;
+}
+
+.answer__input:focus-visible {
+  border-color: var(--accent);
+}
+
+.answer__hint {
+  min-height: 1.3em;
+  margin: 0.4rem 0 0;
+}
+
+.suggestions {
+  margin: 0.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.7rem;
+  background: var(--surface);
+}
+
+.suggestions[hidden] {
+  display: none;
+}
+
+.suggestion {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  min-height: 2.9rem;
+  padding: 0.55rem 0.8rem;
+  align-items: center;
+  cursor: pointer;
+}
+
+.suggestion + .suggestion {
+  border-top: 1px solid var(--border);
+}
+
+.suggestion--active,
+.suggestion:hover {
+  background: var(--bg);
+  outline: 2px solid var(--accent);
+  outline-offset: -2px;
+}
+
+.suggestion__meta {
+  flex: none;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+/* reveal */
+.result {
+  display: inline-block;
+  margin: 0.4rem 0 0.5rem;
+  padding: 0.3rem 0.8rem;
+  border-radius: 999px;
+  background: var(--border);
+  font-size: 1.2rem;
+}
+
+.result--t1 { background: var(--t1); color: var(--on-t1); }
+.result--t2 { background: var(--t2); color: var(--on-t2); }
+.result--t3 { background: var(--t3); color: var(--on-t3); }
+.result--t4 { background: var(--t4); color: var(--on-t4); }
+.result--t5 { background: var(--t5); color: var(--on-t5); }
+.result--t6 { background: var(--t6); color: var(--on-t6); }
+.result--invalid,
+.result--timeout { background: var(--miss); color: var(--on-miss); }
+
+.reveal h4 {
+  margin: 1.1rem 0 0.4rem;
+}
+
+.answers {
+  display: grid;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.answers__item,
+.recap__item {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.answers__name {
+  flex: 1;
+}
+
+.answers__points {
+  font-variant-numeric: tabular-nums;
+  font-weight: 650;
+}
+
+.all-answers {
+  margin-top: 1rem;
+}
+
+.all-answers summary {
+  min-height: 2.75rem;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  font-weight: 650;
+}
+
+.chip,
+.square {
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  min-width: 1.7rem;
+  height: 1.7rem;
+  border-radius: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 800;
+}
+
+.chip--t1, .square--t1 { background: var(--t1); color: var(--on-t1); }
+.chip--t2, .square--t2 { background: var(--t2); color: var(--on-t2); }
+.chip--t3, .square--t3 { background: var(--t3); color: var(--on-t3); }
+.chip--t4, .square--t4 { background: var(--t4); color: var(--on-t4); }
+.chip--t5, .square--t5 { background: var(--t5); color: var(--on-t5); }
+.chip--t6, .square--t6 { background: var(--t6); color: var(--on-t6); }
+.chip--miss, .square--miss { background: var(--miss); color: var(--on-miss); }
+
+/* final */
+.final h2 {
+  margin: 0;
+}
+
+.final__score {
+  margin: 0.25rem 0;
+  font-size: 3.2rem;
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.final__max {
+  color: var(--muted);
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.squares {
+  display: flex;
+  gap: 0.4rem;
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.square {
+  flex: 1;
+  height: 2.6rem;
+  max-width: 3.2rem;
+  border-radius: 0.5rem;
+  font-size: 1.1rem;
+}
+
+.share-preview,
+.share-text {
+  display: block;
+  width: 100%;
+  margin: 0 0 0.75rem;
+  padding: 0.7rem;
+  border: 1px solid var(--border);
+  border-radius: 0.6rem;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+  font-size: 1.1rem;
+  white-space: pre-wrap;
+}
+
+.recap,
+.legend,
+.steps {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.steps {
+  padding-left: 1.2rem;
+  list-style: decimal;
+}
+
+.recap__text {
+  display: grid;
+}
+
+.recap__prompt,
+.recap__how {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.tiers {
+  width: 100%;
+  margin: 1rem 0;
+  border-collapse: collapse;
+}
+
+.tiers caption {
+  margin-bottom: 0.4rem;
+  text-align: left;
+  font-weight: 650;
+}
+
+.tiers th,
+.tiers td {
+  padding: 0.4rem 0.3rem;
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+@media (min-width: 34rem) {
+  .actions {
+    grid-template-columns: 1fr 1fr;
+  }
+}
