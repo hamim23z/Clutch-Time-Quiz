@@ -235,7 +235,7 @@ Names that did not come out as expected: Chet Holmgren (tier 3).
 
 Written by hand after reading the numbers above (the rest of this file is generated).
 
-**Fixed in session 5.** The score now takes the best of five ranks (career points, rebounds, assists, steals plus blocks, best points per game), so Ben Wallace (decided by steals plus blocks) moved from tier 3 to tier 1 and the other 20 sanity names that were fine stayed fine. Six Hall of Famers whose prime was before 2001-02 have hand-set tiers (table above): Michael Jordan and Karl Malone tier 1; John Stockton, Scottie Pippen, Reggie Miller and Patrick Ewing tier 2.
+**Fixed in session 5.** The score now takes the best of five ranks (career points, rebounds, assists, steals plus blocks, best points per game), so Ben Wallace (decided by steals plus blocks) moved from tier 3 to tier 1 and every other sanity name passes. Six Hall of Famers whose prime was before 2001-02 have hand-set tiers (table above): Michael Jordan and Karl Malone tier 1; John Stockton, Scottie Pippen, Reggie Miller and Patrick Ewing tier 2.
 
 **Still wrong:**
 

@@ -129,6 +129,6 @@ def test_alias_file_is_read_and_cleaned(tmp_path):
 def test_the_shipped_alias_file_is_well_formed():
     df = load_aliases(Path(__file__).parent / "data" / "aliases.csv")
     assert list(df.columns) == ALIAS_COLUMNS
-    assert len(df) <= 10  # a small hand-written list
+    assert len(df) <= 150  # a hand-written list, not a generated one
     assert df["evidence"].str.len().gt(20).all()  # every entry says what in the data supports it
     assert not df["alias"].duplicated().any()

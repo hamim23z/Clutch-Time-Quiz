@@ -9,9 +9,9 @@ Written by `python3 pipeline/generate.py`; do not edit by hand.
 
 ## Totals
 
-- Candidates: **72** (53 player, 19 team).
-- Tried: 87 template and threshold combinations. Dropped for too few valid answers: 10. Dropped for too many: 5.
-- By difficulty: easy 43, hard 5, medium 24.
+- Candidates: **171** (118 player, 53 team).
+- Tried: 226 template and threshold combinations. Dropped for too few valid answers: 50. Dropped for too many: 5.
+- By difficulty: easy 92, hard 12, medium 67.
 
 Templates that produced no candidates: `triple-double-finals`.
 
@@ -36,6 +36,46 @@ Templates that produced no candidates: `triple-double-finals`.
 | `wins-playoff` | team | 10, 12, 14, 15, 16 | 5 | 0 | 0 |
 | `points-regulation` | team | 140, 145, 150, 155, 160 | 4 | 1 | 0 |
 | `win-margin` | team | 40, 45, 50, 55, 60 | 4 | 1 | 0 |
+| `points-game7` | player | 30, 35, 40 | 2 | 1 | 0 |
+| `points-overtime-game` | player | 40, 45, 50, 55 | 4 | 0 | 0 |
+| `points-bench` | player | 30, 35, 40, 45 | 3 | 1 | 0 |
+| `points-loss` | player | 45, 50, 55, 60 | 3 | 1 | 0 |
+| `points-road` | player | 45, 50, 55, 60 | 3 | 1 | 0 |
+| `rebounds-playoff` | player | 16, 18, 20, 22 | 4 | 0 | 0 |
+| `rebounds-finals` | player | 14, 16, 18, 20 | 2 | 2 | 0 |
+| `assists-playoff` | player | 12, 14, 16, 18 | 3 | 1 | 0 |
+| `assists-finals` | player | 10, 12, 14 | 1 | 2 | 0 |
+| `threes-playoff` | player | 7, 8, 9, 10 | 2 | 2 | 0 |
+| `threes-finals` | player | 6, 7, 8 | 1 | 2 | 0 |
+| `blocks-playoff` | player | 5, 6, 7, 8 | 3 | 1 | 0 |
+| `steals-playoff` | player | 4, 5, 6, 7 | 3 | 1 | 0 |
+| `offensive-rebounds` | player | 9, 10, 11, 12, 14 | 4 | 1 | 0 |
+| `free-throws` | player | 18, 20, 22, 24 | 3 | 1 | 0 |
+| `turnovers` | player | 8, 9, 10, 11 | 4 | 0 | 0 |
+| `shots-taken` | player | 35, 38, 40, 42 | 2 | 2 | 0 |
+| `minutes` | player | 55, 58, 60 | 2 | 1 | 0 |
+| `perfect-shooting` | player | 8, 9, 10, 11 | 4 | 0 | 0 |
+| `five-by-n` | player | 3, 4, 5 | 2 | 1 | 0 |
+| `points-and-rebounds` | player | - | 1 | 0 | 0 |
+| `points-and-assists` | player | - | 1 | 0 | 0 |
+| `rebounds-per-game` | player | 10, 11, 12, 13 | 3 | 1 | 0 |
+| `assists-per-game` | player | 8, 9, 10, 11 | 2 | 2 | 0 |
+| `steals-per-game` | player | 2, 3 | 1 | 1 | 0 |
+| `blocks-per-game` | player | 2, 3 | 1 | 1 | 0 |
+| `double-double-average` | player | - | 1 | 0 | 0 |
+| `losses-season` | team | 55, 60, 62, 65, 67, 70 | 5 | 1 | 0 |
+| `road-wins` | team | 26, 28, 30, 32 | 3 | 1 | 0 |
+| `home-wins` | team | 36, 38, 39, 40 | 1 | 3 | 0 |
+| `points-playoff-team` | team | 130, 135, 140, 145, 150 | 4 | 1 | 0 |
+| `points-any-game` | team | 150, 155, 160, 165 | 3 | 1 | 0 |
+| `win-margin-playoff` | team | 35, 40, 45 | 3 | 0 | 0 |
+| `held-opponent` | team | 55, 60, 65, 70 | 3 | 1 | 0 |
+| `threes-team` | team | 24, 26, 28, 30 | 3 | 1 | 0 |
+| `steals-team` | team | 18, 20, 22, 24 | 2 | 2 | 0 |
+| `overtime-wins` | team | 2, 3, 4 | 2 | 1 | 0 |
+| `win-streak` | team | 14, 16, 18, 20, 22 | 3 | 2 | 0 |
+| `champion` | team | - | 1 | 0 | 0 |
+| `reached-finals` | team | - | 1 | 0 | 0 |
 
 ## What was dropped
 
@@ -51,6 +91,36 @@ Templates that produced no candidates: `triple-double-finals`.
 - `wins-season`: n=67: 4 answers (too few)
 - `points-regulation`: n=160: 2 answers (too few)
 - `win-margin`: n=60: 4 answers (too few)
+- `points-game7`: n=40: 10 answers (too few)
+- `points-bench`: n=45: 14 answers (too few)
+- `points-loss`: n=60: 9 answers (too few)
+- `points-road`: n=60: 11 answers (too few)
+- `rebounds-finals`: n=18: 11 answers (too few); n=20: 6 answers (too few)
+- `assists-playoff`: n=18: 6 answers (too few)
+- `assists-finals`: n=12: 10 answers (too few); n=14: 3 answers (too few)
+- `threes-playoff`: n=9: 11 answers (too few); n=10: 2 answers (too few)
+- `threes-finals`: n=7: 10 answers (too few); n=8: 2 answers (too few)
+- `blocks-playoff`: n=8: 9 answers (too few)
+- `steals-playoff`: n=7: 8 answers (too few)
+- `offensive-rebounds`: n=14: 8 answers (too few)
+- `free-throws`: n=24: 11 answers (too few)
+- `shots-taken`: n=40: 12 answers (too few); n=42: 7 answers (too few)
+- `minutes`: n=60: 8 answers (too few)
+- `five-by-n`: n=5: 8 answers (too few)
+- `rebounds-per-game`: n=13: 14 answers (too few)
+- `assists-per-game`: n=10: 13 answers (too few); n=11: 6 answers (too few)
+- `steals-per-game`: n=3: 1 answers (too few)
+- `blocks-per-game`: n=3: 9 answers (too few)
+- `losses-season`: n=70: 2 answers (too few)
+- `road-wins`: n=32: 4 answers (too few)
+- `home-wins`: n=38: 4 answers (too few); n=39: 3 answers (too few); n=40: 1 answers (too few)
+- `points-playoff-team`: n=150: 2 answers (too few)
+- `points-any-game`: n=165: 4 answers (too few)
+- `held-opponent`: n=55: 2 answers (too few)
+- `threes-team`: n=30: 0 answers (too few)
+- `steals-team`: n=22: 4 answers (too few); n=24: 0 answers (too few)
+- `overtime-wins`: n=4: 4 answers (too few)
+- `win-streak`: n=20: 3 answers (too few); n=22: 3 answers (too few)
 
 ## Player templates: examples
 
@@ -404,6 +474,660 @@ James Harden (1), Dwight Howard (1), Chris Paul (1), Russell Westbrook (1), Andr
 
 </details>
 
+### `points-game7`
+
+**Since 2001-02 (through 2025-26), name a player who scored 30 or more points in a Game 7.**
+
+46 valid answers, difficulty **easy**, tiers: 1: 40, 2: 4, 3: 2 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kevin Durant (1), Kobe Bryant (1), Tim Duncan (1), Luka Doncic (1), Joel Embiid (1), Dirk Nowitzki (1), Kevin Garnett (1), Stephen Curry (1), Shai Gilgeous-Alexander (1), Tony Parker (1), DeMar DeRozan (1), Kyle Lowry (1), Dwyane Wade (1), Paul Pierce (1), Shawn Marion (1), Bradley Beal (1), Giannis Antetokounmpo (1), Nikola Jokic (1), Jayson Tatum (1), Draymond Green (1), Paul George (1), Chauncey Billups (1), Elton Brand (1), Jaylen Brown (1), Carlos Boozer (1), Tyrese Maxey (1), Donovan Mitchell (1), Kawhi Leonard (1), Jason Terry (1), Shaquille O'Neal (1), Jimmy Butler III (1), CJ McCollum (1), Tobias Harris (1), Cade Cunningham (1), Paolo Banchero (1), Jamal Murray (1), Yao Ming (1), Khris Middleton (1), Victor Oladipo (2), Spencer Dinwiddie (2), Ben Gordon (2), Buddy Hield (2), Donte DiVincenzo (3), Luguentz Dort (3)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who scored 35 or more points in a Game 7.**
+
+23 valid answers, difficulty **medium**, tiers: 1: 22, 3: 1 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), Kevin Durant (1), Tim Duncan (1), Luka Doncic (1), Dirk Nowitzki (1), Stephen Curry (1), Shai Gilgeous-Alexander (1), Kyle Lowry (1), Paul Pierce (1), Bradley Beal (1), Giannis Antetokounmpo (1), Jayson Tatum (1), Chauncey Billups (1), Elton Brand (1), Carlos Boozer (1), Donovan Mitchell (1), Kawhi Leonard (1), Shaquille O'Neal (1), Jimmy Butler III (1), CJ McCollum (1), Paolo Banchero (1), Jamal Murray (1), Donte DiVincenzo (3)
+
+</details>
+
+### `points-overtime-game`
+
+**Since 2001-02 (through 2025-26), name a player who scored 55 or more points in a game that went to overtime.**
+
+21 valid answers, difficulty **medium**, tiers: 1: 21 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+James Harden (1), Kobe Bryant (1), Russell Westbrook (1), Luka Doncic (1), Allen Iverson (1), Stephen Curry (1), Shai Gilgeous-Alexander (1), Damian Lillard (1), Tony Parker (1), Bradley Beal (1), Giannis Antetokounmpo (1), Nikola Jokic (1), Jayson Tatum (1), LaMarcus Aldridge (1), Gilbert Arenas (1), Jalen Brunson (1), Kyrie Irving (1), Donovan Mitchell (1), DeMarcus Cousins (1), De'Aaron Fox (1), Kemba Walker (1)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who scored 45 or more points in a game that went to overtime.**
+
+70 valid answers, difficulty **easy**, tiers: 1: 56, 2: 13, 3: 1 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Russell Westbrook (1), Luka Doncic (1), Joel Embiid (1), Dirk Nowitzki (1), Allen Iverson (1), Stephen Curry (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), Damian Lillard (1), Tony Parker (1), Tracy McGrady (1), DeMar DeRozan (1), Dwyane Wade (1), Andre Miller (1), Paul Pierce (1), Bradley Beal (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), Jayson Tatum (1), Trae Young (1), LaMarcus Aldridge (1), Gilbert Arenas (1), Paul George (1), Vince Carter (1), Paul Millsap (1), Isaiah Thomas (1), Jalen Brunson (1), Jaylen Brown (1), Kyrie Irving (1), Tyrese Maxey (1), Klay Thompson (1), Donovan Mitchell (1), Jamal Crawford (1), Devin Booker (1), Ray Allen (1), Jimmy Butler III (1), Zach LaVine (1), Manu Ginobili (1), DeMarcus Cousins (1), CJ McCollum (1), Lauri Markkanen (1), Michael Redd (1), De'Aaron Fox (1), Cade Cunningham (1), Kemba Walker (1), Richard Hamilton (1), Blake Griffin (1), Brandon Ingram (1), Kevin Martin (1), D'Angelo Russell (1), Victor Oladipo (2), Jerami Grant (2), Aaron Gordon (2), Danilo Gallinari (2), Jamal Mashburn (2), Ben Gordon (2), Mike Miller (2), Mikal Bridges (2), Caris LeVert (2), Ricky Davis (2), Nate Robinson (2), Malik Monk (2), Charlie Villanueva (2), Quentin Grimes (3)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who scored 40 or more points in a game that went to overtime.**
+
+135 valid answers, difficulty **easy**, tiers: 1: 90, 2: 39, 3: 6 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Chris Paul (1), Tim Duncan (1), Russell Westbrook (1), Luka Doncic (1), Joel Embiid (1), Dirk Nowitzki (1), Steve Nash (1), Allen Iverson (1), Stephen Curry (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), Rajon Rondo (1), Damian Lillard (1), Carmelo Anthony (1), Tony Parker (1), Tracy McGrady (1), DeMar DeRozan (1), Dwyane Wade (1), Andre Miller (1), Paul Pierce (1), Zach Randolph (1), Bradley Beal (1), Deron Williams (1), Giannis Antetokounmpo (1), Jrue Holiday (1), Kevin Love (1), Nikola Jokic (1), Jayson Tatum (1), Trae Young (1), Joe Johnson (1), LaMarcus Aldridge (1), John Wall (1), Gilbert Arenas (1), Paul George (1), Vince Carter (1), Paul Millsap (1), Isaiah Thomas (1), Anthony Edwards (1), Jalen Brunson (1), Jaylen Brown (1), Kyrie Irving (1), Karl-Anthony Towns (1), Tyrese Maxey (1), Klay Thompson (1), Donovan Mitchell (1), Jamal Crawford (1), Chris Bosh (1), Kawhi Leonard (1), Devin Booker (1), Jason Terry (1), Ray Allen (1), Jimmy Butler III (1), Ja Morant (1), Zach LaVine (1), Manu Ginobili (1), Myles Turner (1), DeMarcus Cousins (1), CJ McCollum (1), Lauri Markkanen (1), Julius Randle (1), Michael Redd (1), De'Aaron Fox (1), David West (1), Amar'e Stoudemire (1), Cade Cunningham (1), Mike Bibby (1), Antawn Jamison (1), Paolo Banchero (1), Kemba Walker (1), Monta Ellis (1), Derrick Rose (1), Yao Ming (1), Richard Hamilton (1), Blake Griffin (1), Victor Wembanyama (1), Brandon Ingram (1), Kevin Martin (1), Andrew Wiggins (1), D'Angelo Russell (1), Collin Sexton (1), Stephon Marbury (1), Pascal Siakam (1), Khris Middleton (1), Tyler Herro (1), Michael Jordan (1), Rashard Lewis (2), Victor Oladipo (2), Caron Butler (2), Jordan Clarkson (2), Jaren Jackson Jr. (2), JJ Redick (2), Jalen Johnson (2), Dejounte Murray (2), Gary Payton (2), Jerami Grant (2), Al Harrington (2), Darius Garland (2), Aaron Gordon (2), Jalen Rose (2), Jalen Green (2), Ramon Sessions (2), Danilo Gallinari (2), Norman Powell (2), Steve Francis (2), Jamal Mashburn (2), Trey Murphy III (2), Ben Gordon (2), Mike Miller (2), Terry Rozier (2), Buddy Hield (2), Mikal Bridges (2), Cooper Flagg (2), Caris LeVert (2), Ricky Davis (2), Jordan Poole (2), Aaron Brooks (2), Eddy Curry (2), Nate Robinson (2), Malik Monk (2), Marcus Thornton (2), Arron Afflalo (2), Nick Van Exel (2), Nick Young (2), Charlie Villanueva (2), Trey Burke (3), Grayson Allen (3), Matas Buzelis (3), Pat Connaughton (3), Quentin Grimes (3), Damien Wilkins (3)
+
+</details>
+
+### `points-bench`
+
+**Since 2001-02 (through 2025-26), name a player who scored 30 or more points in a game he did not start.**
+
+313 valid answers, difficulty **medium**, tiers: 1: 73, 2: 102, 3: 95, 4: 35, 5: 7, 6: 1 (43 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kevin Durant (1), Kobe Bryant (1), Pau Gasol (1), Dirk Nowitzki (1), Steve Nash (1), Allen Iverson (1), Stephen Curry (1), Brook Lopez (1), Tracy McGrady (1), Josh Smith (1), Dwyane Wade (1), Paul Pierce (1), Zach Randolph (1), Jrue Holiday (1), Kevin Love (1), Andrei Kirilenko (1), Gilbert Arenas (1), Vince Carter (1), Isaiah Thomas (1), Chauncey Billups (1), Elton Brand (1), Jaylen Brown (1), Klay Thompson (1), Jamal Crawford (1), Ricky Rubio (1), Jason Terry (1), Shaquille O'Neal (1), Jeff Teague (1), Zach LaVine (1), Manu Ginobili (1), Dennis Schroder (1), Myles Turner (1), Jameer Nelson (1), CJ McCollum (1), Julius Randle (1), Goran Dragic (1), Michael Redd (1), Domantas Sabonis (1), Kirk Hinrich (1), Amar'e Stoudemire (1), Metta World Peace (1), Antawn Jamison (1), Samuel Dalembert (1), Mo Williams (1), Monta Ellis (1), Derrick Rose (1), Jermaine O'Neal (1), LaMelo Ball (1), Lou Williams (1), T.J. McConnell (1), Nicolas Batum (1), Richard Jefferson (1), Yao Ming (1), Jarrett Jack (1), Richard Hamilton (1), Victor Wembanyama (1), Kevin Martin (1), D.J. Augustin (1), Reggie Jackson (1), Chris Webber (1), D'Angelo Russell (1), Peja Stojakovic (1), Stephon Marbury (1), Jeff Green (1), Jason Richardson (1), Taj Gibson (1), Michael Porter Jr. (1), Khris Middleton (1), Drew Gooden (1), Tyler Herro (1), Michael Jordan (1), Eric Gordon (2), Keyonte George (2), Jamaal Tinsley (2), Rashard Lewis (2), Austin Reaves (2), Kristaps Porzingis (2), Victor Oladipo (2), Kurt Thomas (2), JR Smith (2), Kentavious Caldwell-Pope (2), Caron Butler (2), Spencer Dinwiddie (2), Anfernee Simons (2), Jordan Clarkson (2), Stephen Jackson (2), JJ Redick (2), Bobby Portis (2), George Hill (2), Allan Houston (2), Gordon Hayward (2), Cam Thomas (2), Kyle Korver (2), Ish Smith (2), Hedo Turkoglu (2), Tim Hardaway Jr. (2), Al Harrington (2), Sam Cassell (2), Corey Maggette (2), Antoine Walker (2), Jalen Rose (2), Tyreke Evans (2), Larry Hughes (2), Ramon Sessions (2), Danilo Gallinari (2), Norman Powell (2), Cuttino Mobley (2), Jerry Stackhouse (2), Trey Murphy III (2), Ben Gordon (2), Matt Barnes (2), Mike Miller (2), Malcolm Brogdon (2), Buddy Hield (2), Mike Dunleavy (2), Miles Bridges (2), Christian Wood (2), Kelly Olynyk (2), Rodney Stuckey (2), Shaedon Sharpe (2), Marcus Morris Sr. (2), Caris LeVert (2), Glenn Robinson (2), Ricky Davis (2), Jae Crowder (2), Channing Frye (2), Michael Finley (2), Jordan Poole (2), Coby White (2), Leandro Barbosa (2), Kelly Oubre Jr. (2), Juwan Howard (2), Mike James (2002-2014) (2), Patty Mills (2), Jabari Parker (2), Andris Biedrins (2), Jeremy Lin (2), Wilson Chandler (2), Brandon Knight (2), Earl Boykins (2), Joe Smith (2), Ryan Anderson (2), Quentin Richardson (2), Michael Beasley (2), Kevin Porter Jr. (2), Donyell Marshall (2), Wally Szczerbiak (2), Nate Robinson (2), Alec Burks (2), Alex Caruso (2), Anthony Johnson (2), Malik Monk (2), Will Barton (2), Cameron Johnson (2), Marcus Thornton (2), Montrezl Harrell (2), Andray Blatche (2), CJ Miles (2), Terrence Ross (2), Lance Stephenson (2), Nick Van Exel (2), Gary Trent Jr. (2), Nick Young (2), Devonte' Graham (2), Bogdan Bogdanovic (2), Jerryd Bayless (2), Matt Harpring (2), Cameron Payne (2), Charlie Villanueva (2), P.J. Washington (2), Saddiq Bey (2), Marreese Speights (2), Reggie Miller (2), Bennedict Mathurin (3), Stromile Swift (3), Desmond Mason (3), Immanuel Quickley (3), Austin Rivers (3), Damon Jones (3), Payton Pritchard (3), De'Andre Hunter (3), Jordan Farmar (3), Bonzi Wells (3), Trey Burke (3), Garrett Temple (3), Al Thornton (3), Carl Landry (3), Stephon Castle (3), Francisco Garcia (3), Malik Beasley (3), Naz Reid (3), Gerald Green (3), Cole Anthony (3), Jonathan Kuminga (3), Dion Waiters (3), Jabari Smith Jr. (3), Jodie Meeks (3), Troy Hudson (3), Nikola Mirotic (3), Luke Kennard (3), Wayne Ellington (3), Willie Green (3), Davis Bertans (3), Doug McDermott (3), Andres Nocioni (3), Jaime Jaquez Jr. (3), Jeremy Lamb (3), Ayo Dosunmu (3), Naji Marshall (3), Seth Curry (3), Will Bynum (3), Ronald Murray (3), Travis Outlaw (3), Anthony Black (3), Ruben Patterson (3), Marvin Bagley III (3), Brice Sensabaugh (3), Rashad McCants (3), Rodney Hood (3), Darius Miles (3), Rui Hachimura (3), Jordan Crawford (3), Eddie House (3), Joe Harris (3), Chris Boucher (3), Jannero Pargo (3), Anthony Morrow (3), Voshon Lenard (3), Fred Jones (3), Lee Nailon (3), Martell Webster (3), Santi Aldama (3), Scoot Henderson (3), Jose Alvarado (3), Tyler Johnson (3), Corliss Williamson (3), Max Strus (3), Reed Sheppard (3), Toney Douglas (3), Mike Scott (3), Shake Milton (3), Corey Kispert (3), Josh Jackson (3), Shabazz Napier (3), Allen Crabbe (3), Tony Wroten (3), Georges Niang (3), Daniel Gibson (3), Brandon Williams (2022-2026) (3), Landry Shamet (3), Damion Lee (3), Austin Croshere (3), Juan Dixon (3), Bryn Forbes (3), Ty Jerome (3), Obi Toppin (3), Derrick Williams (3), Luther Head (3), Jevon Carter (3), Marcus Fizer (3), Langston Galloway (3), Frank Kaminsky (3), Moritz Wagner (3), Mirza Teletovic (3), Linas Kleiza (3), Lonnie Walker IV (3), Roger Mason Jr. (3), Isaiah Joe (3), Maurice Taylor (4), Chase Budinger (4), Sandro Mamukelashvili (4), Keon Ellis (4), Allonzo Trier (4), Damyean Dotson (4), Alan Anderson (4), Shabazz Muhammad (4), Will Riley (4), Dalano Banton (4), Furkan Korkmaz (4), Kareem Rush (4), Troy Daniels (4), James Wiseman (4), Ian Clark (4), Malachi Flynn (4), Chris Douglas-Roberts (4), Courtney Alexander (4), Rodrigue Beaubois (4), Keita Bates-Diop (4), Salim Stoudamire (4), Terence Davis (4), Walt Williams (4), Reggie Williams (4), Jordan Nwora (4), Skal Labissiere (4), Tyrese Martin (4), Ike Diogu (4), Josh Christopher (4), Wayne Selden (2017-2019) (4), Sean May (4), Jeff Dowtin Jr. (4), Antonio Reeves (4), Jordan McRae (4), Mike Taylor (4), Kennedy Chandler (5), Terrence Shannon Jr. (5), Jett Howard (5), Quincy Douby (5), A.J. Lawson (5), Richie Frahm (5), Justin James (5), Alec Peters (6)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who scored 35 or more points in a game he did not start.**
+
+98 valid answers, difficulty **hard**, tiers: 1: 29, 2: 41, 3: 18, 4: 9, 6: 1 (10 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kobe Bryant (1), Allen Iverson (1), Stephen Curry (1), Brook Lopez (1), Tracy McGrady (1), Dwyane Wade (1), Paul Pierce (1), Kevin Love (1), Gilbert Arenas (1), Vince Carter (1), Klay Thompson (1), Jamal Crawford (1), Ricky Rubio (1), Jason Terry (1), Shaquille O'Neal (1), Zach LaVine (1), Manu Ginobili (1), Michael Redd (1), Samuel Dalembert (1), Jermaine O'Neal (1), Lou Williams (1), Richard Hamilton (1), Kevin Martin (1), Stephon Marbury (1), Jason Richardson (1), Khris Middleton (1), Tyler Herro (1), Keyonte George (2), Austin Reaves (2), JR Smith (2), Kentavious Caldwell-Pope (2), Spencer Dinwiddie (2), Anfernee Simons (2), Jordan Clarkson (2), Bobby Portis (2), Gordon Hayward (2), Cam Thomas (2), Tim Hardaway Jr. (2), Al Harrington (2), Antoine Walker (2), Larry Hughes (2), Danilo Gallinari (2), Ben Gordon (2), Mike Miller (2), Buddy Hield (2), Shaedon Sharpe (2), Glenn Robinson (2), Ricky Davis (2), Coby White (2), Leandro Barbosa (2), Kelly Oubre Jr. (2), Jabari Parker (2), Wilson Chandler (2), Donyell Marshall (2), Nate Robinson (2), Anthony Johnson (2), Malik Monk (2), Will Barton (2), Cameron Johnson (2), Marcus Thornton (2), Terrence Ross (2), Nick Van Exel (2), Gary Trent Jr. (2), Nick Young (2), Devonte' Graham (2), Bogdan Bogdanovic (2), P.J. Washington (2), Reggie Miller (2), Bennedict Mathurin (3), Austin Rivers (3), Payton Pritchard (3), De'Andre Hunter (3), Cole Anthony (3), Nikola Mirotic (3), Davis Bertans (3), Ayo Dosunmu (3), Travis Outlaw (3), Brice Sensabaugh (3), Darius Miles (3), Jordan Crawford (3), Anthony Morrow (3), Santi Aldama (3), Jose Alvarado (3), Josh Jackson (3), Landry Shamet (3), Juan Dixon (3), Alan Anderson (4), Shabazz Muhammad (4), Kareem Rush (4), Ian Clark (4), Malachi Flynn (4), Rodrigue Beaubois (4), Salim Stoudamire (4), Jordan McRae (4), Mike Taylor (4), Alec Peters (6)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who scored 40 or more points in a game he did not start.**
+
+35 valid answers, difficulty **hard**, tiers: 1: 13, 2: 14, 3: 6, 4: 2 (2 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kobe Bryant (1), Allen Iverson (1), Stephen Curry (1), Dwyane Wade (1), Gilbert Arenas (1), Vince Carter (1), Jamal Crawford (1), Manu Ginobili (1), Lou Williams (1), Kevin Martin (1), Jason Richardson (1), JR Smith (2), Jordan Clarkson (2), Cam Thomas (2), Al Harrington (2), Ben Gordon (2), Mike Miller (2), Buddy Hield (2), Nate Robinson (2), Anthony Johnson (2), Malik Monk (2), Nick Van Exel (2), Nick Young (2), Bogdan Bogdanovic (2), P.J. Washington (2), Austin Rivers (3), Payton Pritchard (3), Ayo Dosunmu (3), Brice Sensabaugh (3), Darius Miles (3), Jordan Crawford (3), Malachi Flynn (4), Rodrigue Beaubois (4)
+
+</details>
+
+### `points-loss`
+
+**Since 2001-02 (through 2025-26), name a player who scored 45 or more points in a game his team lost.**
+
+84 valid answers, difficulty **easy**, tiers: 1: 61, 2: 19, 3: 3, 4: 1 (1 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Tim Duncan (1), Russell Westbrook (1), Luka Doncic (1), Joel Embiid (1), Dirk Nowitzki (1), Kevin Garnett (1), Steve Nash (1), Allen Iverson (1), Stephen Curry (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), Damian Lillard (1), Carmelo Anthony (1), Tracy McGrady (1), DeMar DeRozan (1), Dwyane Wade (1), Paul Pierce (1), Bradley Beal (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), Jayson Tatum (1), Trae Young (1), John Wall (1), Gilbert Arenas (1), Paul George (1), Vince Carter (1), Paul Millsap (1), Anthony Edwards (1), Jalen Brunson (1), Jaylen Brown (1), Kyrie Irving (1), Karl-Anthony Towns (1), Donovan Mitchell (1), Jamal Crawford (1), Devin Booker (1), Jason Terry (1), Ray Allen (1), Ja Morant (1), Zach LaVine (1), DeMarcus Cousins (1), Julius Randle (1), Michael Redd (1), De'Aaron Fox (1), Antawn Jamison (1), Paolo Banchero (1), Kemba Walker (1), Monta Ellis (1), Jamal Murray (1), LaMelo Ball (1), Lou Williams (1), Richard Hamilton (1), Blake Griffin (1), Kevin Martin (1), D'Angelo Russell (1), Stephon Marbury (1), Victor Oladipo (2), Cam Thomas (2), Jerami Grant (2), Darius Garland (2), Aaron Gordon (2), Danilo Gallinari (2), Ben Gordon (2), Mike Miller (2), Mikal Bridges (2), RJ Barrett (2), Cooper Flagg (2), Miles Bridges (2), Ricky Davis (2), Damon Stoudamire (2), Jordan Poole (2), Latrell Sprewell (2), Nate Robinson (2), Terrence Ross (2), Charlie Villanueva (2), Bonzi Wells (3), Darius Miles (3), Quentin Grimes (3), Malachi Flynn (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who scored 50 or more points in a game his team lost.**
+
+47 valid answers, difficulty **easy**, tiers: 1: 41, 2: 5, 4: 1 (1 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kevin Durant (1), Kobe Bryant (1), Tim Duncan (1), Russell Westbrook (1), Dirk Nowitzki (1), Allen Iverson (1), Stephen Curry (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), Damian Lillard (1), Carmelo Anthony (1), Tracy McGrady (1), Dwyane Wade (1), Paul Pierce (1), Bradley Beal (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), Trae Young (1), John Wall (1), Anthony Edwards (1), Jalen Brunson (1), Kyrie Irving (1), Karl-Anthony Towns (1), Donovan Mitchell (1), Jamal Crawford (1), Devin Booker (1), Ray Allen (1), Zach LaVine (1), DeMarcus Cousins (1), Julius Randle (1), Michael Redd (1), De'Aaron Fox (1), Kemba Walker (1), Jamal Murray (1), LaMelo Ball (1), Richard Hamilton (1), Kevin Martin (1), D'Angelo Russell (1), Darius Garland (2), Aaron Gordon (2), Cooper Flagg (2), Damon Stoudamire (2), Terrence Ross (2), Malachi Flynn (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who scored 55 or more points in a game his team lost.**
+
+20 valid answers, difficulty **medium**, tiers: 1: 20 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kevin Durant (1), Kobe Bryant (1), Russell Westbrook (1), Stephen Curry (1), Damian Lillard (1), Bradley Beal (1), Nikola Jokic (1), Trae Young (1), Anthony Edwards (1), Jalen Brunson (1), Karl-Anthony Towns (1), Donovan Mitchell (1), Devin Booker (1), DeMarcus Cousins (1), Julius Randle (1), Michael Redd (1), De'Aaron Fox (1), Kemba Walker (1)
+
+</details>
+
+### `points-road`
+
+**Since 2001-02 (through 2025-26), name a player who scored 45 or more points in a road game.**
+
+91 valid answers, difficulty **easy**, tiers: 1: 70, 2: 17, 3: 3, 4: 1 (1 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Tim Duncan (1), Russell Westbrook (1), Luka Doncic (1), Joel Embiid (1), Steve Nash (1), Allen Iverson (1), Stephen Curry (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), Damian Lillard (1), Carmelo Anthony (1), Tony Parker (1), Tracy McGrady (1), DeMar DeRozan (1), Dwyane Wade (1), Andre Miller (1), Paul Pierce (1), Bradley Beal (1), Deron Williams (1), Giannis Antetokounmpo (1), Jrue Holiday (1), Kevin Love (1), Nikola Jokic (1), Jayson Tatum (1), Trae Young (1), LaMarcus Aldridge (1), Gilbert Arenas (1), Paul George (1), Vince Carter (1), Paul Millsap (1), Anthony Edwards (1), Jalen Brunson (1), Jaylen Brown (1), Kyrie Irving (1), Karl-Anthony Towns (1), Tyrese Maxey (1), Klay Thompson (1), Donovan Mitchell (1), Jamal Crawford (1), Kawhi Leonard (1), Devin Booker (1), Ray Allen (1), Jimmy Butler III (1), Ja Morant (1), Zach LaVine (1), Manu Ginobili (1), DeMarcus Cousins (1), Lauri Markkanen (1), Julius Randle (1), Michael Redd (1), Amar'e Stoudemire (1), Paolo Banchero (1), Kemba Walker (1), Mo Williams (1), Monta Ellis (1), Jamal Murray (1), LaMelo Ball (1), Lou Williams (1), Devin Harris (1), Richard Hamilton (1), Blake Griffin (1), Kevin Martin (1), D'Angelo Russell (1), Stephon Marbury (1), Pascal Siakam (1), Eric Gordon (2), Desmond Bane (2), Rashard Lewis (2), Austin Reaves (2), Fred VanVleet (2), Anfernee Simons (2), Allan Houston (2), Aaron Gordon (2), Ben Gordon (2), Mike Miller (2), Mikal Bridges (2), Caris LeVert (2), Damon Stoudamire (2), Latrell Sprewell (2), Malik Monk (2), Charlie Villanueva (2), Saddiq Bey (2), Bonzi Wells (3), Darius Miles (3), Quentin Grimes (3), Malachi Flynn (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who scored 50 or more points in a road game.**
+
+58 valid answers, difficulty **easy**, tiers: 1: 48, 2: 9, 4: 1 (1 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kevin Durant (1), Kobe Bryant (1), Russell Westbrook (1), Luka Doncic (1), Joel Embiid (1), Allen Iverson (1), Stephen Curry (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), Damian Lillard (1), Carmelo Anthony (1), Tony Parker (1), Tracy McGrady (1), Dwyane Wade (1), Andre Miller (1), Bradley Beal (1), Deron Williams (1), Giannis Antetokounmpo (1), Jrue Holiday (1), Kevin Love (1), Nikola Jokic (1), Jayson Tatum (1), Trae Young (1), Gilbert Arenas (1), Vince Carter (1), Anthony Edwards (1), Jalen Brunson (1), Jaylen Brown (1), Kyrie Irving (1), Karl-Anthony Towns (1), Tyrese Maxey (1), Klay Thompson (1), Donovan Mitchell (1), Jamal Crawford (1), Devin Booker (1), Ray Allen (1), Jimmy Butler III (1), Zach LaVine (1), Mo Williams (1), Jamal Murray (1), LaMelo Ball (1), Lou Williams (1), Richard Hamilton (1), Kevin Martin (1), D'Angelo Russell (1), Pascal Siakam (1), Eric Gordon (2), Rashard Lewis (2), Austin Reaves (2), Fred VanVleet (2), Allan Houston (2), Aaron Gordon (2), Caris LeVert (2), Damon Stoudamire (2), Saddiq Bey (2), Malachi Flynn (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who scored 55 or more points in a road game.**
+
+22 valid answers, difficulty **medium**, tiers: 1: 22 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kevin Durant (1), Kobe Bryant (1), Russell Westbrook (1), Luka Doncic (1), Stephen Curry (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), Damian Lillard (1), Tony Parker (1), Bradley Beal (1), Deron Williams (1), Nikola Jokic (1), Trae Young (1), Gilbert Arenas (1), Anthony Edwards (1), Jalen Brunson (1), Kyrie Irving (1), Karl-Anthony Towns (1), Donovan Mitchell (1), Devin Booker (1)
+
+</details>
+
+### `rebounds-playoff`
+
+**Since 2001-02 (through 2025-26), name a player who grabbed 22 or more rebounds in a playoff game.**
+
+17 valid answers, difficulty **medium**, tiers: 1: 14, 2: 3 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dwight Howard (1), Tim Duncan (1), Kevin Garnett (1), Ben Wallace (1), Anthony Davis (1), Rudy Gobert (1), DeAndre Jordan (1), Giannis Antetokounmpo (1), Nikola Jokic (1), Jonas Valanciunas (1), Carlos Boozer (1), Shaquille O'Neal (1), Jermaine O'Neal (1), Victor Wembanyama (1), Bismack Biyombo (2), Deandre Ayton (2), Kevon Looney (2)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who grabbed 18 or more rebounds in a playoff game.**
+
+68 valid answers, difficulty **easy**, tiers: 1: 48, 2: 17, 3: 3 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), Dwight Howard (1), Kevin Durant (1), Tim Duncan (1), Russell Westbrook (1), Pau Gasol (1), Joel Embiid (1), Dirk Nowitzki (1), Kevin Garnett (1), Ben Wallace (1), Anthony Davis (1), Rajon Rondo (1), Rudy Gobert (1), Josh Smith (1), DeAndre Jordan (1), Tyson Chandler (1), Zach Randolph (1), Shawn Marion (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), Jayson Tatum (1), Draymond Green (1), LaMarcus Aldridge (1), Jonas Valanciunas (1), Paul Millsap (1), Carlos Boozer (1), Marcus Camby (1), Chris Bosh (1), Marc Gasol (1), Clint Capela (1), Shaquille O'Neal (1), Lamar Odom (1), Amar'e Stoudemire (1), Antawn Jamison (1), Samuel Dalembert (1), Jermaine O'Neal (1), Marcin Gortat (1), Joakim Noah (1), Zaza Pachulia (1), Blake Griffin (1), Victor Wembanyama (1), Andrew Bogut (1), Udonis Haslem (1), Bam Adebayo (1), Mason Plumlee (1), Enes Freedom (1), Jarrett Allen (1), Zydrunas Ilgauskas (2), Hassan Whiteside (2), Roy Hibbert (2), Caron Butler (2), Bobby Portis (2), Bismack Biyombo (2), Kendrick Perkins (2), Deandre Ayton (2), Jeff Foster (2), Mehmet Okur (2), Josh Hart (2), Kevon Looney (2), Mitchell Robinson (2), Andrew Bynum (2), Kenny Thomas (2), James Posey (2), Robert Horry (2), Keith Van Horn (3), Andres Nocioni (3), Jim Jackson (3)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who grabbed 16 or more rebounds in a playoff game.**
+
+113 valid answers, difficulty **easy**, tiers: 1: 71, 2: 33, 3: 8, 4: 1 (1 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), Dwight Howard (1), Kevin Durant (1), Tim Duncan (1), Russell Westbrook (1), Luka Doncic (1), Pau Gasol (1), Joel Embiid (1), Dirk Nowitzki (1), Kevin Garnett (1), Ben Wallace (1), Anthony Davis (1), Andre Drummond (1), Rajon Rondo (1), Rudy Gobert (1), Jason Kidd (1), Carmelo Anthony (1), Josh Smith (1), DeAndre Jordan (1), Tyson Chandler (1), Nikola Vucevic (1), Paul Pierce (1), Zach Randolph (1), Shawn Marion (1), Al Horford (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), Jayson Tatum (1), Draymond Green (1), LaMarcus Aldridge (1), Jonas Valanciunas (1), Paul George (1), Paul Millsap (1), Serge Ibaka (1), Jaylen Brown (1), Carlos Boozer (1), Marcus Camby (1), Karl-Anthony Towns (1), Chris Bosh (1), Kawhi Leonard (1), Marc Gasol (1), Clint Capela (1), Shaquille O'Neal (1), Lamar Odom (1), Thaddeus Young (1), Domantas Sabonis (1), Tobias Harris (1), Amar'e Stoudemire (1), Tristan Thompson (1), Antawn Jamison (1), Samuel Dalembert (1), Paolo Banchero (1), Jermaine O'Neal (1), Marcin Gortat (1), Steven Adams (1), Gerald Wallace (1), Richard Jefferson (1), Joakim Noah (1), Zaza Pachulia (1), Blake Griffin (1), Victor Wembanyama (1), Kenyon Martin (1), Andrew Bogut (1), Udonis Haslem (1), Andrew Wiggins (1), Bam Adebayo (1), Mason Plumlee (1), Enes Freedom (1), Jarrett Allen (1), Drew Gooden (1), Zydrunas Ilgauskas (2), Luol Deng (2), Derrick Favors (2), Hassan Whiteside (2), Roy Hibbert (2), Chris Kaman (2), Brad Miller (2), Caron Butler (2), Ivica Zubac (2), Bobby Portis (2), P.J. Tucker (2), Bismack Biyombo (2), Kendrick Perkins (2), Deandre Ayton (2), Aaron Gordon (2), Jeff Foster (2), John Collins (2), Mehmet Okur (2), Ed Davis (2), Josh Hart (2), Alperen Sengun (2), Antonio McDyess (2), P.J. Brown (2), Kevon Looney (2), Wendell Carter Jr. (2), Mitchell Robinson (2), Andrew Bynum (2), Kenny Thomas (2), James Posey (2), Jalen Duren (2), Evan Mobley (2), Isaiah Hartenstein (2), Robert Horry (2), Chet Holmgren (3), Bonzi Wells (3), Keith Van Horn (3), Andres Nocioni (3), Brian Grant (3), Vlade Divac (3), Jim Jackson (3), David Robinson (3), Keon Clark (4)
+
+</details>
+
+### `rebounds-finals`
+
+**Since 2001-02 (through 2025-26), name a player who grabbed 14 or more rebounds in a Finals game.**
+
+28 valid answers, difficulty **medium**, tiers: 1: 23, 2: 3, 3: 2 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), Dwight Howard (1), Kobe Bryant (1), Tim Duncan (1), Pau Gasol (1), Dirk Nowitzki (1), Kevin Garnett (1), Ben Wallace (1), Anthony Davis (1), Tyson Chandler (1), Al Horford (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), Draymond Green (1), Chris Bosh (1), Kawhi Leonard (1), Shaquille O'Neal (1), Lamar Odom (1), Tristan Thompson (1), Victor Wembanyama (1), Andrew Wiggins (1), Bam Adebayo (1), Zydrunas Ilgauskas (2), Deandre Ayton (2), Josh Hart (2), Chet Holmgren (3), David Robinson (3)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who grabbed 16 or more rebounds in a Finals game.**
+
+19 valid answers, difficulty **medium**, tiers: 1: 16, 2: 2, 3: 1 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), Dwight Howard (1), Tim Duncan (1), Pau Gasol (1), Dirk Nowitzki (1), Ben Wallace (1), Tyson Chandler (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), Draymond Green (1), Kawhi Leonard (1), Shaquille O'Neal (1), Tristan Thompson (1), Andrew Wiggins (1), Bam Adebayo (1), Zydrunas Ilgauskas (2), Deandre Ayton (2), David Robinson (3)
+
+</details>
+
+### `assists-playoff`
+
+**Since 2001-02 (through 2025-26), name a player who recorded 12 or more assists in a playoff game.**
+
+76 valid answers, difficulty **easy**, tiers: 1: 54, 2: 19, 3: 2, 4: 1 (1 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kobe Bryant (1), Chris Paul (1), Russell Westbrook (1), Luka Doncic (1), Steve Nash (1), Allen Iverson (1), Stephen Curry (1), Shai Gilgeous-Alexander (1), Rajon Rondo (1), Damian Lillard (1), Jason Kidd (1), Tony Parker (1), Tracy McGrady (1), Kyle Lowry (1), Dwyane Wade (1), Mike Conley (1), Deron Williams (1), Giannis Antetokounmpo (1), Jrue Holiday (1), Nikola Jokic (1), Jayson Tatum (1), Trae Young (1), Draymond Green (1), John Wall (1), Gilbert Arenas (1), Paul George (1), Isaiah Thomas (1), Anthony Edwards (1), Chauncey Billups (1), Jalen Brunson (1), Jaylen Brown (1), Donovan Mitchell (1), Baron Davis (1), Jose Calderon (1), Devin Booker (1), Jeff Teague (1), Jimmy Butler III (1), Ja Morant (1), Zach LaVine (1), Julius Randle (1), Kirk Hinrich (1), Cade Cunningham (1), Mike Bibby (1), Derrick Rose (1), Jamal Murray (1), T.J. McConnell (1), Richard Hamilton (1), Blake Griffin (1), Reggie Jackson (1), Chris Webber (1), Marcus Smart (1), Tyler Herro (1), Jamaal Tinsley (2), Ty Lawson (2), J.J. Barea (2), Tyrese Haliburton (2), Hedo Turkoglu (2), Gary Payton (2), Ben Simmons (2), Larry Hughes (2), Shaun Livingston (2), Steve Francis (2), Eric Snow (2), Cory Joseph (2), Malcolm Brogdon (2), T.J. Ford (2), Patrick Beverley (2), Caris LeVert (2), Antonio Daniels (2), Scottie Barnes (2), John Stockton (2), Andrew Nembhard (3), Stephon Castle (3), Chris Childs (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who recorded 14 or more assists in a playoff game.**
+
+36 valid answers, difficulty **medium**, tiers: 1: 26, 2: 9, 4: 1 (1 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Chris Paul (1), Russell Westbrook (1), Luka Doncic (1), Steve Nash (1), Allen Iverson (1), Stephen Curry (1), Rajon Rondo (1), Jason Kidd (1), Tony Parker (1), Tracy McGrady (1), Dwyane Wade (1), Mike Conley (1), Deron Williams (1), Giannis Antetokounmpo (1), Jrue Holiday (1), Nikola Jokic (1), Trae Young (1), John Wall (1), Gilbert Arenas (1), Jalen Brunson (1), Jeff Teague (1), Ja Morant (1), Kirk Hinrich (1), Tyler Herro (1), Tyrese Haliburton (2), Hedo Turkoglu (2), Gary Payton (2), Ben Simmons (2), Shaun Livingston (2), Malcolm Brogdon (2), T.J. Ford (2), Caris LeVert (2), Scottie Barnes (2), Chris Childs (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who recorded 16 or more assists in a playoff game.**
+
+15 valid answers, difficulty **medium**, tiers: 1: 14, 2: 1 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Chris Paul (1), Russell Westbrook (1), Steve Nash (1), Rajon Rondo (1), Jason Kidd (1), Tony Parker (1), Tracy McGrady (1), Deron Williams (1), Jrue Holiday (1), Nikola Jokic (1), Trae Young (1), John Wall (1), Tyrese Haliburton (2)
+
+</details>
+
+### `assists-finals`
+
+**Since 2001-02 (through 2025-26), name a player who recorded 10 or more assists in a Finals game.**
+
+22 valid answers, difficulty **medium**, tiers: 1: 21, 2: 1 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), Kevin Durant (1), Kobe Bryant (1), Chris Paul (1), Tim Duncan (1), Russell Westbrook (1), Luka Doncic (1), Stephen Curry (1), Shai Gilgeous-Alexander (1), Rajon Rondo (1), Jason Kidd (1), Kyle Lowry (1), Dwyane Wade (1), Paul Pierce (1), Jrue Holiday (1), Nikola Jokic (1), Jayson Tatum (1), Draymond Green (1), Jimmy Butler III (1), Manu Ginobili (1), Jamal Murray (1), Tyrese Haliburton (2)
+
+</details>
+
+### `threes-playoff`
+
+**Since 2001-02 (through 2025-26), name a player who made 7 or more three-pointers in a playoff game.**
+
+83 valid answers, difficulty **easy**, tiers: 1: 37, 2: 31, 3: 15 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Chris Paul (1), Russell Westbrook (1), Luka Doncic (1), Stephen Curry (1), Damian Lillard (1), Kyle Lowry (1), Paul Pierce (1), Mike Conley (1), Al Horford (1), Deron Williams (1), Kevin Love (1), Nikola Jokic (1), Jayson Tatum (1), Draymond Green (1), Paul George (1), Vince Carter (1), Anthony Edwards (1), Chauncey Billups (1), Kyrie Irving (1), Tyrese Maxey (1), Klay Thompson (1), Donovan Mitchell (1), Kawhi Leonard (1), Devin Booker (1), Jason Terry (1), Ray Allen (1), Myles Turner (1), CJ McCollum (1), Jamal Murray (1), Danny Green (1), D'Angelo Russell (1), Jeff Green (1), Jason Richardson (1), Marcus Smart (1), Khris Middleton (1), Eric Gordon (2), Desmond Bane (2), Fred VanVleet (2), JR Smith (2), Tyrese Haliburton (2), Stephen Jackson (2), Dejounte Murray (2), Tim Hardaway Jr. (2), Sam Cassell (2), Antoine Walker (2), Jalen Green (2), Joe Ingles (2), Norman Powell (2), Derrick White (2), Bojan Bogdanovic (2), Mike Miller (2), Terry Rozier (2), Buddy Hield (2), Mike Dunleavy (2), OG Anunoby (2), Marcus Morris Sr. (2), Channing Frye (2), Michael Finley (2), Dillon Brooks (2), Marco Belinelli (2), Latrell Sprewell (2), Alex Caruso (2), Gary Trent Jr. (2), Bogdan Bogdanovic (2), Cameron Payne (2), P.J. Washington (2), Donte DiVincenzo (3), Dorian Finney-Smith (3), Bruce Bowen (3), Damon Jones (3), Raja Bell (3), Naz Reid (3), Duncan Robinson (3), Seth Curry (3), Maxi Kleber (3), Joe Harris (3), Terance Mann (3), Aaron Nesmith (3), Bryn Forbes (3), Grant Williams (3), Miles McBride (3)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who made 8 or more three-pointers in a playoff game.**
+
+32 valid answers, difficulty **medium**, tiers: 1: 16, 2: 11, 3: 5 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Chris Paul (1), Stephen Curry (1), Damian Lillard (1), Paul Pierce (1), Kevin Love (1), Jayson Tatum (1), Draymond Green (1), Paul George (1), Chauncey Billups (1), Klay Thompson (1), Donovan Mitchell (1), Devin Booker (1), Jason Terry (1), Ray Allen (1), Jamal Murray (1), Jason Richardson (1), Desmond Bane (2), Fred VanVleet (2), JR Smith (2), Jalen Green (2), Derrick White (2), Bojan Bogdanovic (2), Buddy Hield (2), Mike Dunleavy (2), Michael Finley (2), Alex Caruso (2), Gary Trent Jr. (2), Donte DiVincenzo (3), Dorian Finney-Smith (3), Duncan Robinson (3), Maxi Kleber (3), Aaron Nesmith (3)
+
+</details>
+
+### `threes-finals`
+
+**Since 2001-02 (through 2025-26), name a player who made 6 or more three-pointers in a Finals game.**
+
+21 valid answers, difficulty **medium**, tiers: 1: 14, 2: 5, 3: 2 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), Kevin Durant (1), Kobe Bryant (1), Stephen Curry (1), Al Horford (1), Kevin Love (1), Jayson Tatum (1), Draymond Green (1), Kyrie Irving (1), Klay Thompson (1), Devin Booker (1), Ray Allen (1), Shane Battier (1), Danny Green (1), Rashard Lewis (2), JR Smith (2), Mike Miller (2), OG Anunoby (2), Jae Crowder (2), Duncan Robinson (3), Gary Neal (3)
+
+</details>
+
+### `blocks-playoff`
+
+**Since 2001-02 (through 2025-26), name a player who blocked 5 or more shots in a playoff game.**
+
+87 valid answers, difficulty **medium**, tiers: 1: 46, 2: 19, 3: 19, 4: 3 (3 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), Dwight Howard (1), Kevin Durant (1), Tim Duncan (1), Pau Gasol (1), Joel Embiid (1), Dirk Nowitzki (1), Kevin Garnett (1), Ben Wallace (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), Brook Lopez (1), Rudy Gobert (1), Josh Smith (1), DeAndre Jordan (1), Dwyane Wade (1), Paul Pierce (1), Shawn Marion (1), Al Horford (1), Giannis Antetokounmpo (1), Andrei Kirilenko (1), Draymond Green (1), LaMarcus Aldridge (1), Paul Millsap (1), Serge Ibaka (1), Elton Brand (1), Marcus Camby (1), Karl-Anthony Towns (1), Kawhi Leonard (1), Marc Gasol (1), Clint Capela (1), Shaquille O'Neal (1), Myles Turner (1), David West (1), Amar'e Stoudemire (1), Jermaine O'Neal (1), Marcin Gortat (1), Steven Adams (1), Rasheed Wallace (1), Yao Ming (1), Joakim Noah (1), Victor Wembanyama (1), Andrew Bogut (1), Danny Green (1), Chris Webber (1), JaVale McGee (1), Zydrunas Ilgauskas (2), Brendan Haywood (2), Hassan Whiteside (2), Roy Hibbert (2), Erick Dampier (2), Jaren Jackson Jr. (2), Chris Andersen (2), Kendrick Perkins (2), Jamaal Magloire (2), P.J. Brown (2), Andrew Bynum (2), Joel Przybilla (2), Joe Smith (2), Jalen Duren (2), Evan Mobley (2), Robert Horry (2), Tony Battie (2), Matisse Thybulle (2), Daniel Gafford (2), Tyrus Thomas (3), Chet Holmgren (3), John Henson (3), Raef LaFrentz (3), Alonzo Mourning (3), Robert Williams III (3), Isaiah Stewart (3), Timofey Mozgov (3), Joel Anthony (3), Elden Campbell (3), Zach Collins (3), Greg Ostertag (3), Luke Kornet (3), Ausar Thompson (3), Shawn Bradley (3), James Jones (3), Andre Roberson (3), Jerome James (3), David Robinson (3), Thon Maker (4), Todd MacCulloch (4), Zach Edey (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who blocked 6 or more shots in a playoff game.**
+
+37 valid answers, difficulty **medium**, tiers: 1: 22, 2: 7, 3: 7, 4: 1 (1 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dwight Howard (1), Tim Duncan (1), Pau Gasol (1), Joel Embiid (1), Kevin Garnett (1), Ben Wallace (1), Anthony Davis (1), Brook Lopez (1), Rudy Gobert (1), Josh Smith (1), Shawn Marion (1), Andrei Kirilenko (1), Draymond Green (1), Serge Ibaka (1), Marc Gasol (1), Clint Capela (1), Shaquille O'Neal (1), David West (1), Rasheed Wallace (1), Joakim Noah (1), Victor Wembanyama (1), JaVale McGee (1), Zydrunas Ilgauskas (2), Roy Hibbert (2), Jaren Jackson Jr. (2), Chris Andersen (2), Kendrick Perkins (2), Jamaal Magloire (2), Andrew Bynum (2), Tyrus Thomas (3), John Henson (3), Raef LaFrentz (3), Robert Williams III (3), Isaiah Stewart (3), Luke Kornet (3), James Jones (3), Zach Edey (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who blocked 7 or more shots in a playoff game.**
+
+21 valid answers, difficulty **hard**, tiers: 1: 13, 2: 4, 3: 3, 4: 1 (1 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dwight Howard (1), Tim Duncan (1), Ben Wallace (1), Anthony Davis (1), Brook Lopez (1), Rudy Gobert (1), Josh Smith (1), Andrei Kirilenko (1), Draymond Green (1), Serge Ibaka (1), Shaquille O'Neal (1), Rasheed Wallace (1), Victor Wembanyama (1), Roy Hibbert (2), Jaren Jackson Jr. (2), Kendrick Perkins (2), Andrew Bynum (2), Robert Williams III (3), Isaiah Stewart (3), Luke Kornet (3), Zach Edey (4)
+
+</details>
+
+### `steals-playoff`
+
+**Since 2001-02 (through 2025-26), name a player who stole the ball 4 or more times in a playoff game.**
+
+283 valid answers, difficulty **easy**, tiers: 1: 113, 2: 90, 3: 70, 4: 10 (10 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Chris Paul (1), Tim Duncan (1), Russell Westbrook (1), Luka Doncic (1), Dirk Nowitzki (1), Kevin Garnett (1), Allen Iverson (1), Ben Wallace (1), Stephen Curry (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), Andre Drummond (1), Rajon Rondo (1), Damian Lillard (1), Rudy Gobert (1), Jason Kidd (1), Carmelo Anthony (1), Tony Parker (1), Tracy McGrady (1), Josh Smith (1), DeAndre Jordan (1), DeMar DeRozan (1), Kyle Lowry (1), Dwyane Wade (1), Andre Miller (1), Paul Pierce (1), Mike Conley (1), Shawn Marion (1), Bradley Beal (1), Al Horford (1), Deron Williams (1), Jrue Holiday (1), Kevin Love (1), Nikola Jokic (1), Jayson Tatum (1), Andrei Kirilenko (1), Andre Iguodala (1), Joe Johnson (1), Draymond Green (1), LaMarcus Aldridge (1), John Wall (1), Gilbert Arenas (1), Paul George (1), Vince Carter (1), Paul Millsap (1), Chauncey Billups (1), Jalen Brunson (1), Jaylen Brown (1), Kyrie Irving (1), Karl-Anthony Towns (1), Tyrese Maxey (1), Klay Thompson (1), Donovan Mitchell (1), Baron Davis (1), Jamal Crawford (1), Jose Calderon (1), Ricky Rubio (1), Kawhi Leonard (1), Marc Gasol (1), Raymond Felton (1), Devin Booker (1), Jason Terry (1), Ray Allen (1), Jimmy Butler III (1), Lamar Odom (1), Manu Ginobili (1), Myles Turner (1), Jameer Nelson (1), Thaddeus Young (1), CJ McCollum (1), Trevor Ariza (1), Goran Dragic (1), De'Aaron Fox (1), Kirk Hinrich (1), Tobias Harris (1), Metta World Peace (1), Cade Cunningham (1), Mike Bibby (1), Monta Ellis (1), Derrick Rose (1), Marcin Gortat (1), Jamal Murray (1), Lou Williams (1), T.J. McConnell (1), Nicolas Batum (1), Richard Jefferson (1), Devin Harris (1), Zaza Pachulia (1), Richard Hamilton (1), Blake Griffin (1), Victor Wembanyama (1), Kenyon Martin (1), Danny Green (1), Andrew Wiggins (1), Bam Adebayo (1), Chris Webber (1), Luke Ridnour (1), Pascal Siakam (1), Eric Bledsoe (1), Tony Allen (1), Mason Plumlee (1), Darren Collison (1), Jason Richardson (1), Marcus Smart (1), Jarrett Allen (1), Franz Wagner (1), Khris Middleton (1), Karl Malone (1), Steve Blake (2), Robert Covington (2), Luol Deng (2), Jamaal Tinsley (2), Rashard Lewis (2), Jusuf Nurkic (2), Austin Reaves (2), Kristaps Porzingis (2), Fred VanVleet (2), Victor Oladipo (2), Tyus Jones (2), JR Smith (2), Kentavious Caldwell-Pope (2), Derek Fisher (2), Tyrese Haliburton (2), Caron Butler (2), Anfernee Simons (2), Rafer Alston (2), Stephen Jackson (2), Brandon Jennings (2), George Hill (2), Dejounte Murray (2), Gordon Hayward (2), Kyle Korver (2), P.J. Tucker (2), Hedo Turkoglu (2), Thabo Sefolosha (2), Tayshaun Prince (2), Ben Simmons (2), Al Harrington (2), Darius Garland (2), Antoine Walker (2), Jalen Green (2), Larry Hughes (2), Joe Ingles (2), Brevin Knight (2), Cuttino Mobley (2), Anderson Varejao (2), Derrick White (2), Bojan Bogdanovic (2), Mario Chalmers (2), Jalen Williams (2), Wesley Matthews (2), Eric Snow (2), Mehmet Okur (2), Josh Hart (2), Matt Barnes (2), Evan Turner (2), Nazr Mohammed (2), Kyle Anderson (2), Alperen Sengun (2), Al-Farouq Aminu (2), Mikal Bridges (2), RJ Barrett (2), Patrick Beverley (2), OG Anunoby (2), Rodney Stuckey (2), Marcus Morris Sr. (2), Caris LeVert (2), Nickeil Alexander-Walker (2), Ricky Davis (2), P.J. Brown (2), Jae Crowder (2), Michael Finley (2), John Salmons (2), Kelly Oubre Jr. (2), Brandon Bass (2), Josh Howard (2), T.J. Warren (2), James Posey (2), Quentin Richardson (2), Devin Vassell (2), Latrell Sprewell (2), Royce O'Neale (2), Alex Caruso (2), Chuck Hayes (2), Isaiah Hartenstein (2), O.J. Mayo (2), Robert Horry (2), Matisse Thybulle (2), Gary Trent Jr. (2), Amen Thompson (2), Bogdan Bogdanovic (2), Jared Dudley (2), Cameron Payne (2), Justin Holiday (2), Delon Wright (2), Delonte West (2), Reggie Miller (2), John Stockton (2), Kevin Huerter (3), Josh Richardson (3), Donte DiVincenzo (3), Gary Harris (3), Dorian Finney-Smith (3), Tyrus Thomas (3), Avery Bradley (3), Luguentz Dort (3), Austin Rivers (3), Jaden McDaniels (3), Otto Porter Jr. (3), Bruce Bowen (3), Chet Holmgren (3), Andrew Nembhard (3), Raja Bell (3), Bonzi Wells (3), Morris Peterson (3), Speedy Claxton (3), Onyeka Okongwu (3), Dario Saric (3), Doug Christie (3), DeMarre Carroll (3), Clifford Robinson (3), Bobby Simmons (3), Tim Thomas (3), De'Anthony Melton (3), Bruce Brown (3), Keith Van Horn (3), Glen Davis (3), Duncan Robinson (3), Malik Rose (3), Christian Braun (3), Pat Connaughton (3), Seth Curry (3), Ronald Murray (3), Trenton Hassell (3), Anthony Black (3), Iman Shumpert (3), DeJuan Blair (3), Anthony Parker (3), Devean George (3), Jalen Suggs (3), Herbert Jones (3), Marquis Daniels (3), Martell Webster (3), Tiago Splitter (3), Ron Mercer (3), Brandin Podziemski (3), Toni Kukoc (3), Ajay Mitchell (3), Kerry Kittles (3), Damien Wilkins (3), Anfernee Hardaway (3), Pablo Prigioni (3), Ausar Thompson (3), Daniel Gibson (3), Paul Reed (3), Aaron McKie (3), Jim Jackson (3), Cason Wallace (3), Andre Roberson (3), Jamal Shead (3), Obi Toppin (3), Jevon Carter (3), Isaac Okoro (3), Frank Ntilikina (3), Tari Eason (3), Javonte Green (3), Tony Delk (3), Dylan Harper (3), Julian Champagnie (4), Eric Williams (4), Jaylin Williams (4), Adrian Griffin (4), Brad Wanamaker (4), Ime Udoka (4), Daniss Jenkins (4), Quincy Pondexter (4), Ja'Kobe Walter (4), Chris Chiozza (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who stole the ball 5 or more times in a playoff game.**
+
+129 valid answers, difficulty **easy**, tiers: 1: 58, 2: 43, 3: 27, 4: 1 (1 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kobe Bryant (1), Chris Paul (1), Russell Westbrook (1), Luka Doncic (1), Kevin Garnett (1), Allen Iverson (1), Ben Wallace (1), Stephen Curry (1), Shai Gilgeous-Alexander (1), Rajon Rondo (1), Rudy Gobert (1), Jason Kidd (1), Carmelo Anthony (1), Tracy McGrady (1), DeMar DeRozan (1), Dwyane Wade (1), Paul Pierce (1), Mike Conley (1), Shawn Marion (1), Bradley Beal (1), Al Horford (1), Deron Williams (1), Jrue Holiday (1), Kevin Love (1), Jayson Tatum (1), Andre Iguodala (1), Joe Johnson (1), Draymond Green (1), John Wall (1), Gilbert Arenas (1), Paul George (1), Vince Carter (1), Paul Millsap (1), Chauncey Billups (1), Jalen Brunson (1), Donovan Mitchell (1), Baron Davis (1), Jamal Crawford (1), Kawhi Leonard (1), Ray Allen (1), Jimmy Butler III (1), Manu Ginobili (1), Thaddeus Young (1), Metta World Peace (1), Mike Bibby (1), Jamal Murray (1), T.J. McConnell (1), Devin Harris (1), Zaza Pachulia (1), Danny Green (1), Pascal Siakam (1), Tony Allen (1), Mason Plumlee (1), Marcus Smart (1), Jarrett Allen (1), Khris Middleton (1), Robert Covington (2), Luol Deng (2), Jamaal Tinsley (2), Jusuf Nurkic (2), Fred VanVleet (2), Victor Oladipo (2), JR Smith (2), Derek Fisher (2), Caron Butler (2), Stephen Jackson (2), Brandon Jennings (2), George Hill (2), Dejounte Murray (2), Kyle Korver (2), P.J. Tucker (2), Thabo Sefolosha (2), Al Harrington (2), Antoine Walker (2), Larry Hughes (2), Joe Ingles (2), Anderson Varejao (2), Derrick White (2), Mario Chalmers (2), Jalen Williams (2), Eric Snow (2), Evan Turner (2), Kyle Anderson (2), Al-Farouq Aminu (2), Patrick Beverley (2), OG Anunoby (2), Michael Finley (2), John Salmons (2), Kelly Oubre Jr. (2), Josh Howard (2), T.J. Warren (2), James Posey (2), Latrell Sprewell (2), Alex Caruso (2), Chuck Hayes (2), Gary Trent Jr. (2), Amen Thompson (2), Justin Holiday (2), Reggie Miller (2), Josh Richardson (3), Donte DiVincenzo (3), Dorian Finney-Smith (3), Tyrus Thomas (3), Austin Rivers (3), Andrew Nembhard (3), Bonzi Wells (3), Doug Christie (3), Clifford Robinson (3), Bruce Brown (3), Glen Davis (3), Duncan Robinson (3), Trenton Hassell (3), Anthony Black (3), Toni Kukoc (3), Damien Wilkins (3), Pablo Prigioni (3), Ausar Thompson (3), Aaron McKie (3), Jim Jackson (3), Andre Roberson (3), Jamal Shead (3), Jevon Carter (3), Tari Eason (3), Javonte Green (3), Tony Delk (3), Dylan Harper (3), Brad Wanamaker (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who stole the ball 6 or more times in a playoff game.**
+
+37 valid answers, difficulty **medium**, tiers: 1: 24, 2: 6, 3: 7 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Russell Westbrook (1), Kevin Garnett (1), Ben Wallace (1), Stephen Curry (1), Rajon Rondo (1), Jason Kidd (1), Dwyane Wade (1), Shawn Marion (1), Kevin Love (1), Jayson Tatum (1), Gilbert Arenas (1), Paul George (1), Vince Carter (1), Donovan Mitchell (1), Baron Davis (1), Jamal Crawford (1), Kawhi Leonard (1), Jimmy Butler III (1), Manu Ginobili (1), Thaddeus Young (1), Zaza Pachulia (1), Jarrett Allen (1), Fred VanVleet (2), Derek Fisher (2), Kyle Korver (2), Thabo Sefolosha (2), Kyle Anderson (2), John Salmons (2), Josh Richardson (3), Andrew Nembhard (3), Doug Christie (3), Glen Davis (3), Toni Kukoc (3), Javonte Green (3), Dylan Harper (3)
+
+</details>
+
+### `offensive-rebounds`
+
+**Since 2001-02 (through 2025-26), name a player who grabbed 12 or more offensive rebounds in a game.**
+
+52 valid answers, difficulty **easy**, tiers: 1: 24, 2: 19, 3: 8, 6: 1 (1 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Tim Duncan (1), Ben Wallace (1), Andre Drummond (1), Rudy Gobert (1), Carmelo Anthony (1), DeAndre Jordan (1), Tyson Chandler (1), Zach Randolph (1), Kevin Love (1), Jonas Valanciunas (1), Elton Brand (1), Clint Capela (1), Al Jefferson (1), Shaquille O'Neal (1), Lamar Odom (1), DeMarcus Cousins (1), Domantas Sabonis (1), Tristan Thompson (1), Steven Adams (1), Joakim Noah (1), Zaza Pachulia (1), JaVale McGee (1), Enes Freedom (1), Reggie Evans (1), Zydrunas Ilgauskas (2), Emeka Okafor (2), Jusuf Nurkic (2), Ivica Zubac (2), Erick Dampier (2), Amir Johnson (2), Aaron Gordon (2), Jeff Foster (2), Anderson Varejao (2), Ersan Ilyasova (2), Kevon Looney (2), Kenneth Faried (2), Mitchell Robinson (2), Kenny Thomas (2), JJ Hickson (2), Jalen Duren (2), Chuck Hayes (2), Andray Blatche (2), Isaiah Hartenstein (2), Mark Williams (3), Vlade Divac (3), Greg Ostertag (3), Walker Kessler (3), Donovan Clingan (3), Tari Eason (3), Thomas Robinson (3), Yi Jianlian (3), Alex Stepheson (6)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who grabbed 10 or more offensive rebounds in a game.**
+
+137 valid answers, difficulty **medium**, tiers: 1: 51, 2: 47, 3: 22, 4: 13, 5: 2, 6: 2 (17 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dwight Howard (1), Tim Duncan (1), Pau Gasol (1), Kevin Garnett (1), Ben Wallace (1), Anthony Davis (1), Andre Drummond (1), Brook Lopez (1), Rudy Gobert (1), Carmelo Anthony (1), DeAndre Jordan (1), Tyson Chandler (1), Nikola Vucevic (1), Zach Randolph (1), Kevin Love (1), Nikola Jokic (1), Draymond Green (1), LaMarcus Aldridge (1), Jonas Valanciunas (1), Paul Millsap (1), Elton Brand (1), Carlos Boozer (1), Marcus Camby (1), Karl-Anthony Towns (1), Chris Bosh (1), Marc Gasol (1), Clint Capela (1), Al Jefferson (1), Shaquille O'Neal (1), Lamar Odom (1), DeMarcus Cousins (1), Thaddeus Young (1), Domantas Sabonis (1), Amar'e Stoudemire (1), Tristan Thompson (1), Antawn Jamison (1), Samuel Dalembert (1), Jermaine O'Neal (1), Steven Adams (1), Joakim Noah (1), Zaza Pachulia (1), Andrew Bogut (1), Bam Adebayo (1), JaVale McGee (1), Tony Allen (1), Mason Plumlee (1), Enes Freedom (1), Taj Gibson (1), Jarrett Allen (1), Reggie Evans (1), Drew Gooden (1), Zydrunas Ilgauskas (2), Emeka Okafor (2), Derrick Favors (2), Jusuf Nurkic (2), Brendan Haywood (2), Hassan Whiteside (2), Roy Hibbert (2), Kurt Thomas (2), Caron Butler (2), Ivica Zubac (2), Erick Dampier (2), Greg Monroe (2), Chris Andersen (2), Kendrick Perkins (2), Deandre Ayton (2), Amir Johnson (2), Aaron Gordon (2), Keldon Johnson (2), Jeff Foster (2), Anderson Varejao (2), Ersan Ilyasova (2), John Collins (2), Robin Lopez (2), Mehmet Okur (2), Ed Davis (2), Nazr Mohammed (2), Jakob Poeltl (2), Antonio McDyess (2), Kevon Looney (2), Kenneth Faried (2), Jason Thompson (2), Mitchell Robinson (2), Rasho Nesterovic (2), Brandon Bass (2), Andris Biedrins (2), Kenny Thomas (2), Joel Przybilla (2), JJ Hickson (2), Larry Nance Jr. (2), Ryan Anderson (2), Gorgui Dieng (2), Jalen Duren (2), Adonal Foyle (2), Chuck Hayes (2), Andray Blatche (2), Isaiah Hartenstein (2), Luc Mbah a Moute (2), Nikola Pekovic (3), Trevor Booker (3), Bonzi Wells (3), Onyeka Okongwu (3), Antonio Davis (3), Alonzo Mourning (3), Robert Williams III (3), Mark Williams (3), Precious Achiuwa (3), Dale Davis (3), Marvin Bagley III (3), DeJuan Blair (3), Vlade Divac (3), Greg Ostertag (3), Lavoy Allen (3), Walker Kessler (3), Mikki Moore (3), Donovan Clingan (3), Tari Eason (3), Thomas Robinson (3), Yi Jianlian (3), Day'Ron Sharpe (3), Khem Birch (4), Michael Ruffin (4), Scott Padgett (4), Moussa Diabate (4), Neemias Queta (4), Yves Missi (4), Jahidi White (4), Moses Brown (4), Greg Oden (4), Loren Woods (4), Dominick Barlow (4), Joey Dorsey (4), Zendon Hamilton (4), Moussa Cisse (5), Julian Reese (5), Adama Sanogo (6), Alex Stepheson (6)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who grabbed 9 or more offensive rebounds in a game.**
+
+236 valid answers, difficulty **medium**, tiers: 1: 67, 2: 74, 3: 52, 4: 35, 5: 6, 6: 2 (43 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dwight Howard (1), Tim Duncan (1), Pau Gasol (1), Joel Embiid (1), Kevin Garnett (1), Ben Wallace (1), Anthony Davis (1), Andre Drummond (1), Brook Lopez (1), Rudy Gobert (1), Carmelo Anthony (1), Tracy McGrady (1), Josh Smith (1), DeAndre Jordan (1), Tyson Chandler (1), Nikola Vucevic (1), Zach Randolph (1), Shawn Marion (1), Al Horford (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), Draymond Green (1), LaMarcus Aldridge (1), Jonas Valanciunas (1), Paul Millsap (1), Serge Ibaka (1), Elton Brand (1), Carlos Boozer (1), Marcus Camby (1), Karl-Anthony Towns (1), Chris Bosh (1), Marc Gasol (1), Clint Capela (1), Ray Allen (1), Al Jefferson (1), Shaquille O'Neal (1), Lamar Odom (1), DeMarcus Cousins (1), David Lee (1), Thaddeus Young (1), Julius Randle (1), David West (1), Domantas Sabonis (1), Amar'e Stoudemire (1), Tristan Thompson (1), Antawn Jamison (1), Samuel Dalembert (1), Jermaine O'Neal (1), Marcin Gortat (1), Steven Adams (1), Nene (1), Yao Ming (1), Joakim Noah (1), Zaza Pachulia (1), Blake Griffin (1), Victor Wembanyama (1), Andrew Bogut (1), Bam Adebayo (1), JaVale McGee (1), Tony Allen (1), Mason Plumlee (1), Enes Freedom (1), Taj Gibson (1), Jarrett Allen (1), Reggie Evans (1), Drew Gooden (1), Zydrunas Ilgauskas (2), Emeka Okafor (2), Rashard Lewis (2), Derrick Favors (2), Jusuf Nurkic (2), Marvin Williams (2), Kristaps Porzingis (2), Brendan Haywood (2), Hassan Whiteside (2), Roy Hibbert (2), Kurt Thomas (2), Troy Murphy (2), Chris Kaman (2), Caron Butler (2), Ivica Zubac (2), Erick Dampier (2), Greg Monroe (2), Bismack Biyombo (2), Chris Andersen (2), Kendrick Perkins (2), Deandre Ayton (2), Amir Johnson (2), Al Harrington (2), Luis Scola (2), Aaron Gordon (2), Keldon Johnson (2), Jeff Foster (2), Anderson Varejao (2), Ersan Ilyasova (2), John Collins (2), Robin Lopez (2), Mehmet Okur (2), Ed Davis (2), Matt Barnes (2), Nazr Mohammed (2), Jakob Poeltl (2), Antonio McDyess (2), Kris Humphries (2), Jamaal Magloire (2), P.J. Brown (2), Kevon Looney (2), Markieff Morris (2), Kenneth Faried (2), Wendell Carter Jr. (2), Jason Thompson (2), Mitchell Robinson (2), Juwan Howard (2), Andrew Bynum (2), Rasho Nesterovic (2), Brandon Bass (2), Andris Biedrins (2), Kenny Thomas (2), Scottie Barnes (2), Alex Len (2), Joel Przybilla (2), JJ Hickson (2), Larry Nance Jr. (2), Joe Smith (2), Ryan Anderson (2), Omer Asik (2), Gorgui Dieng (2), Kosta Koufos (2), Jalen Duren (2), Donyell Marshall (2), Adonal Foyle (2), Chuck Hayes (2), Andray Blatche (2), Isaiah Hartenstein (2), JaMychal Green (2), Amen Thompson (2), Nic Claxton (2), Jason Collins (2), DeSagana Diop (2), Luc Mbah a Moute (2), Nikola Pekovic (3), Trevor Booker (3), Bonzi Wells (3), Onyeka Okongwu (3), Dario Saric (3), Lorenzen Wright (3), Jason Maxiell (3), Richaun Holmes (3), Glen Davis (3), Aron Baynes (3), Antonio Davis (3), Alonzo Mourning (3), Robert Williams III (3), Malik Rose (3), Isaiah Stewart (3), Jordan Hill (3), Timofey Mozgov (3), Mark Williams (3), Precious Achiuwa (3), Dale Davis (3), Dan Gadzuric (3), Marvin Bagley III (3), DeJuan Blair (3), Vlade Divac (3), Chris Boucher (3), Jared Sullinger (3), Darrell Arthur (3), Etan Thomas (3), Willy Hernangomez (3), Greg Ostertag (3), Tyler Hansbrough (3), Goga Bitadze (3), Lavoy Allen (3), Josh Childress (3), Walker Kessler (3), Luke Kornet (3), Mikki Moore (3), Drew Eubanks (3), Jerome Williams (3), Noah Vonleh (3), Primoz Brezec (3), Brandon Clarke (3), Nick Richards (3), Danny Fortson (3), Lou Amundson (3), Shelden Williams (3), Donovan Clingan (3), Terrence Jones (3), Tari Eason (3), Thomas Robinson (3), Yi Jianlian (3), Day'Ron Sharpe (3), Isaiah Jackson (4), Boban Marjanovic (4), Khem Birch (4), Josh Boone (4), Cole Aldrich (4), Byron Mullens (4), Michael Ruffin (4), Scott Padgett (4), Moussa Diabate (4), Alan Henderson (4), Neemias Queta (4), Ira Newble (4), Samaki Walker (4), Tarik Black (4), Yves Missi (4), Zach Edey (4), Trayce Jackson-Davis (4), Jahidi White (4), Slava Medvedenko (4), Moses Brown (4), Shawn Kemp (4), Greg Oden (4), Collin Murray-Boyles (4), Loren Woods (4), Dominick Barlow (4), Henry Sims (4), Luka Garza (4), Michael Bradley (4), Scott Williams (4), KJ McDaniels (4), Mouhamed Gueye (4), Ryan Kalkbrenner (4), Joey Dorsey (4), Zendon Hamilton (4), Dylan Cardwell (4), Oscar Tshiebwe (5), Curtis Borchardt (5), Moussa Cisse (5), Andre Brown (5), Colin Castleton (5), Julian Reese (5), Adama Sanogo (6), Alex Stepheson (6)
+
+</details>
+
+### `free-throws`
+
+**Since 2001-02 (through 2025-26), name a player who made 18 or more free throws in a game.**
+
+65 valid answers, difficulty **easy**, tiers: 1: 52, 2: 12, 3: 1 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Chris Paul (1), Russell Westbrook (1), Luka Doncic (1), Joel Embiid (1), Dirk Nowitzki (1), Allen Iverson (1), Stephen Curry (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), Damian Lillard (1), Carmelo Anthony (1), Tracy McGrady (1), DeMar DeRozan (1), Dwyane Wade (1), Paul Pierce (1), Bradley Beal (1), Deron Williams (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), Trae Young (1), John Wall (1), Gilbert Arenas (1), Vince Carter (1), Anthony Edwards (1), Chauncey Billups (1), Jaylen Brown (1), Donovan Mitchell (1), Chris Bosh (1), Kawhi Leonard (1), Devin Booker (1), Jimmy Butler III (1), Ja Morant (1), Manu Ginobili (1), DeMarcus Cousins (1), Michael Redd (1), Amar'e Stoudemire (1), Cade Cunningham (1), Derrick Rose (1), Jermaine O'Neal (1), Devin Harris (1), Yao Ming (1), Richard Hamilton (1), Kevin Martin (1), Bam Adebayo (1), Deni Avdija (1), Franz Wagner (1), Austin Reaves (2), Marvin Williams (2), Brandon Roy (2), Allan Houston (2), Cam Thomas (2), Jerami Grant (2), Corey Maggette (2), Ramon Sessions (2), Danilo Gallinari (2), Steve Francis (2), Ben Gordon (2), Mike James (2002-2014) (2), Travis Outlaw (3)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who made 20 or more free throws in a game.**
+
+34 valid answers, difficulty **medium**, tiers: 1: 32, 2: 2 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Russell Westbrook (1), Joel Embiid (1), Dirk Nowitzki (1), Allen Iverson (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), DeMar DeRozan (1), Dwyane Wade (1), Paul Pierce (1), Deron Williams (1), Giannis Antetokounmpo (1), Nikola Jokic (1), Trae Young (1), Gilbert Arenas (1), Vince Carter (1), Donovan Mitchell (1), Chris Bosh (1), Devin Booker (1), Jimmy Butler III (1), Ja Morant (1), DeMarcus Cousins (1), Amar'e Stoudemire (1), Cade Cunningham (1), Devin Harris (1), Richard Hamilton (1), Kevin Martin (1), Bam Adebayo (1), Austin Reaves (2), Jerami Grant (2)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who made 22 or more free throws in a game.**
+
+21 valid answers, difficulty **medium**, tiers: 1: 21 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Joel Embiid (1), Dirk Nowitzki (1), Allen Iverson (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), DeMar DeRozan (1), Dwyane Wade (1), Giannis Antetokounmpo (1), Nikola Jokic (1), Gilbert Arenas (1), Vince Carter (1), Chris Bosh (1), Devin Booker (1), Jimmy Butler III (1), Kevin Martin (1), Bam Adebayo (1)
+
+</details>
+
+### `turnovers`
+
+**Since 2001-02 (through 2025-26), name a player who committed 11 or more turnovers in a game.**
+
+27 valid answers, difficulty **medium**, tiers: 1: 23, 2: 2, 3: 2 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Russell Westbrook (1), Luka Doncic (1), Allen Iverson (1), Stephen Curry (1), Jason Kidd (1), Dwyane Wade (1), Paul Pierce (1), Giannis Antetokounmpo (1), Trae Young (1), John Wall (1), Gilbert Arenas (1), Karl-Anthony Towns (1), Domantas Sabonis (1), Amar'e Stoudemire (1), Mike Bibby (1), Monta Ellis (1), Derrick Rose (1), Richard Jefferson (1), Zydrunas Ilgauskas (2), Ben Simmons (2), Stephon Castle (3), Emmanuel Mudiay (3)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who committed 9 or more turnovers in a game.**
+
+128 valid answers, difficulty **easy**, tiers: 1: 86, 2: 29, 3: 11, 4: 1, 5: 1 (2 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Tim Duncan (1), Russell Westbrook (1), Luka Doncic (1), Pau Gasol (1), Joel Embiid (1), Steve Nash (1), Allen Iverson (1), Stephen Curry (1), Andre Drummond (1), Rajon Rondo (1), Damian Lillard (1), Jason Kidd (1), Carmelo Anthony (1), Josh Smith (1), DeAndre Jordan (1), Kyle Lowry (1), Dwyane Wade (1), Andre Miller (1), Paul Pierce (1), Bradley Beal (1), Deron Williams (1), Giannis Antetokounmpo (1), Jrue Holiday (1), Nikola Jokic (1), Jayson Tatum (1), Andre Iguodala (1), Trae Young (1), Joe Johnson (1), Draymond Green (1), John Wall (1), Gilbert Arenas (1), Paul George (1), Vince Carter (1), Paul Millsap (1), Carlos Boozer (1), Kyrie Irving (1), Karl-Anthony Towns (1), Donovan Mitchell (1), Baron Davis (1), Kawhi Leonard (1), Raymond Felton (1), Devin Booker (1), Shaquille O'Neal (1), Ja Morant (1), Zach LaVine (1), Dennis Schroder (1), Zion Williamson (1), DeMarcus Cousins (1), Julius Randle (1), De'Aaron Fox (1), Domantas Sabonis (1), Kirk Hinrich (1), Amar'e Stoudemire (1), Cade Cunningham (1), Mike Bibby (1), Paolo Banchero (1), Kemba Walker (1), Mo Williams (1), Monta Ellis (1), Derrick Rose (1), Jermaine O'Neal (1), Jamal Murray (1), LaMelo Ball (1), Nicolas Batum (1), Richard Jefferson (1), Yao Ming (1), Joakim Noah (1), Blake Griffin (1), Victor Wembanyama (1), Andrew Bogut (1), Brandon Ingram (1), Chris Webber (1), D'Angelo Russell (1), Collin Sexton (1), Stephon Marbury (1), Eric Bledsoe (1), Darren Collison (1), Deni Avdija (1), Jason Richardson (1), Khris Middleton (1), Michael Jordan (1), Zydrunas Ilgauskas (2), Steve Blake (2), Robert Covington (2), Jamaal Tinsley (2), Victor Oladipo (2), Caron Butler (2), Stephen Jackson (2), Ben Simmons (2), Al Harrington (2), Antoine Walker (2), Jalen Rose (2), Steve Francis (2), Derrick White (2), Jerry Stackhouse (2), Ben Gordon (2), Evan Turner (2), Shaedon Sharpe (2), Ricky Davis (2), Coby White (2), Randy Foye (2), Jeremy Lin (2), JJ Hickson (2), Aaron Brooks (2), Eddy Curry (2), Kevin Porter Jr. (2), Jeff McInnis (2), O.J. Mayo (2), Michael Carter-Williams (2), P.J. Washington (2), Bonzi Wells (3), Al Thornton (3), Stephon Castle (3), Jaden Ivey (3), Dennis Smith Jr. (3), Emmanuel Mudiay (3), Scoot Henderson (3), Darius Bazley (3), Anfernee Hardaway (3), Josh Jackson (3), Danny Fortson (3), Isaiah Roby (4), Jahmai Mashack (5)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who committed 8 or more turnovers in a game.**
+
+247 valid answers, difficulty **easy**, tiers: 1: 131, 2: 80, 3: 30, 4: 4, 5: 2 (6 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Chris Paul (1), Tim Duncan (1), Russell Westbrook (1), Luka Doncic (1), Pau Gasol (1), Joel Embiid (1), Dirk Nowitzki (1), Kevin Garnett (1), Steve Nash (1), Allen Iverson (1), Stephen Curry (1), Shai Gilgeous-Alexander (1), Andre Drummond (1), Rajon Rondo (1), Damian Lillard (1), Jason Kidd (1), Carmelo Anthony (1), Tony Parker (1), Tracy McGrady (1), Josh Smith (1), DeAndre Jordan (1), DeMar DeRozan (1), Kyle Lowry (1), Dwyane Wade (1), Tyson Chandler (1), Nikola Vucevic (1), Andre Miller (1), Paul Pierce (1), Bradley Beal (1), Deron Williams (1), Giannis Antetokounmpo (1), Jrue Holiday (1), Nikola Jokic (1), Jayson Tatum (1), Andre Iguodala (1), Trae Young (1), Joe Johnson (1), Draymond Green (1), LaMarcus Aldridge (1), Jonas Valanciunas (1), John Wall (1), Gilbert Arenas (1), Paul George (1), Vince Carter (1), Paul Millsap (1), Anthony Edwards (1), Chauncey Billups (1), Elton Brand (1), Jaylen Brown (1), Carlos Boozer (1), Kyrie Irving (1), Karl-Anthony Towns (1), Donovan Mitchell (1), Baron Davis (1), Jose Calderon (1), Chris Bosh (1), Ricky Rubio (1), Kawhi Leonard (1), Marc Gasol (1), Raymond Felton (1), Devin Booker (1), Jason Terry (1), Al Jefferson (1), Shaquille O'Neal (1), Lamar Odom (1), Ja Morant (1), Zach LaVine (1), Manu Ginobili (1), Dennis Schroder (1), Zion Williamson (1), DeMarcus Cousins (1), CJ McCollum (1), Julius Randle (1), De'Aaron Fox (1), David West (1), Rudy Gay (1), Domantas Sabonis (1), Kirk Hinrich (1), Amar'e Stoudemire (1), Cade Cunningham (1), Mike Bibby (1), Antawn Jamison (1), Samuel Dalembert (1), Paolo Banchero (1), Kemba Walker (1), Mo Williams (1), Monta Ellis (1), Derrick Rose (1), Jermaine O'Neal (1), Jamal Murray (1), Boris Diaw (1), Gerald Wallace (1), LaMelo Ball (1), Lou Williams (1), Nicolas Batum (1), Richard Jefferson (1), Nene (1), Devin Harris (1), Yao Ming (1), Jarrett Jack (1), Joakim Noah (1), Zaza Pachulia (1), Richard Hamilton (1), Blake Griffin (1), Victor Wembanyama (1), Kenyon Martin (1), Andrew Bogut (1), Brandon Ingram (1), Bam Adebayo (1), D.J. Augustin (1), Reggie Jackson (1), Chris Webber (1), D'Angelo Russell (1), Collin Sexton (1), Luke Ridnour (1), Stephon Marbury (1), Eric Bledsoe (1), Mason Plumlee (1), Darren Collison (1), Deni Avdija (1), Jason Richardson (1), Marcus Smart (1), Khris Middleton (1), Tyler Herro (1), Michael Jordan (1), Karl Malone (1), Zydrunas Ilgauskas (2), Steve Blake (2), Eric Gordon (2), Desmond Bane (2), Robert Covington (2), Keyonte George (2), Luol Deng (2), Jamaal Tinsley (2), Jusuf Nurkic (2), Ty Lawson (2), Austin Reaves (2), Jason Williams (2), Fred VanVleet (2), Victor Oladipo (2), Caron Butler (2), Erick Dampier (2), Rafer Alston (2), Stephen Jackson (2), Brandon Jennings (2), George Hill (2), Dejounte Murray (2), Gordon Hayward (2), Hedo Turkoglu (2), Elfrid Payton (2), Gary Payton (2), Ben Simmons (2), Al Harrington (2), Kyle Kuzma (2), Luis Scola (2), Darius Garland (2), Antoine Walker (2), Aaron Gordon (2), Jalen Rose (2), Tyreke Evans (2), Larry Hughes (2), Joe Ingles (2), Brevin Knight (2), Steve Francis (2), Derrick White (2), Jerry Stackhouse (2), Ben Gordon (2), Shareef Abdur-Rahim (2), Evan Turner (2), Kyle Anderson (2), Mike Miller (2), Alperen Sengun (2), T.J. Ford (2), Terry Rozier (2), Mike Dunleavy (2), Rodney Stuckey (2), Jamaal Magloire (2), Shaedon Sharpe (2), Glenn Robinson (2), Ricky Davis (2), Jordan Poole (2), Coby White (2), Josh Giddey (2), Randy Foye (2), Andrew Bynum (2), Jeremy Lin (2), Scottie Barnes (2), JJ Hickson (2), Grant Hill (2), Brandon Knight (2), Aaron Brooks (2), Greivis Vasquez (2), Eddy Curry (2), Kris Dunn (2), Kevin Porter Jr. (2), Jeff McInnis (2), Andray Blatche (2), Carlos Arroyo (2), Eddie Jones (2), O.J. Mayo (2), Lance Stephenson (2), Amen Thompson (2), Michael Carter-Williams (2), P.J. Washington (2), Darrel Armstrong (2), John Stockton (2), Jahlil Okafor (3), Andrew Nembhard (3), Bonzi Wells (3), Al Thornton (3), Stephon Castle (3), Clifford Robinson (3), Jaden Ivey (3), Matas Buzelis (3), Dennis Smith Jr. (3), Mark Blount (3), Troy Hudson (3), Naji Marshall (3), Killian Hayes (3), Rashad McCants (3), Emmanuel Mudiay (3), Scoot Henderson (3), Darius Bazley (3), Josh McRoberts (3), Jonny Flynn (3), Damien Wilkins (3), Anfernee Hardaway (3), Josh Jackson (3), Tony Wroten (3), Smush Parker (3), Danny Fortson (3), Bub Carrington (3), Roger Mason Jr. (3), Rodney Rogers (3), Erick Strickland (3), Jarace Walker (3), Tre Mann (4), Isaiah Roby (4), Jared Butler (4), George McCloud (4), Jahmai Mashack (5), Nikola Topic (5)
+
+</details>
+
+### `shots-taken`
+
+**Since 2001-02 (through 2025-26), name a player who took 35 or more shots from the field in a game.**
+
+54 valid answers, difficulty **easy**, tiers: 1: 51, 2: 2, 3: 1 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kevin Durant (1), Kobe Bryant (1), Russell Westbrook (1), Luka Doncic (1), Joel Embiid (1), Allen Iverson (1), Stephen Curry (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), Damian Lillard (1), Jason Kidd (1), Carmelo Anthony (1), Tony Parker (1), Tracy McGrady (1), DeMar DeRozan (1), Dwyane Wade (1), Paul Pierce (1), Zach Randolph (1), Bradley Beal (1), Giannis Antetokounmpo (1), Jrue Holiday (1), Nikola Jokic (1), Jayson Tatum (1), Gilbert Arenas (1), Vince Carter (1), Anthony Edwards (1), Jalen Brunson (1), Jaylen Brown (1), Kyrie Irving (1), Karl-Anthony Towns (1), Tyrese Maxey (1), Klay Thompson (1), Donovan Mitchell (1), Kawhi Leonard (1), Devin Booker (1), Zach LaVine (1), CJ McCollum (1), De'Aaron Fox (1), Rudy Gay (1), Cade Cunningham (1), Monta Ellis (1), Jamal Murray (1), LaMelo Ball (1), Yao Ming (1), Richard Hamilton (1), Blake Griffin (1), Bam Adebayo (1), D'Angelo Russell (1), Michael Jordan (1), Dejounte Murray (2), Latrell Sprewell (2), GG Jackson (3)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who took 38 or more shots from the field in a game.**
+
+26 valid answers, difficulty **medium**, tiers: 1: 25, 2: 1 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kobe Bryant (1), Russell Westbrook (1), Joel Embiid (1), Allen Iverson (1), Stephen Curry (1), Damian Lillard (1), DeMar DeRozan (1), Dwyane Wade (1), Zach Randolph (1), Bradley Beal (1), Giannis Antetokounmpo (1), Nikola Jokic (1), Jalen Brunson (1), Tyrese Maxey (1), Klay Thompson (1), Kawhi Leonard (1), Devin Booker (1), CJ McCollum (1), Cade Cunningham (1), Monta Ellis (1), LaMelo Ball (1), Bam Adebayo (1), Michael Jordan (1), Dejounte Murray (2)
+
+</details>
+
+### `minutes`
+
+**Since 2001-02 (through 2025-26), name a player who played 55 or more minutes in a game.**
+
+84 valid answers, difficulty **easy**, tiers: 1: 53, 2: 26, 3: 5 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), Kevin Durant (1), Pau Gasol (1), Dirk Nowitzki (1), Steve Nash (1), Allen Iverson (1), Ben Wallace (1), Stephen Curry (1), Rajon Rondo (1), Damian Lillard (1), Jason Kidd (1), Carmelo Anthony (1), Tracy McGrady (1), DeMar DeRozan (1), Zach Randolph (1), Shawn Marion (1), Bradley Beal (1), Deron Williams (1), Nikola Jokic (1), Trae Young (1), Joe Johnson (1), Vince Carter (1), Chauncey Billups (1), Elton Brand (1), Klay Thompson (1), Jamal Crawford (1), Chris Bosh (1), Marc Gasol (1), Raymond Felton (1), Devin Booker (1), Jason Terry (1), Ray Allen (1), Jimmy Butler III (1), Lamar Odom (1), Zach LaVine (1), CJ McCollum (1), Trevor Ariza (1), Kirk Hinrich (1), Antawn Jamison (1), Derrick Rose (1), Jamal Murray (1), Rasheed Wallace (1), Gerald Wallace (1), Richard Jefferson (1), Devin Harris (1), Richard Hamilton (1), Kenyon Martin (1), Kevin Martin (1), Peja Stojakovic (1), Stephon Marbury (1), Pascal Siakam (1), Enes Freedom (1), Khris Middleton (1), Luol Deng (2), Jamaal Tinsley (2), Ty Lawson (2), Victor Oladipo (2), Caron Butler (2), Gordon Hayward (2), Thabo Sefolosha (2), Tayshaun Prince (2), Sam Cassell (2), Beno Udrih (2), Jalen Rose (2), Cuttino Mobley (2), Steve Francis (2), Chris Duhon (2), Shareef Abdur-Rahim (2), OG Anunoby (2), Marcus Morris Sr. (2), Ricky Davis (2), Channing Frye (2), Michael Finley (2), John Salmons (2), Scottie Barnes (2), Aaron Brooks (2), Ryan Anderson (2), Quentin Richardson (2), Gary Trent Jr. (2), Immanuel Quickley (3), Otto Porter Jr. (3), Raja Bell (3), David Wesley (3), Kerry Kittles (3)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who played 58 or more minutes in a game.**
+
+19 valid answers, difficulty **medium**, tiers: 1: 14, 2: 4, 3: 1 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dirk Nowitzki (1), Stephen Curry (1), Rajon Rondo (1), Damian Lillard (1), DeMar DeRozan (1), Shawn Marion (1), Deron Williams (1), Nikola Jokic (1), Jamal Crawford (1), Ray Allen (1), Jimmy Butler III (1), CJ McCollum (1), Kirk Hinrich (1), Derrick Rose (1), Cuttino Mobley (2), Steve Francis (2), John Salmons (2), Aaron Brooks (2), Raja Bell (3)
+
+</details>
+
+### `perfect-shooting`
+
+**Since 2001-02 (through 2025-26), name a player who made 11 or more field goals in a game without a miss.**
+
+22 valid answers, difficulty **hard**, tiers: 1: 11, 2: 4, 3: 5, 4: 2 (2 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dwight Howard (1), Chris Paul (1), Nikola Jokic (1), Serge Ibaka (1), Domantas Sabonis (1), Steven Adams (1), Nene (1), Yao Ming (1), Tony Allen (1), Enes Freedom (1), Jarrett Allen (1), Ivica Zubac (2), Kenneth Faried (2), Mitchell Robinson (2), Daniel Gafford (2), Jonathan Kuminga (3), Richaun Holmes (3), Nenad Krstic (3), Thomas Bryant (3), Paul Reed (3), Fabricio Oberto (4), Keita Bates-Diop (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who made 9 or more field goals in a game without a miss.**
+
+91 valid answers, difficulty **hard**, tiers: 1: 34, 2: 23, 3: 23, 4: 10, 5: 1 (11 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dwight Howard (1), Chris Paul (1), Pau Gasol (1), Andre Drummond (1), Rudy Gobert (1), Tyson Chandler (1), Giannis Antetokounmpo (1), Nikola Jokic (1), Draymond Green (1), Jonas Valanciunas (1), Serge Ibaka (1), Chris Bosh (1), Clint Capela (1), Shaquille O'Neal (1), Myles Turner (1), Jameer Nelson (1), Julius Randle (1), Domantas Sabonis (1), Amar'e Stoudemire (1), Mo Williams (1), Marcin Gortat (1), Steven Adams (1), Boris Diaw (1), Nene (1), Yao Ming (1), Jarrett Jack (1), Kenyon Martin (1), JaVale McGee (1), Tony Allen (1), Mason Plumlee (1), Darren Collison (1), Enes Freedom (1), Jarrett Allen (1), Michael Porter Jr. (1), Zydrunas Ilgauskas (2), Derrick Favors (2), Ivica Zubac (2), Gordon Hayward (2), Ish Smith (2), Deandre Ayton (2), Amir Johnson (2), Anderson Varejao (2), Ersan Ilyasova (2), Kenneth Faried (2), Mitchell Robinson (2), Alex Len (2), JJ Hickson (2), Jalen Duren (2), Eddy Curry (2), Dwight Powell (2), Montrezl Harrell (2), Carlos Arroyo (2), Tony Battie (2), JaMychal Green (2), Daniel Gafford (2), Jared Dudley (2), Dikembe Mutombo (2), Desmond Mason (3), Jaden McDaniels (3), Chet Holmgren (3), Dante Cunningham (3), Matas Buzelis (3), Jonathan Kuminga (3), Jonas Jerebko (3), Richaun Holmes (3), Robert Williams III (3), Bobby Jackson (3), Nenad Krstic (3), Mark Williams (3), Brandan Wright (3), Thomas Bryant (3), Goga Bitadze (3), Walker Kessler (3), Mikki Moore (3), Paul Reed (3), Jaxson Hayes (3), Brandon Clarke (3), Nick Richards (3), Tony Snell (3), Jarron Collins (3), Keon Clark (4), Fabricio Oberto (4), Josh Boone (4), Lance Thomas (4), Keita Bates-Diop (4), Chimezie Metu (4), Andrew Nicholson (4), Dereck Lively II (4), Trayce Jackson-Davis (4), Derrick Brown (4), Kai Jones (5)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who made 8 or more field goals in a game without a miss.**
+
+176 valid answers, difficulty **medium**, tiers: 1: 56, 2: 50, 3: 45, 4: 24, 5: 1 (25 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dwight Howard (1), Chris Paul (1), Tim Duncan (1), Pau Gasol (1), Joel Embiid (1), Steve Nash (1), Andre Drummond (1), Rudy Gobert (1), Tony Parker (1), DeAndre Jordan (1), Tyson Chandler (1), Mike Conley (1), Al Horford (1), Giannis Antetokounmpo (1), Nikola Jokic (1), Draymond Green (1), Jonas Valanciunas (1), Vince Carter (1), Serge Ibaka (1), Karl-Anthony Towns (1), Jamal Crawford (1), Jose Calderon (1), Chris Bosh (1), Marc Gasol (1), Clint Capela (1), Shaquille O'Neal (1), Myles Turner (1), David Lee (1), Jameer Nelson (1), Julius Randle (1), Domantas Sabonis (1), Amar'e Stoudemire (1), Samuel Dalembert (1), Mo Williams (1), Marcin Gortat (1), Steven Adams (1), Boris Diaw (1), T.J. McConnell (1), Richard Jefferson (1), Nene (1), Devin Harris (1), Yao Ming (1), Jarrett Jack (1), Kenyon Martin (1), Bam Adebayo (1), Luke Ridnour (1), JaVale McGee (1), Jeff Green (1), Tony Allen (1), Mason Plumlee (1), Darren Collison (1), Enes Freedom (1), Taj Gibson (1), Jarrett Allen (1), Michael Porter Jr. (1), Drew Gooden (1), Zydrunas Ilgauskas (2), Derrick Favors (2), J.J. Barea (2), Hassan Whiteside (2), Troy Murphy (2), Tyus Jones (2), Kentavious Caldwell-Pope (2), Ivica Zubac (2), Gordon Hayward (2), Kyle Korver (2), Ish Smith (2), Kendrick Perkins (2), Tayshaun Prince (2), Deandre Ayton (2), Amir Johnson (2), Ben Simmons (2), Anderson Varejao (2), Ersan Ilyasova (2), Bojan Bogdanovic (2), Mehmet Okur (2), Trey Murphy III (2), Ed Davis (2), Jakob Poeltl (2), Kris Humphries (2), Michael Finley (2), Kenneth Faried (2), Mitchell Robinson (2), Andrew Bynum (2), Andris Biedrins (2), Alex Len (2), T.J. Warren (2), JJ Hickson (2), Kosta Koufos (2), Jalen Duren (2), Eddy Curry (2), Nate Robinson (2), Evan Mobley (2), Dwight Powell (2), Montrezl Harrell (2), Carlos Arroyo (2), Cody Zeller (2), Tony Battie (2), JaMychal Green (2), Daniel Gafford (2), Bogdan Bogdanovic (2), Jared Dudley (2), Dikembe Mutombo (2), Nic Claxton (2), P.J. Washington (2), John Stockton (2), Stromile Swift (3), Desmond Mason (3), Patrick Patterson (3), Jaden McDaniels (3), Bruce Bowen (3), Chet Holmgren (3), Naz Reid (3), Dante Cunningham (3), Lorenzen Wright (3), Jason Maxiell (3), Matas Buzelis (3), Jonathan Kuminga (3), Jonas Jerebko (3), Richaun Holmes (3), Robert Williams III (3), Jodie Meeks (3), Isaiah Stewart (3), Luke Kennard (3), Jordan Hill (3), Bobby Jackson (3), Nenad Krstic (3), Mark Williams (3), Trenton Hassell (3), Markelle Fultz (3), Marvin Bagley III (3), Torrey Craig (3), Brandan Wright (3), Aaron Nesmith (3), Thomas Bryant (3), Goga Bitadze (3), Ajay Mitchell (3), Walker Kessler (3), Mikki Moore (3), Paul Reed (3), Jaxson Hayes (3), Brandon Clarke (3), Nick Richards (3), Tony Snell (3), Jarron Collins (3), Moritz Wagner (3), David Robinson (3), Donovan Clingan (3), Alonzo Gee (3), Gary Payton II (3), Derik Queen (3), Keon Clark (4), Isaiah Jackson (4), Fabricio Oberto (4), Josh Boone (4), Adrian Griffin (4), Ian Clark (4), Lance Thomas (4), Tony Bradley (4), Damian Jones (4), Keita Bates-Diop (4), Chimezie Metu (4), Andrew Nicholson (4), Dereck Lively II (4), Sonny Weems (4), Trayce Jackson-Davis (4), Cheick Diallo (4), Bruno Fernando (4), Jan Vesely (4), Derrick Brown (4), Popeye Jones (4), Ryan Kalkbrenner (4), Monty Williams (4), Qyntel Woods (4), Jordan Walsh (4), Kai Jones (5)
+
+</details>
+
+### `five-by-n`
+
+**Since 2001-02 (through 2025-26), name a player who recorded at least 3 points, rebounds, assists, steals and blocks in the same game.**
+
+252 valid answers, difficulty **easy**, tiers: 1: 103, 2: 79, 3: 48, 4: 20, 5: 2 (22 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Chris Paul (1), Tim Duncan (1), Russell Westbrook (1), Luka Doncic (1), Pau Gasol (1), Joel Embiid (1), Dirk Nowitzki (1), Kevin Garnett (1), Ben Wallace (1), Stephen Curry (1), Anthony Davis (1), Shai Gilgeous-Alexander (1), Andre Drummond (1), Rajon Rondo (1), Damian Lillard (1), Brook Lopez (1), Rudy Gobert (1), Jason Kidd (1), Tracy McGrady (1), Josh Smith (1), Kyle Lowry (1), Dwyane Wade (1), Tyson Chandler (1), Nikola Vucevic (1), Andre Miller (1), Paul Pierce (1), Zach Randolph (1), Shawn Marion (1), Al Horford (1), Giannis Antetokounmpo (1), Jrue Holiday (1), Nikola Jokic (1), Andrei Kirilenko (1), Andre Iguodala (1), Draymond Green (1), LaMarcus Aldridge (1), John Wall (1), Paul George (1), Vince Carter (1), Paul Millsap (1), Serge Ibaka (1), Anthony Edwards (1), Elton Brand (1), Carlos Boozer (1), Marcus Camby (1), Kyrie Irving (1), Karl-Anthony Towns (1), Tyrese Maxey (1), Donovan Mitchell (1), Baron Davis (1), Kawhi Leonard (1), Marc Gasol (1), Al Jefferson (1), Shaquille O'Neal (1), Jeff Teague (1), Jimmy Butler III (1), Lamar Odom (1), DeMarcus Cousins (1), Thaddeus Young (1), CJ McCollum (1), Julius Randle (1), De'Aaron Fox (1), David West (1), Rudy Gay (1), Tobias Harris (1), Amar'e Stoudemire (1), Metta World Peace (1), Cade Cunningham (1), Mike Bibby (1), Danny Granger (1), Kemba Walker (1), Shane Battier (1), Monta Ellis (1), Jermaine O'Neal (1), Marcin Gortat (1), Steven Adams (1), Rasheed Wallace (1), Boris Diaw (1), Gerald Wallace (1), LaMelo Ball (1), Nicolas Batum (1), Richard Jefferson (1), Nene (1), Jarrett Jack (1), Joakim Noah (1), Blake Griffin (1), Victor Wembanyama (1), Kenyon Martin (1), Andrew Bogut (1), Brandon Ingram (1), Andrew Wiggins (1), Bam Adebayo (1), Chris Webber (1), Pascal Siakam (1), Eric Bledsoe (1), Marcus Smart (1), Jarrett Allen (1), Karl Malone (1), Desmond Bane (2), Robert Covington (2), Jamaal Tinsley (2), Rashard Lewis (2), Derrick Favors (2), Jusuf Nurkic (2), Kristaps Porzingis (2), Fred VanVleet (2), Victor Oladipo (2), Hassan Whiteside (2), Kurt Thomas (2), Troy Murphy (2), Tyrese Haliburton (2), Brad Miller (2), Brandon Roy (2), Rafer Alston (2), Jaren Jackson Jr. (2), George Hill (2), Dejounte Murray (2), Kyle Korver (2), Thabo Sefolosha (2), Tayshaun Prince (2), Deandre Ayton (2), Amir Johnson (2), Ben Simmons (2), Cuttino Mobley (2), Derrick White (2), Wesley Matthews (2), Mehmet Okur (2), Josh Hart (2), Shareef Abdur-Rahim (2), Kyle Anderson (2), Jakob Poeltl (2), Alperen Sengun (2), Nerlens Noel (2), Al-Farouq Aminu (2), Buddy Hield (2), Mikal Bridges (2), Antonio McDyess (2), James Johnson (2), Kris Humphries (2), Nickeil Alexander-Walker (2), Ricky Davis (2), P.J. Brown (2), Jae Crowder (2), Michael Finley (2), Markieff Morris (2), Spencer Hawes (2), John Salmons (2), Wendell Carter Jr. (2), Kelly Oubre Jr. (2), Dillon Brooks (2), Mitchell Robinson (2), Andris Biedrins (2), Kenny Thomas (2), Scottie Barnes (2), T.J. Warren (2), Grant Hill (2), Larry Nance Jr. (2), Kosta Koufos (2), Royce O'Neale (2), Kris Dunn (2), Donyell Marshall (2), Nate Robinson (2), Alex Caruso (2), Evan Mobley (2), Andray Blatche (2), Brent Barry (2), Isaiah Hartenstein (2), Eddie Jones (2), Robert Horry (2), Lonzo Ball (2), Amen Thompson (2), Michael Carter-Williams (2), Nic Claxton (2), Delon Wright (2), Delonte West (2), P.J. Washington (2), Darrel Armstrong (2), Otto Porter Jr. (3), Chet Holmgren (3), Raja Bell (3), Wesley Johnson (3), Francisco Garcia (3), Dante Cunningham (3), Dorell Wright (3), Clifford Robinson (3), De'Anthony Melton (3), Bruce Brown (3), Jared Jeffries (3), Mark Blount (3), Raef LaFrentz (3), Glen Davis (3), Jabari Smith Jr. (3), Robert Williams III (3), Ronnie Brewer (3), Nikola Mirotic (3), Willie Cauley-Stein (3), Kyshawn George (3), Darius Miles (3), Devean George (3), Dyson Daniels (3), Vlade Divac (3), Jonathan Isaac (3), Quentin Grimes (3), Jalen Suggs (3), Herbert Jones (3), Daniel Theis (3), Josh Okogie (3), Elden Campbell (3), Kelvin Cato (3), Ekpe Udoh (3), Greg Ostertag (3), Corliss Williamson (3), Larry Sanders (3), Anfernee Hardaway (3), Luke Kornet (3), Ausar Thompson (3), Paul Reed (3), Andre Roberson (3), Brandon Clarke (3), Bilal Coulibaly (3), Brandon Rush (3), David Robinson (3), Frank Ntilikina (3), Miles McBride (3), Jarace Walker (3), Quinton Ross (4), Julian Champagnie (4), Anthony Randolph (4), Greg Stiemsma (4), George Lynch (4), Moussa Diabate (4), Will Riley (4), Dalano Banton (4), Isaiah Roby (4), Malachi Flynn (4), Craig Porter Jr. (4), Juan Toscano-Anderson (4), Collin Murray-Boyles (4), Hakeem Olajuwon (4), Jamir Watkins (4), Justin Hamilton (4), Romeo Langford (4), Arvydas Sabonis (4), Markel Brown (4), Eric Moreland (4), Wade Baldwin IV (5), Leaky Black (5)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who recorded at least 4 points, rebounds, assists, steals and blocks in the same game.**
+
+40 valid answers, difficulty **medium**, tiers: 1: 29, 2: 4, 3: 5, 4: 2 (2 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Ben Wallace (1), Anthony Davis (1), Andre Drummond (1), Brook Lopez (1), Jason Kidd (1), Josh Smith (1), Dwyane Wade (1), Shawn Marion (1), Giannis Antetokounmpo (1), Andrei Kirilenko (1), Draymond Green (1), Paul Millsap (1), Anthony Edwards (1), Elton Brand (1), Marcus Camby (1), Kawhi Leonard (1), Shaquille O'Neal (1), DeMarcus Cousins (1), Metta World Peace (1), Gerald Wallace (1), Nicolas Batum (1), Nene (1), Victor Wembanyama (1), Pascal Siakam (1), Eric Bledsoe (1), Jamaal Tinsley (2), Jusuf Nurkic (2), Fred VanVleet (2), Delon Wright (2), Dorell Wright (3), Willie Cauley-Stein (3), Darius Miles (3), Jonathan Isaac (3), Ausar Thompson (3), Juan Toscano-Anderson (4), Eric Moreland (4)
+
+</details>
+
+### `points-and-rebounds`
+
+**Since 2001-02 (through 2025-26), name a player who scored 30 or more points and grabbed 15 or more rebounds in the same game.**
+
+138 valid answers, difficulty **easy**, tiers: 1: 81, 2: 44, 3: 10, 4: 3 (3 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Dwight Howard (1), Kevin Durant (1), Kobe Bryant (1), Tim Duncan (1), Russell Westbrook (1), Luka Doncic (1), Pau Gasol (1), Joel Embiid (1), Dirk Nowitzki (1), Kevin Garnett (1), Stephen Curry (1), Anthony Davis (1), Andre Drummond (1), Brook Lopez (1), Rudy Gobert (1), Carmelo Anthony (1), Tracy McGrady (1), Josh Smith (1), Dwyane Wade (1), Nikola Vucevic (1), Paul Pierce (1), Zach Randolph (1), Shawn Marion (1), Al Horford (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), Jayson Tatum (1), Draymond Green (1), LaMarcus Aldridge (1), Jonas Valanciunas (1), Paul George (1), Vince Carter (1), Paul Millsap (1), Elton Brand (1), Jaylen Brown (1), Carlos Boozer (1), Marcus Camby (1), Karl-Anthony Towns (1), Chris Bosh (1), Kawhi Leonard (1), Al Jefferson (1), Shaquille O'Neal (1), Jimmy Butler III (1), Lamar Odom (1), Manu Ginobili (1), Myles Turner (1), Zion Williamson (1), DeMarcus Cousins (1), David Lee (1), Lauri Markkanen (1), Julius Randle (1), David West (1), Domantas Sabonis (1), Tobias Harris (1), Amar'e Stoudemire (1), Antawn Jamison (1), Paolo Banchero (1), Danny Granger (1), Jermaine O'Neal (1), Marcin Gortat (1), Rasheed Wallace (1), Gerald Wallace (1), Yao Ming (1), Joakim Noah (1), Blake Griffin (1), Victor Wembanyama (1), Andrew Bogut (1), Brandon Ingram (1), Bam Adebayo (1), Chris Webber (1), JaVale McGee (1), Pascal Siakam (1), Enes Freedom (1), Deni Avdija (1), Jarrett Allen (1), Michael Porter Jr. (1), Khris Middleton (1), Drew Gooden (1), Zydrunas Ilgauskas (2), Rashard Lewis (2), Jusuf Nurkic (2), Austin Reaves (2), Kristaps Porzingis (2), Hassan Whiteside (2), Kurt Thomas (2), Troy Murphy (2), Brad Miller (2), Caron Butler (2), Ivica Zubac (2), Jalen Johnson (2), Greg Monroe (2), Deandre Ayton (2), Ben Simmons (2), Luis Scola (2), Antoine Walker (2), Aaron Gordon (2), Anderson Varejao (2), John Collins (2), Mehmet Okur (2), Trey Murphy III (2), Shareef Abdur-Rahim (2), Nazr Mohammed (2), Mike Miller (2), Jakob Poeltl (2), Alperen Sengun (2), Miles Bridges (2), Kris Humphries (2), Christian Wood (2), Wendell Carter Jr. (2), Andrew Bynum (2), Scottie Barnes (2), Alex Len (2), JJ Hickson (2), Jalen Duren (2), Quentin Richardson (2), Donyell Marshall (2), Kwame Brown (2), Evan Mobley (2), Andray Blatche (2), Isaiah Hartenstein (2), Daniel Gafford (2), Chris Wilcox (2), Lorenzen Wright (3), Aron Baynes (3), Nikola Mirotic (3), Chris Boucher (3), Kelenna Azubuike (3), Jared Sullinger (3), Michael Olowokandi (3), Marcus Fizer (3), Moritz Wagner (3), Derik Queen (3), Kyle Filipowski (4), Boban Marjanovic (4), Zach Edey (4)
+
+</details>
+
+### `points-and-assists`
+
+**Since 2001-02 (through 2025-26), name a player who scored 30 or more points and recorded 10 or more assists in the same game.**
+
+169 valid answers, difficulty **easy**, tiers: 1: 101, 2: 51, 3: 13, 4: 4 (4 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kevin Durant (1), Kobe Bryant (1), Chris Paul (1), Russell Westbrook (1), Luka Doncic (1), Joel Embiid (1), Dirk Nowitzki (1), Kevin Garnett (1), Steve Nash (1), Allen Iverson (1), Stephen Curry (1), Shai Gilgeous-Alexander (1), Rajon Rondo (1), Damian Lillard (1), Jason Kidd (1), Carmelo Anthony (1), Tony Parker (1), Tracy McGrady (1), DeMar DeRozan (1), Kyle Lowry (1), Dwyane Wade (1), Nikola Vucevic (1), Andre Miller (1), Paul Pierce (1), Mike Conley (1), Bradley Beal (1), Deron Williams (1), Giannis Antetokounmpo (1), Jrue Holiday (1), Kevin Love (1), Nikola Jokic (1), Jayson Tatum (1), Andre Iguodala (1), Trae Young (1), Joe Johnson (1), John Wall (1), Gilbert Arenas (1), Paul George (1), Vince Carter (1), Isaiah Thomas (1), Anthony Edwards (1), Chauncey Billups (1), Jalen Brunson (1), Kyrie Irving (1), Karl-Anthony Towns (1), Tyrese Maxey (1), Donovan Mitchell (1), Baron Davis (1), Jamal Crawford (1), Ricky Rubio (1), Kawhi Leonard (1), Raymond Felton (1), Devin Booker (1), Jason Terry (1), Jeff Teague (1), Jimmy Butler III (1), Lamar Odom (1), Ja Morant (1), Zach LaVine (1), Manu Ginobili (1), Dennis Schroder (1), Zion Williamson (1), DeMarcus Cousins (1), David Lee (1), Jameer Nelson (1), CJ McCollum (1), Julius Randle (1), Goran Dragic (1), De'Aaron Fox (1), Domantas Sabonis (1), Kirk Hinrich (1), Cade Cunningham (1), Mike Bibby (1), Paolo Banchero (1), Kemba Walker (1), Mo Williams (1), Monta Ellis (1), Derrick Rose (1), Jamal Murray (1), LaMelo Ball (1), Lou Williams (1), Richard Jefferson (1), Devin Harris (1), Jarrett Jack (1), Richard Hamilton (1), Blake Griffin (1), Victor Wembanyama (1), Brandon Ingram (1), Bam Adebayo (1), Reggie Jackson (1), D'Angelo Russell (1), Collin Sexton (1), Luke Ridnour (1), Stephon Marbury (1), Pascal Siakam (1), Eric Bledsoe (1), Deni Avdija (1), Franz Wagner (1), Tyler Herro (1), Desmond Bane (2), Jamaal Tinsley (2), Ty Lawson (2), J.J. Barea (2), Austin Reaves (2), Jason Williams (2), Fred VanVleet (2), Victor Oladipo (2), Tyrese Haliburton (2), Spencer Dinwiddie (2), Brandon Roy (2), Anfernee Simons (2), Stephen Jackson (2), Brandon Jennings (2), Jalen Johnson (2), Dejounte Murray (2), Hedo Turkoglu (2), Elfrid Payton (2), Gary Payton (2), Ben Simmons (2), Sam Cassell (2), Darius Garland (2), Antoine Walker (2), Jalen Rose (2), Jalen Green (2), Tyreke Evans (2), Larry Hughes (2), Ramon Sessions (2), Steve Francis (2), Derrick White (2), Jamal Mashburn (2), Malcolm Brogdon (2), Alperen Sengun (2), T.J. Ford (2), Terry Rozier (2), RJ Barrett (2), Caris LeVert (2), Ricky Davis (2), Antonio Daniels (2), Mike James (2002-2014) (2), Patty Mills (2), Randy Foye (2), Jeremy Lin (2), Scottie Barnes (2), Brandon Knight (2), Kevin Porter Jr. (2), Nate Robinson (2), Brent Barry (2), Nick Van Exel (2), Cameron Payne (2), Delonte West (2), Ryan Rollins (3), Immanuel Quickley (3), Andrew Nembhard (3), Payton Pritchard (3), Trey Burke (3), Stephon Castle (3), VJ Edgecombe (3), Troy Hudson (3), Naji Marshall (3), Talen Horton-Tucker (3), Collin Gillespie (3), Jevon Carter (3), Derik Queen (3), Scotty Pippen Jr. (4), Jared McCain (4), Ousmane Dieng (4), Rayan Rupert (4)
+
+</details>
+
+### `rebounds-per-game`
+
+**Since 2001-02 (through 2025-26), name a player who averaged 10 or more rebounds per game in a regular season (minimum 40 games).**
+
+82 valid answers, difficulty **easy**, tiers: 1: 51, 2: 26, 3: 5 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dwight Howard (1), Tim Duncan (1), Russell Westbrook (1), Pau Gasol (1), Joel Embiid (1), Kevin Garnett (1), Ben Wallace (1), Anthony Davis (1), Andre Drummond (1), Rudy Gobert (1), DeAndre Jordan (1), Tyson Chandler (1), Nikola Vucevic (1), Zach Randolph (1), Shawn Marion (1), Al Horford (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), LaMarcus Aldridge (1), Jonas Valanciunas (1), Elton Brand (1), Carlos Boozer (1), Marcus Camby (1), Karl-Anthony Towns (1), Chris Bosh (1), Clint Capela (1), Al Jefferson (1), Shaquille O'Neal (1), Lamar Odom (1), DeMarcus Cousins (1), David Lee (1), Julius Randle (1), Domantas Sabonis (1), Tristan Thompson (1), Antawn Jamison (1), Samuel Dalembert (1), Jermaine O'Neal (1), Marcin Gortat (1), Steven Adams (1), Gerald Wallace (1), Yao Ming (1), Joakim Noah (1), Blake Griffin (1), Victor Wembanyama (1), Andrew Bogut (1), Bam Adebayo (1), Chris Webber (1), Enes Freedom (1), Jarrett Allen (1), Reggie Evans (1), Emeka Okafor (2), Jusuf Nurkic (2), Hassan Whiteside (2), Kurt Thomas (2), Troy Murphy (2), Chris Kaman (2), Brad Miller (2), Ivica Zubac (2), Erick Dampier (2), Jalen Johnson (2), Greg Monroe (2), Deandre Ayton (2), John Collins (2), Alperen Sengun (2), Kris Humphries (2), Christian Wood (2), Jamaal Magloire (2), Wendell Carter Jr. (2), Andrew Bynum (2), Andris Biedrins (2), Kenny Thomas (2), JJ Hickson (2), Omer Asik (2), Jalen Duren (2), Isaiah Hartenstein (2), Dikembe Mutombo (2), Mark Williams (3), Brian Grant (3), Walker Kessler (3), Danny Fortson (3), Donovan Clingan (3)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who averaged 11 or more rebounds per game in a regular season (minimum 40 games).**
+
+52 valid answers, difficulty **easy**, tiers: 1: 37, 2: 12, 3: 3 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dwight Howard (1), Tim Duncan (1), Russell Westbrook (1), Pau Gasol (1), Joel Embiid (1), Kevin Garnett (1), Ben Wallace (1), Anthony Davis (1), Andre Drummond (1), Rudy Gobert (1), DeAndre Jordan (1), Tyson Chandler (1), Nikola Vucevic (1), Zach Randolph (1), Shawn Marion (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), LaMarcus Aldridge (1), Jonas Valanciunas (1), Elton Brand (1), Carlos Boozer (1), Marcus Camby (1), Karl-Anthony Towns (1), Clint Capela (1), Al Jefferson (1), Shaquille O'Neal (1), DeMarcus Cousins (1), David Lee (1), Domantas Sabonis (1), Steven Adams (1), Joakim Noah (1), Blake Griffin (1), Victor Wembanyama (1), Andrew Bogut (1), Enes Freedom (1), Reggie Evans (1), Emeka Okafor (2), Jusuf Nurkic (2), Hassan Whiteside (2), Troy Murphy (2), Chris Kaman (2), Ivica Zubac (2), Erick Dampier (2), Deandre Ayton (2), Andrew Bynum (2), Andris Biedrins (2), Omer Asik (2), Jalen Duren (2), Walker Kessler (3), Danny Fortson (3), Donovan Clingan (3)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who averaged 12 or more rebounds per game in a regular season (minimum 40 games).**
+
+25 valid answers, difficulty **medium**, tiers: 1: 21, 2: 3, 3: 1 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dwight Howard (1), Tim Duncan (1), Joel Embiid (1), Kevin Garnett (1), Ben Wallace (1), Anthony Davis (1), Andre Drummond (1), Rudy Gobert (1), DeAndre Jordan (1), Tyson Chandler (1), Nikola Vucevic (1), Zach Randolph (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), Jonas Valanciunas (1), Marcus Camby (1), Karl-Anthony Towns (1), Clint Capela (1), DeMarcus Cousins (1), Domantas Sabonis (1), Hassan Whiteside (2), Chris Kaman (2), Ivica Zubac (2), Walker Kessler (3)
+
+</details>
+
+### `assists-per-game`
+
+**Since 2001-02 (through 2025-26), name a player who averaged 8 or more assists per game in a regular season (minimum 40 games).**
+
+42 valid answers, difficulty **easy**, tiers: 1: 28, 2: 13, 3: 1 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Chris Paul (1), Russell Westbrook (1), Luka Doncic (1), Steve Nash (1), Stephen Curry (1), Rajon Rondo (1), Damian Lillard (1), Jason Kidd (1), Kyle Lowry (1), Andre Miller (1), Deron Williams (1), Jrue Holiday (1), Nikola Jokic (1), Trae Young (1), Draymond Green (1), John Wall (1), Chauncey Billups (1), Baron Davis (1), Jose Calderon (1), Ricky Rubio (1), Raymond Felton (1), Jeff Teague (1), Ja Morant (1), Domantas Sabonis (1), Cade Cunningham (1), Stephon Marbury (1), Jamaal Tinsley (2), Ty Lawson (2), Jason Williams (2), Fred VanVleet (2), Tyrese Haliburton (2), Dejounte Murray (2), Gary Payton (2), Ben Simmons (2), Darius Garland (2), Brevin Knight (2), Josh Giddey (2), Greivis Vasquez (2), John Stockton (2), Kendall Marshall (3)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a player who averaged 9 or more assists per game in a regular season (minimum 40 games).**
+
+19 valid answers, difficulty **medium**, tiers: 1: 15, 2: 4 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Chris Paul (1), Russell Westbrook (1), Luka Doncic (1), Steve Nash (1), Rajon Rondo (1), Jason Kidd (1), Andre Miller (1), Deron Williams (1), Nikola Jokic (1), Trae Young (1), John Wall (1), Ricky Rubio (1), Cade Cunningham (1), Ty Lawson (2), Tyrese Haliburton (2), Dejounte Murray (2), Josh Giddey (2)
+
+</details>
+
+### `steals-per-game`
+
+**Since 2001-02 (through 2025-26), name a player who averaged 2 or more steals per game in a regular season (minimum 40 games).**
+
+41 valid answers, difficulty **easy**, tiers: 1: 30, 2: 8, 3: 3 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+LeBron James (1), James Harden (1), Kobe Bryant (1), Chris Paul (1), Russell Westbrook (1), Allen Iverson (1), Stephen Curry (1), Shai Gilgeous-Alexander (1), Rajon Rondo (1), Jason Kidd (1), Kyle Lowry (1), Dwyane Wade (1), Mike Conley (1), Shawn Marion (1), Andre Iguodala (1), Draymond Green (1), John Wall (1), Gilbert Arenas (1), Paul George (1), Baron Davis (1), Ricky Rubio (1), Kawhi Leonard (1), Jimmy Butler III (1), Thaddeus Young (1), De'Aaron Fox (1), Metta World Peace (1), Monta Ellis (1), Gerald Wallace (1), Eric Bledsoe (1), Tony Allen (1), Jamaal Tinsley (2), Victor Oladipo (2), Caron Butler (2), Dejounte Murray (2), Ben Simmons (2), Larry Hughes (2), Brevin Knight (2), Kris Dunn (2), Doug Christie (3), Dyson Daniels (3), Ausar Thompson (3)
+
+</details>
+
+### `blocks-per-game`
+
+**Since 2001-02 (through 2025-26), name a player who averaged 2 or more blocks per game in a regular season (minimum 40 games).**
+
+56 valid answers, difficulty **easy**, tiers: 1: 26, 2: 19, 3: 11 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dwight Howard (1), Tim Duncan (1), Pau Gasol (1), Kevin Garnett (1), Ben Wallace (1), Anthony Davis (1), Brook Lopez (1), Rudy Gobert (1), Josh Smith (1), DeAndre Jordan (1), Andrei Kirilenko (1), Serge Ibaka (1), Elton Brand (1), Marcus Camby (1), Clint Capela (1), Shaquille O'Neal (1), Myles Turner (1), Amar'e Stoudemire (1), Samuel Dalembert (1), Jermaine O'Neal (1), Gerald Wallace (1), Yao Ming (1), Joakim Noah (1), Victor Wembanyama (1), Andrew Bogut (1), JaVale McGee (1), Zydrunas Ilgauskas (2), Emeka Okafor (2), Kristaps Porzingis (2), Brendan Haywood (2), Hassan Whiteside (2), Roy Hibbert (2), Chris Kaman (2), Erick Dampier (2), Jaren Jackson Jr. (2), Chris Andersen (2), Nerlens Noel (2), Theo Ratliff (2), Mitchell Robinson (2), Rasho Nesterovic (2), Joel Przybilla (2), Adonal Foyle (2), Daniel Gafford (2), Dikembe Mutombo (2), Nic Claxton (2), Chet Holmgren (3), John Henson (3), Darko Milicic (3), Ronny Turiaf (3), Raef LaFrentz (3), Alonzo Mourning (3), Robert Williams III (3), Eddie Griffin (3), Larry Sanders (3), Walker Kessler (3), Shawn Bradley (3)
+
+</details>
+
+### `double-double-average`
+
+**Since 2001-02 (through 2025-26), name a player who averaged a double-double (10 or more points and 10 or more rebounds per game) in a regular season (minimum 40 games).**
+
+79 valid answers, difficulty **easy**, tiers: 1: 48, 2: 26, 3: 5 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Dwight Howard (1), Tim Duncan (1), Russell Westbrook (1), Pau Gasol (1), Joel Embiid (1), Kevin Garnett (1), Anthony Davis (1), Andre Drummond (1), Rudy Gobert (1), DeAndre Jordan (1), Tyson Chandler (1), Nikola Vucevic (1), Zach Randolph (1), Shawn Marion (1), Al Horford (1), Giannis Antetokounmpo (1), Kevin Love (1), Nikola Jokic (1), LaMarcus Aldridge (1), Jonas Valanciunas (1), Elton Brand (1), Carlos Boozer (1), Marcus Camby (1), Karl-Anthony Towns (1), Chris Bosh (1), Clint Capela (1), Al Jefferson (1), Shaquille O'Neal (1), Lamar Odom (1), DeMarcus Cousins (1), David Lee (1), Julius Randle (1), Domantas Sabonis (1), Tristan Thompson (1), Antawn Jamison (1), Samuel Dalembert (1), Jermaine O'Neal (1), Marcin Gortat (1), Gerald Wallace (1), Yao Ming (1), Joakim Noah (1), Blake Griffin (1), Victor Wembanyama (1), Andrew Bogut (1), Bam Adebayo (1), Chris Webber (1), Enes Freedom (1), Jarrett Allen (1), Emeka Okafor (2), Jusuf Nurkic (2), Hassan Whiteside (2), Kurt Thomas (2), Troy Murphy (2), Chris Kaman (2), Brad Miller (2), Ivica Zubac (2), Erick Dampier (2), Jalen Johnson (2), Greg Monroe (2), Deandre Ayton (2), John Collins (2), Alperen Sengun (2), Kris Humphries (2), Christian Wood (2), Jamaal Magloire (2), Wendell Carter Jr. (2), Andrew Bynum (2), Andris Biedrins (2), Kenny Thomas (2), JJ Hickson (2), Omer Asik (2), Jalen Duren (2), Isaiah Hartenstein (2), Dikembe Mutombo (2), Mark Williams (3), Brian Grant (3), Walker Kessler (3), Danny Fortson (3), Donovan Clingan (3)
+
+</details>
+
 ## Team templates: examples
 
 Three candidates per template, from the shortest list to the longest. Each answer is shown as name (tier).
@@ -539,5 +1263,361 @@ Atlanta Hawks (1), Boston Celtics (1), Brooklyn Nets (1), Charlotte Hornets (1),
 <details><summary>All valid answers</summary>
 
 Atlanta Hawks (1), Boston Celtics (1), Brooklyn Nets (1), Charlotte Hornets (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New Orleans Pelicans (1), New York Knicks (1), Oklahoma City Thunder (1), Orlando Magic (1), Philadelphia 76ers (1), Phoenix Suns (1), Portland Trail Blazers (1), Sacramento Kings (1), San Antonio Spurs (1), Toronto Raptors (1), Utah Jazz (1), Washington Wizards (1)
+
+</details>
+
+### `losses-season`
+
+**Since 2001-02 (through 2025-26), name a team that lost 67 or more regular-season games in a season.**
+
+8 valid answers, difficulty **hard**, tiers: 1: 7, 4: 1 (1 at tier 4 or above).
+
+Qualified only under a historical name: Brooklyn Nets.
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Detroit Pistons (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), Philadelphia 76ers (1), Washington Wizards (1), Brooklyn Nets (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that lost 62 or more regular-season games in a season.**
+
+22 valid answers, difficulty **medium**, tiers: 1: 20, 4: 2 (2 at tier 4 or above).
+
+Qualified only under a historical name: New Orleans Pelicans, Oklahoma City Thunder.
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Brooklyn Nets (1), Charlotte Hornets (1), Cleveland Cavaliers (1), Denver Nuggets (1), Detroit Pistons (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Los Angeles Lakers (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New York Knicks (1), Orlando Magic (1), Philadelphia 76ers (1), Phoenix Suns (1), Sacramento Kings (1), Utah Jazz (1), Washington Wizards (1), New Orleans Pelicans (4), Oklahoma City Thunder (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that lost 55 or more regular-season games in a season.**
+
+30 valid answers, difficulty **easy**, tiers: 1: 30 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Brooklyn Nets (1), Charlotte Hornets (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New Orleans Pelicans (1), New York Knicks (1), Oklahoma City Thunder (1), Orlando Magic (1), Philadelphia 76ers (1), Phoenix Suns (1), Portland Trail Blazers (1), Sacramento Kings (1), San Antonio Spurs (1), Toronto Raptors (1), Utah Jazz (1), Washington Wizards (1)
+
+</details>
+
+### `road-wins`
+
+**Since 2001-02 (through 2025-26), name a team that won 26 or more road games in a regular season.**
+
+22 valid answers, difficulty **easy**, tiers: 1: 22 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Boston Celtics (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New Orleans Pelicans (1), Oklahoma City Thunder (1), Orlando Magic (1), Philadelphia 76ers (1), Phoenix Suns (1), San Antonio Spurs (1), Toronto Raptors (1)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that won 28 or more road games in a regular season.**
+
+12 valid answers, difficulty **easy**, tiers: 1: 12 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Boston Celtics (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Detroit Pistons (1), Golden State Warriors (1), Houston Rockets (1), Los Angeles Lakers (1), Miami Heat (1), New Orleans Pelicans (1), Oklahoma City Thunder (1), Phoenix Suns (1), San Antonio Spurs (1)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that won 30 or more road games in a regular season.**
+
+8 valid answers, difficulty **medium**, tiers: 1: 8 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Boston Celtics (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Golden State Warriors (1), Houston Rockets (1), Oklahoma City Thunder (1), Phoenix Suns (1), San Antonio Spurs (1)
+
+</details>
+
+### `home-wins`
+
+**Since 2001-02 (through 2025-26), name a team that won 36 or more home games in a regular season.**
+
+13 valid answers, difficulty **easy**, tiers: 1: 13 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Boston Celtics (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Los Angeles Lakers (1), Miami Heat (1), Oklahoma City Thunder (1), Sacramento Kings (1), San Antonio Spurs (1), Utah Jazz (1)
+
+</details>
+
+### `points-playoff-team`
+
+**Since 2001-02 (through 2025-26), name a team that scored 145 or more points in a playoff game.**
+
+5 valid answers, difficulty **medium**, tiers: 1: 5 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Denver Nuggets (1), LA Clippers (1), Oklahoma City Thunder (1), Philadelphia 76ers (1), Toronto Raptors (1)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that scored 135 or more points in a playoff game.**
+
+20 valid answers, difficulty **easy**, tiers: 1: 20 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Brooklyn Nets (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Golden State Warriors (1), Indiana Pacers (1), LA Clippers (1), Los Angeles Lakers (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New York Knicks (1), Oklahoma City Thunder (1), Philadelphia 76ers (1), Phoenix Suns (1), Portland Trail Blazers (1), Sacramento Kings (1), San Antonio Spurs (1), Toronto Raptors (1), Utah Jazz (1)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that scored 130 or more points in a playoff game.**
+
+26 valid answers, difficulty **easy**, tiers: 1: 26 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Brooklyn Nets (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New Orleans Pelicans (1), New York Knicks (1), Oklahoma City Thunder (1), Philadelphia 76ers (1), Phoenix Suns (1), Portland Trail Blazers (1), Sacramento Kings (1), San Antonio Spurs (1), Toronto Raptors (1), Utah Jazz (1)
+
+</details>
+
+### `points-any-game`
+
+**Since 2001-02 (through 2025-26), name a team that scored 150 or more points in a game, overtime included.**
+
+25 valid answers, difficulty **easy**, tiers: 1: 25 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Brooklyn Nets (1), Charlotte Hornets (1), Chicago Bulls (1), Denver Nuggets (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New Orleans Pelicans (1), New York Knicks (1), Oklahoma City Thunder (1), Philadelphia 76ers (1), Phoenix Suns (1), Sacramento Kings (1), San Antonio Spurs (1), Toronto Raptors (1), Utah Jazz (1), Washington Wizards (1)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that scored 155 or more points in a game, overtime included.**
+
+17 valid answers, difficulty **medium**, tiers: 1: 16, 4: 1 (1 at tier 4 or above).
+
+Qualified only under a historical name: Brooklyn Nets.
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Charlotte Hornets (1), Chicago Bulls (1), Denver Nuggets (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Memphis Grizzlies (1), New Orleans Pelicans (1), Philadelphia 76ers (1), Phoenix Suns (1), Sacramento Kings (1), San Antonio Spurs (1), Washington Wizards (1), Brooklyn Nets (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that scored 160 or more points in a game, overtime included.**
+
+7 valid answers, difficulty **medium**, tiers: 1: 7 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Chicago Bulls (1), Denver Nuggets (1), Indiana Pacers (1), LA Clippers (1), Phoenix Suns (1), Sacramento Kings (1)
+
+</details>
+
+### `win-margin-playoff`
+
+**Since 2001-02 (through 2025-26), name a team that won a playoff game by 35 or more points.**
+
+21 valid answers, difficulty **easy**, tiers: 1: 21 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Boston Celtics (1), Brooklyn Nets (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Golden State Warriors (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New York Knicks (1), Oklahoma City Thunder (1), Orlando Magic (1), Philadelphia 76ers (1), San Antonio Spurs (1), Toronto Raptors (1), Utah Jazz (1), Washington Wizards (1)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that won a playoff game by 40 or more points.**
+
+11 valid answers, difficulty **medium**, tiers: 1: 11 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Golden State Warriors (1), LA Clippers (1), Los Angeles Lakers (1), Minnesota Timberwolves (1), New York Knicks (1), Oklahoma City Thunder (1), Orlando Magic (1)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that won a playoff game by 45 or more points.**
+
+6 valid answers, difficulty **medium**, tiers: 1: 6 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Chicago Bulls (1), Cleveland Cavaliers (1), Denver Nuggets (1), Minnesota Timberwolves (1), New York Knicks (1), Oklahoma City Thunder (1)
+
+</details>
+
+### `held-opponent`
+
+**Since 2001-02 (through 2025-26), name a team that held an opponent to 60 or fewer points in a game.**
+
+14 valid answers, difficulty **hard**, tiers: 1: 11, 4: 3 (3 at tier 4 or above).
+
+Qualified only under a historical name: Brooklyn Nets, New Orleans Pelicans, Oklahoma City Thunder.
+
+<details><summary>All valid answers</summary>
+
+Boston Celtics (1), Chicago Bulls (1), Dallas Mavericks (1), Detroit Pistons (1), Indiana Pacers (1), Los Angeles Lakers (1), Minnesota Timberwolves (1), Philadelphia 76ers (1), Toronto Raptors (1), Utah Jazz (1), Washington Wizards (1), Brooklyn Nets (4), New Orleans Pelicans (4), Oklahoma City Thunder (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that held an opponent to 65 or fewer points in a game.**
+
+28 valid answers, difficulty **easy**, tiers: 1: 24, 4: 4 (4 at tier 4 or above).
+
+Qualified only under a historical name: Brooklyn Nets, Charlotte Hornets, New Orleans Pelicans, Oklahoma City Thunder.
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Chicago Bulls (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New York Knicks (1), Philadelphia 76ers (1), Phoenix Suns (1), Portland Trail Blazers (1), Sacramento Kings (1), San Antonio Spurs (1), Toronto Raptors (1), Utah Jazz (1), Washington Wizards (1), Brooklyn Nets (4), Charlotte Hornets (4), New Orleans Pelicans (4), Oklahoma City Thunder (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that held an opponent to 70 or fewer points in a game.**
+
+30 valid answers, difficulty **easy**, tiers: 1: 28, 4: 2 (2 at tier 4 or above).
+
+Qualified only under a historical name: Charlotte Hornets, New Orleans Pelicans.
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Brooklyn Nets (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New York Knicks (1), Oklahoma City Thunder (1), Orlando Magic (1), Philadelphia 76ers (1), Phoenix Suns (1), Portland Trail Blazers (1), Sacramento Kings (1), San Antonio Spurs (1), Toronto Raptors (1), Utah Jazz (1), Washington Wizards (1), Charlotte Hornets (4), New Orleans Pelicans (4)
+
+</details>
+
+### `threes-team`
+
+**Since 2001-02 (through 2025-26), name a team that made 24 or more three-pointers as a team in a game.**
+
+27 valid answers, difficulty **easy**, tiers: 1: 27 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Brooklyn Nets (1), Charlotte Hornets (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New Orleans Pelicans (1), New York Knicks (1), Oklahoma City Thunder (1), Orlando Magic (1), Philadelphia 76ers (1), Phoenix Suns (1), Portland Trail Blazers (1), Sacramento Kings (1), San Antonio Spurs (1), Toronto Raptors (1), Utah Jazz (1)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that made 26 or more three-pointers as a team in a game.**
+
+14 valid answers, difficulty **easy**, tiers: 1: 14 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Boston Celtics (1), Brooklyn Nets (1), Charlotte Hornets (1), Cleveland Cavaliers (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Memphis Grizzlies (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), Oklahoma City Thunder (1), Orlando Magic (1), Utah Jazz (1)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that made 28 or more three-pointers as a team in a game.**
+
+5 valid answers, difficulty **medium**, tiers: 1: 5 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Boston Celtics (1), Houston Rockets (1), Memphis Grizzlies (1), Milwaukee Bucks (1), Utah Jazz (1)
+
+</details>
+
+### `steals-team`
+
+**Since 2001-02 (through 2025-26), name a team that recorded 18 or more steals as a team in a game.**
+
+30 valid answers, difficulty **easy**, tiers: 1: 30 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Brooklyn Nets (1), Charlotte Hornets (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New Orleans Pelicans (1), New York Knicks (1), Oklahoma City Thunder (1), Orlando Magic (1), Philadelphia 76ers (1), Phoenix Suns (1), Portland Trail Blazers (1), Sacramento Kings (1), San Antonio Spurs (1), Toronto Raptors (1), Utah Jazz (1), Washington Wizards (1)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that recorded 20 or more steals as a team in a game.**
+
+19 valid answers, difficulty **medium**, tiers: 1: 18, 4: 1 (1 at tier 4 or above).
+
+Qualified only under a historical name: Charlotte Hornets.
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Dallas Mavericks (1), Golden State Warriors (1), Houston Rockets (1), LA Clippers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), New Orleans Pelicans (1), New York Knicks (1), Orlando Magic (1), Philadelphia 76ers (1), Portland Trail Blazers (1), Sacramento Kings (1), Toronto Raptors (1), Utah Jazz (1), Washington Wizards (1), Charlotte Hornets (4)
+
+</details>
+
+### `overtime-wins`
+
+**Since 2001-02 (through 2025-26), name a team that won a game that went to 2 or more overtimes.**
+
+30 valid answers, difficulty **easy**, tiers: 1: 30 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Brooklyn Nets (1), Charlotte Hornets (1), Chicago Bulls (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Houston Rockets (1), Indiana Pacers (1), LA Clippers (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), Minnesota Timberwolves (1), New Orleans Pelicans (1), New York Knicks (1), Oklahoma City Thunder (1), Orlando Magic (1), Philadelphia 76ers (1), Phoenix Suns (1), Portland Trail Blazers (1), Sacramento Kings (1), San Antonio Spurs (1), Toronto Raptors (1), Utah Jazz (1), Washington Wizards (1)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that won a game that went to 3 or more overtimes.**
+
+22 valid answers, difficulty **easy**, tiers: 1: 21, 4: 1 (1 at tier 4 or above).
+
+Qualified only under a historical name: Charlotte Hornets.
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Brooklyn Nets (1), Chicago Bulls (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Houston Rockets (1), Los Angeles Lakers (1), Memphis Grizzlies (1), Miami Heat (1), Milwaukee Bucks (1), New Orleans Pelicans (1), New York Knicks (1), Oklahoma City Thunder (1), Philadelphia 76ers (1), Portland Trail Blazers (1), Sacramento Kings (1), Toronto Raptors (1), Utah Jazz (1), Washington Wizards (1), Charlotte Hornets (4)
+
+</details>
+
+### `win-streak`
+
+**Since 2001-02 (through 2025-26), name a team that won 14 or more regular-season games in a row.**
+
+16 valid answers, difficulty **medium**, tiers: 1: 15, 4: 1 (1 at tier 4 or above).
+
+Qualified only under a historical name: Brooklyn Nets.
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Golden State Warriors (1), Houston Rockets (1), LA Clippers (1), Miami Heat (1), Milwaukee Bucks (1), Oklahoma City Thunder (1), Philadelphia 76ers (1), Phoenix Suns (1), San Antonio Spurs (1), Toronto Raptors (1), Brooklyn Nets (4)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that won 16 or more regular-season games in a row.**
+
+13 valid answers, difficulty **easy**, tiers: 1: 13 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Golden State Warriors (1), Houston Rockets (1), LA Clippers (1), Miami Heat (1), Milwaukee Bucks (1), Oklahoma City Thunder (1), Philadelphia 76ers (1), Phoenix Suns (1), San Antonio Spurs (1)
+
+</details>
+
+**Since 2001-02 (through 2025-26), name a team that won 18 or more regular-season games in a row.**
+
+8 valid answers, difficulty **medium**, tiers: 1: 8 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Atlanta Hawks (1), Boston Celtics (1), Golden State Warriors (1), Houston Rockets (1), Miami Heat (1), Milwaukee Bucks (1), Phoenix Suns (1), San Antonio Spurs (1)
+
+</details>
+
+### `champion`
+
+**Since 2001-02 (through 2025-26), name a team that won the NBA championship.**
+
+13 valid answers, difficulty **easy**, tiers: 1: 13 (0 at tier 4 or above).
+
+<details><summary>All valid answers</summary>
+
+Boston Celtics (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Los Angeles Lakers (1), Miami Heat (1), Milwaukee Bucks (1), New York Knicks (1), Oklahoma City Thunder (1), San Antonio Spurs (1), Toronto Raptors (1)
+
+</details>
+
+### `reached-finals`
+
+**Since 2001-02 (through 2025-26), name a team that reached the NBA Finals.**
+
+17 valid answers, difficulty **medium**, tiers: 1: 16, 4: 1 (1 at tier 4 or above).
+
+Qualified only under a historical name: Brooklyn Nets.
+
+<details><summary>All valid answers</summary>
+
+Boston Celtics (1), Cleveland Cavaliers (1), Dallas Mavericks (1), Denver Nuggets (1), Detroit Pistons (1), Golden State Warriors (1), Indiana Pacers (1), Los Angeles Lakers (1), Miami Heat (1), Milwaukee Bucks (1), New York Knicks (1), Oklahoma City Thunder (1), Orlando Magic (1), Phoenix Suns (1), San Antonio Spurs (1), Toronto Raptors (1), Brooklyn Nets (4)
 
 </details>
