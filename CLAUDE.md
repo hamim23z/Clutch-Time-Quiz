@@ -32,10 +32,12 @@ The repo may contain leftover files from an earlier concept (Clutch Time Quiz). 
 
 Filled in by sessions as they are built.
 
-- Pipeline: TBD
+- Install pipeline dependencies: `pip install -r pipeline/requirements.txt`
+- Pipeline (fetch + normalize, seasons 2002-2026): `python3 pipeline/run.py` from the repo root (about 90 s, run it as plain `python3`, not `python3 -I`). Downloads one season at a time, deletes the raw files it downloaded, writes the six tables `players`, `teams`, `games`, `player_games`, `team_games`, `officials` (parquet) and `summary.json` to `data/processed/`, and regenerates `docs/pipeline-notes.md`. Resumes if interrupted; `--force` redoes finished seasons, `--start 2024 --end 2024` picks seasons, `--keep-raw` keeps downloads. Hand-written aliases are in `pipeline/data/aliases.csv`.
 - Data spike 2 (Deep Cut): download per docs/data-source-boxscores.md, then `python3 pipeline/spike/boxscore_feasibility.py data/raw/boxscores` (counts and checks; output saved in docs/boxscore-feasibility-output.txt). Optional referee cross-check: `python3 pipeline/spike/referee_census.py data/raw/boxscores <out.parquet> 2002 2026`.
 - Website dev server: TBD
-- Tests: TBD
+- Pipeline tests: `cd pipeline && python3 -m pytest` (tiny synthetic samples, no downloads needed)
+- Tests: TBD (web)
 
 ## Conventions
 
