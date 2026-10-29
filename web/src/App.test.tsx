@@ -340,7 +340,7 @@ describe('a full dive', () => {
 
     // share: the line uses the dive number, is shown, and copies to the clipboard
     const preview = screen.getByLabelText('Your result');
-    expect(preview.textContent).toMatch(new RegExp(`^Deep Cut #1: ${expected}\\n.{7,21}$`, 's'));
+    expect(preview.textContent).toMatch(new RegExp(`^Deep Cut #1: ${expected}\\n.{7,21}\\nhttps://`, 's'));
     await user.click(screen.getByRole('button', { name: 'Copy result' }));
     expect(await navigator.clipboard.readText()).toBe(preview.textContent);
     expect(screen.getByTestId('announcer')).toHaveTextContent('Copied to the clipboard.');
@@ -415,7 +415,8 @@ describe('before the launch', () => {
     await screen.findByRole('combobox');
     await playWholeDive(user, divePrompts(mockPrompts(), 2));
     const keys = [...(storage as ReturnType<typeof memory>).data.keys()];
-    expect(keys).toEqual(['deepcut.preview.v1']); // never the real key
+    expect(keys.length).toBeGreaterThan(0);
+    expect(keys.every((k) => k.startsWith('deepcut.preview.'))).toBe(true); // never the real keys
   });
 
   it('ignores ?today=... without ?preview=1 and ignores a bad date', async () => {

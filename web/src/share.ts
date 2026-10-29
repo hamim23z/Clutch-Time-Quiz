@@ -1,4 +1,5 @@
 import type { PromptResult, Tier } from './types';
+import { SITE_URL } from './config';
 import { totalPoints } from './dive2';
 
 /** One colored square per tier, from the common answers (white) to the deepest cuts (purple); a miss is black. */
@@ -9,9 +10,9 @@ export function squareFor(result: PromptResult): string {
   return result.tier === null ? MISS_SQUARE : TIER_SQUARES[result.tier];
 }
 
-/** The text a player copies: "Deep Cut #12: 385" and one square per prompt. */
-export function shareLine(diveNumber: number, results: readonly PromptResult[]): string {
-  return `Deep Cut #${diveNumber}: ${totalPoints(results)}\n${results.map(squareFor).join('')}`;
+/** The text a player copies: "Deep Cut #12: 385", one square per prompt, and the address of the site. */
+export function shareLine(diveNumber: number, results: readonly PromptResult[], url: string = SITE_URL): string {
+  return `Deep Cut #${diveNumber}: ${totalPoints(results)}\n${results.map(squareFor).join('')}\n${url}`;
 }
 
 /** Copy text to the clipboard. Returns false when the browser does not allow it, so the page can show the text instead. */

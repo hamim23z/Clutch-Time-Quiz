@@ -96,3 +96,49 @@ describe('which prompts a dive number plays', () => {
     expect(() => diveIndex(1, 0)).toThrow();
   });
 });
+
+describe('midnight in New York, daylight saving and the launch', () => {
+  it('rolls the dive number over exactly at midnight in New York', () => {
+    expect(diveNumberOn(dateInZone(new Date('2026-11-03T04:59:59Z')))).toBe(0); // 11:59:59 pm on 2 November: not launched
+    expect(diveNumberOn(dateInZone(new Date('2026-11-03T05:00:00Z')))).toBe(1); // midnight: dive #1
+    expect(diveNumberOn(dateInZone(new Date('2026-11-04T04:59:59Z')))).toBe(1);
+    expect(diveNumberOn(dateInZone(new Date('2026-11-04T05:00:00Z')))).toBe(2);
+  });
+
+  it('keeps rolling at midnight New York time through the spring clock change (clocks go forward on 14 March 2027)', () => {
+    // EST is UTC-5 until 2 am on the 14th, EDT is UTC-4 after it
+    expect(dateInZone(new Date('2027-03-14T04:59:59Z'))).toBe('2027-03-13');
+    expect(dateInZone(new Date('2027-03-14T05:00:00Z'))).toBe('2027-03-14'); // midnight EST
+    expect(dateInZone(new Date('2027-03-15T03:59:59Z'))).toBe('2027-03-14'); // the 14th is only 23 hours long
+    expect(dateInZone(new Date('2027-03-15T04:00:00Z'))).toBe('2027-03-15'); // midnight EDT
+    expect(diveNumberOn('2027-03-15')).toBe(diveNumberOn('2027-03-14') + 1);
+    expect(diveNumberOn('2027-03-14')).toBe(diveNumberOn('2027-03-13') + 1);
+  });
+
+  it('keeps rolling through the autumn clock change (clocks go back on 1 November 2026, two days before launch; and on 7 November 2027)', () => {
+    expect(dateInZone(new Date('2026-11-01T03:59:59Z'))).toBe('2026-10-31');
+    expect(dateInZone(new Date('2026-11-01T04:00:00Z'))).toBe('2026-11-01'); // midnight EDT
+    expect(dateInZone(new Date('2026-11-02T04:59:59Z'))).toBe('2026-11-01'); // the 1st is 25 hours long
+    expect(dateInZone(new Date('2026-11-02T05:00:00Z'))).toBe('2026-11-02'); // midnight EST
+    expect(dateInZone(new Date('2027-11-07T03:59:59Z'))).toBe('2027-11-06');
+    expect(dateInZone(new Date('2027-11-07T04:00:00Z'))).toBe('2027-11-07');
+    expect(dateInZone(new Date('2027-11-08T04:59:59Z'))).toBe('2027-11-07');
+    expect(dateInZone(new Date('2027-11-08T05:00:00Z'))).toBe('2027-11-08');
+  });
+
+  it('numbers every New York day once, with no gap or repeat, for two whole years from launch (sampled each hour)', () => {
+    let previous = 0;
+    const start = Date.parse('2026-11-03T05:00:00Z');
+    for (let hour = 0; hour < 24 * 365 * 2; hour++) {
+      const n = diveNumberOn(dateInZone(new Date(start + hour * 3_600_000)));
+      expect([previous, previous + 1]).toContain(n); // never skips ahead by two, never goes back
+      previous = n;
+    }
+    expect(previous).toBe(731); // 730 days later is dive #731, because 2028 has a leap day
+  });
+
+  it('wraps the file at the same moment: dive 505 of a 504-prompt file is the first dive again', () => {
+    expect(diveIndex(73, 72)).toBe(0);
+    expect(diveIndex(72, 72)).toBe(71);
+  });
+});

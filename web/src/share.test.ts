@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { SITE_URL } from './config';
 import { copyText, MISS_SQUARE, shareLine, squareFor, TIER_SQUARES } from './share';
 import { TIER_POINTS } from './tiers';
 import type { PromptResult, Tier } from './types';
@@ -12,8 +13,9 @@ describe('share line', () => {
     // 100 + 100 + 75 + 55 + 35 + 20 + 0 = 385
     const results = [res(6), res(6), res(5), res(4), res(3), res(2), res(null)];
     const line = shareLine(12, results);
-    expect(line).toBe(`Deep Cut #12: 385\n${TIER_SQUARES[6]}${TIER_SQUARES[6]}${TIER_SQUARES[5]}${TIER_SQUARES[4]}${TIER_SQUARES[3]}${TIER_SQUARES[2]}${MISS_SQUARE}`);
+    expect(line).toBe(`Deep Cut #12: 385\n${TIER_SQUARES[6]}${TIER_SQUARES[6]}${TIER_SQUARES[5]}${TIER_SQUARES[4]}${TIER_SQUARES[3]}${TIER_SQUARES[2]}${MISS_SQUARE}\n${SITE_URL}`);
     expect([...line.split('\n')[1]!].length).toBe(7);
+    expect(line.split('\n')[2]).toBe(SITE_URL);
   });
 
   it('uses a different square for every tier and for a miss', () => {
@@ -22,7 +24,18 @@ describe('share line', () => {
   });
 
   it('scores 0 and seven misses when nothing was right', () => {
-    expect(shareLine(1, Array.from({ length: 7 }, () => res(null)))).toBe(`Deep Cut #1: 0\n${MISS_SQUARE.repeat(7)}`);
+    expect(shareLine(1, Array.from({ length: 7 }, () => res(null)))).toBe(`Deep Cut #1: 0\n${MISS_SQUARE.repeat(7)}\n${SITE_URL}`);
+  });
+});
+
+describe('the site address in the share line', () => {
+  it('comes from the one config constant, which is a placeholder the owner must set', () => {
+    expect(SITE_URL).toMatch(/^https:\/\/[a-z0-9.-]+$/);
+    expect(shareLine(3, [res(1), res(2), res(3), res(4), res(5), res(6), res(null)])).toContain(SITE_URL);
+  });
+
+  it('can be given another address', () => {
+    expect(shareLine(3, [res(1)], 'https://example.org')).toMatch(/\nhttps:\/\/example\.org$/);
   });
 });
 

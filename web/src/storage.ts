@@ -66,3 +66,44 @@ export function saveHistory(storage: StorageLike | null, key: string, history: H
     return false;
   }
 }
+
+/** A dive that has been started and not finished: enough to resume it after a reload. */
+export interface Progress {
+  /** The dive number, whether it is today's dive (daily) or an archive play, and the prompts it was started with. */
+  number: number;
+  mode: 'daily' | 'archive';
+  promptIds: string[];
+  /** The answers given so far, in order. The next prompt is the one after them. */
+  results: PromptResult[];
+  /** When the prompt on screen was shown (ms since 1970), so a reload cannot give extra time. Null while a result is on screen. */
+  startedAt: number | null;
+}
+
+/** Read the saved progress; anything unreadable or malformed is ignored. */
+export function loadProgress(storage: StorageLike | null, key: string): Progress | null {
+  if (!storage) return null;
+  try {
+    const raw = storage.getItem(key);
+    if (!raw) return null;
+    const p = JSON.parse(raw) as Partial<Progress> | null;
+    if (!p || typeof p !== 'object') return null;
+    if (!Number.isInteger(p.number) || (p.number ?? 0) < 1 || (p.mode !== 'daily' && p.mode !== 'archive')) return null;
+    if (!Array.isArray(p.promptIds) || p.promptIds.length !== 7 || !p.promptIds.every((id) => typeof id === 'string')) return null;
+    if (!Array.isArray(p.results) || p.results.length > 7 || !p.results.every(isResult)) return null;
+    if (p.startedAt !== null && typeof p.startedAt !== 'number') return null;
+    return { number: p.number as number, mode: p.mode, promptIds: p.promptIds, results: p.results, startedAt: p.startedAt ?? null };
+  } catch {
+    return null;
+  }
+}
+
+/** Save progress, or clear it with null. Returns false if the browser refuses; the game carries on without saving. */
+export function saveProgress(storage: StorageLike | null, key: string, progress: Progress | null): boolean {
+  if (!storage) return false;
+  try {
+    storage.setItem(key, progress ? JSON.stringify(progress) : '');
+    return true;
+  } catch {
+    return false;
+  }
+}

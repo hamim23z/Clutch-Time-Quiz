@@ -5,6 +5,7 @@ import '@fontsource/barlow-condensed/latin-800.css';
 import '@fontsource/barlow/latin-400.css';
 import '@fontsource/barlow/latin-600.css';
 import App from './App';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import './styles.css';
 
 // The animation review page is its own chunk, so it adds nothing to the first load. It is for development
@@ -17,6 +18,7 @@ const root = document.getElementById('root');
 if (!root) throw new Error('Missing #root element');
 createRoot(root).render(
   <StrictMode>
+    <ErrorBoundary>
     {showAnimations ? (
       <Suspense fallback={null}>
         <AnimationsPage />
@@ -24,5 +26,6 @@ createRoot(root).render(
     ) : (
       <App />
     )}
+    </ErrorBoundary>
   </StrictMode>,
 );

@@ -31,12 +31,14 @@ export function Archive({ today, history, saving, onPlay, onResults, onBack }: P
               <span className="archive__name">Dive #{n}</span>
               {played ? (
                 <>
-                  <span className="archive__score" aria-label={`${totalPoints(played.results)} out of ${MAX_DIVE_POINTS}`}>
+                  <span className="archive__score" role="group" aria-label={`${totalPoints(played.results)} out of ${MAX_DIVE_POINTS}`}>
                     {totalPoints(played.results)}
                   </span>
                   <ol className="mini" aria-label={`Dive ${n} answers`}>
                     {played.results.map((r, i) => (
-                      <li key={r.promptId} className={`mini__square square--${r.tier === null ? 'miss' : `t${r.tier}`}`} aria-label={label(r, i)} title={squareFor(r)} />
+                      <li key={r.promptId} className={`mini__square square--${r.tier === null ? 'miss' : `t${r.tier}`}`} aria-label={label(r, i)} title={squareFor(r)}>
+                        <span aria-hidden="true">{r.tier ?? '×'}</span>
+                      </li>
                     ))}
                   </ol>
                   <button type="button" className="secondary" onClick={() => onResults(n)} aria-label={`Results of dive ${n}`}>

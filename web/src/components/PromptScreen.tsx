@@ -6,17 +6,20 @@ import { SECONDS_PER_PROMPT } from '../tiers';
 import type { Entry, Prompt, PromptResult } from '../types';
 import { useCountdown } from '../useCountdown';
 import { AnswerInput } from './AnswerInput';
+import { PromptText } from './PromptText';
 
 interface Props {
   prompt: Prompt;
   index: Index;
   outsideNames?: readonly string[];
+  /** How much of the 25 seconds has already gone (a reload in the middle of the prompt). */
+  elapsedMs?: number;
   onResult: (result: PromptResult) => void;
 }
 
 const WARNINGS = [10, 5];
 
-export function PromptScreen({ prompt, index, outsideNames, onResult }: Props) {
+export function PromptScreen({ prompt, index, outsideNames, elapsedMs = 0, onResult }: Props) {
   const announce = useAnnounce();
   const typed = useRef('');
   const done = useRef(false);
@@ -30,7 +33,7 @@ export function PromptScreen({ prompt, index, outsideNames, onResult }: Props) {
     [onResult],
   );
 
-  const remainingMs = useCountdown(SECONDS_PER_PROMPT, () => finish(timeoutResult(prompt, typed.current)));
+  const remainingMs = useCountdown(SECONDS_PER_PROMPT, () => finish(timeoutResult(prompt, typed.current)), elapsedMs);
   const seconds = Math.ceil(remainingMs / 1000);
 
   useEffect(() => {
@@ -70,7 +73,7 @@ export function PromptScreen({ prompt, index, outsideNames, onResult }: Props) {
         </div>
       </div>
       <h2 id={promptId} className="prompt">
-        {prompt.text}
+        <PromptText text={prompt.text} />
       </h2>
       <AnswerInput
         index={index}

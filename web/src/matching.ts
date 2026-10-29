@@ -110,6 +110,23 @@ export function toEntries(universe: Universe): Entry[] {
   ];
 }
 
+/**
+ * What a player may be called by his surname alone: the last word, and for a hyphenated surname also the whole thing and
+ * each half ("Gilgeous-Alexander" gives "gilgeous alexander", "gilgeous" and "alexander"). Each is accepted only if one
+ * player has it; buildIndex applies that rule.
+ */
+export function surnameKeys(name: string): string[] {
+  const words = baseName(name).split(/\s+/).filter((w) => w !== '');
+  while (words.length > 1 && SUFFIXES.has(normalize(words[words.length - 1] ?? ''))) words.pop();
+  const last = words[words.length - 1];
+  if (words.length < 2 || !last) return [];
+  const keys = new Set([normalize(last)]);
+  const halves = last.split(/[-\u2010-\u2015]/).filter((h) => h !== '');
+  if (halves.length > 1) for (const half of halves) keys.add(normalize(half));
+  keys.delete('');
+  return [...keys];
+}
+
 export function buildIndex(universe: Universe): Index {
   const entries = new Map<string, Entry>();
   const exactKept = new Map<string, KeyHit[]>();
@@ -123,12 +140,10 @@ export function buildIndex(universe: Universe): Index {
       addKey(exactDropped, normalize(text, { dropSuffix: true }), { entryId: entry.id, origin });
     }
     if (entry.kind === 'player') {
-      const tokens = normalize(baseName(entry.name), { dropSuffix: true }).split(' ');
-      const last = tokens[tokens.length - 1];
-      if (tokens.length > 1 && last) {
-        const owners = lastNameOwners.get(last) ?? new Set<string>();
+      for (const key of surnameKeys(entry.name)) {
+        const owners = lastNameOwners.get(key) ?? new Set<string>();
         owners.add(entry.id);
-        lastNameOwners.set(last, owners);
+        lastNameOwners.set(key, owners);
       }
     }
   }
