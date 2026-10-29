@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://deep-cut.local/schema/universe.schema.json",
+  "title": "Deep Cut universe",
+  "description": "Every player and team the autocomplete and the answer matcher know about, not only the valid answers of any prompt. Two people with the same name carry a disambiguator in name, for example 'Mike James (2002-2014)'.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["players", "teams"],
+  "properties": {
+    "players": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/entry" } },
+    "teams": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/entry" } }
+  },
+  "$defs": {
+    "entry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "aliases"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$" },
+        "name": { "type": "string", "minLength": 1 },
+        "aliases": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } }
+      }
+    }
+  }
+}

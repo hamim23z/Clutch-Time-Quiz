@@ -1,0 +1,1006 @@
+[
+  {
+    "id": "mock-p-01",
+    "answerType": "player",
+    "text": "Since 2002, name a player who scored 40 or more points in a game.",
+    "answers": [
+      {
+        "id": "mock-pl-001",
+        "name": "Aldric Ashgrove",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-pl-002",
+        "name": "Corvin Larkspur",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-pl-004",
+        "name": "Bexley Thornbury",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-005",
+        "name": "Marek Fairbourne",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-006",
+        "name": "Soren Ironside",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-007",
+        "name": "Galen Wrenfield",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-008",
+        "name": "Dorian Kingsley",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-009",
+        "name": "Jaspar Hartnell",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-010",
+        "name": "Merrick Stillwater",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-012",
+        "name": "Rafferty Oakhurst",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-013",
+        "name": "Ulric Northcott",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-014",
+        "name": "Wystan Everhart",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-015",
+        "name": "Lorcan Dunmore",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-016",
+        "name": "Silas Rooksby",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-018",
+        "name": "Caius Yarrow",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-019",
+        "name": "Emrys Jessop",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-022",
+        "name": "Kellan Quarrell",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-024",
+        "name": "Rhys Hollin",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-026",
+        "name": "Tiernan Blackmere",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-029",
+        "name": "Xander Penhallow",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-032",
+        "name": "Gideon Moorcroft",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-033",
+        "name": "Hale Thistlewood",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-035",
+        "name": "Lazarus Greaves",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-036",
+        "name": "Niall Ottersley",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-045",
+        "name": "Cassian Fenn",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-048",
+        "name": "Finley Cobbold",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-049",
+        "name": "Gareth Pendry",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-051",
+        "name": "Idris Mabbott",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-066",
+        "name": "J.J. Hartwell",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-067",
+        "name": "Tobias Rennick Jr.",
+        "tier": 6,
+        "points": 100
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "mock-p-02",
+    "answerType": "player",
+    "text": "Since 2002, name a player who recorded a triple-double in the Finals.",
+    "answers": [
+      {
+        "id": "mock-pl-003",
+        "name": "Tavish Orlander",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-pl-004",
+        "name": "Bexley Thornbury",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-008",
+        "name": "Dorian Kingsley",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-010",
+        "name": "Merrick Stillwater",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-013",
+        "name": "Ulric Northcott",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-014",
+        "name": "Wystan Everhart",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-023",
+        "name": "Perrin Calloway-Voss",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-028",
+        "name": "Yoran Fell",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-029",
+        "name": "Xander Penhallow",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-033",
+        "name": "Hale Thistlewood",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-035",
+        "name": "Lazarus Greaves",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-037",
+        "name": "Osric Winterbourne",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-042",
+        "name": "Zane Eastwick",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-046",
+        "name": "Dashiell Roe",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-048",
+        "name": "Finley Cobbold",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-057",
+        "name": "Ozias Wrightson",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-068",
+        "name": "Sol Garrowby III",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-069",
+        "name": "Bo Li",
+        "tier": 6,
+        "points": 100
+      }
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "mock-p-03",
+    "answerType": "player",
+    "text": "Since 2002, name a player who made 12 or more three-pointers in a game.",
+    "answers": [
+      {
+        "id": "mock-pl-007",
+        "name": "Galen Wrenfield",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-018",
+        "name": "Caius Yarrow",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-034",
+        "name": "Ignatius Pryce",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-036",
+        "name": "Niall Ottersley",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-040",
+        "name": "Willem Dankworth",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-043",
+        "name": "Aubrey Stanhope",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-045",
+        "name": "Cassian Fenn",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-050",
+        "name": "Hollis Tarrant",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-052",
+        "name": "Jory Whitlock",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-063",
+        "name": "Verne Rapids",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-067",
+        "name": "Tobias Rennick Jr.",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-068",
+        "name": "Sol Garrowby III",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-069",
+        "name": "Bo Li",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-070",
+        "name": "Ty Roe",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-072",
+        "name": "Ansel Cray",
+        "tier": 6,
+        "points": 100
+      }
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "id": "mock-t-01",
+    "answerType": "team",
+    "text": "Since 2002, name a team that won 60 or more regular-season games in a season.",
+    "answers": [
+      {
+        "id": "mock-tm-01",
+        "name": "Harbor City Gulls",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-05",
+        "name": "Summit Peaks",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-08",
+        "name": "Prairie Lake Loons",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-09",
+        "name": "Granite Wolves",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-12",
+        "name": "Stonebridge Wardens",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-14",
+        "name": "Copper Ridge Smelters",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-18",
+        "name": "Pinecrest Cardinals",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-19",
+        "name": "Bayport Mariners",
+        "tier": 4,
+        "points": 55
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "mock-p-04",
+    "answerType": "player",
+    "text": "Since 2002, name a player who grabbed 25 or more rebounds in a game.",
+    "answers": [
+      {
+        "id": "mock-pl-002",
+        "name": "Corvin Larkspur",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-pl-003",
+        "name": "Tavish Orlander",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-pl-005",
+        "name": "Marek Fairbourne",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-007",
+        "name": "Galen Wrenfield",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-008",
+        "name": "Dorian Kingsley",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-010",
+        "name": "Merrick Stillwater",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-012",
+        "name": "Rafferty Oakhurst",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-014",
+        "name": "Wystan Everhart",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-016",
+        "name": "Silas Rooksby",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-018",
+        "name": "Caius Yarrow",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-023",
+        "name": "Perrin Calloway-Voss",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-027",
+        "name": "Valen Sorrel",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-029",
+        "name": "Xander Penhallow",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-031",
+        "name": "Bram Ashdown",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-035",
+        "name": "Lazarus Greaves",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-036",
+        "name": "Niall Ottersley",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-049",
+        "name": "Gareth Pendry",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-052",
+        "name": "Jory Whitlock",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-053",
+        "name": "Kieran Sutcliffe",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-068",
+        "name": "Sol Garrowby III",
+        "tier": 6,
+        "points": 100
+      }
+    ],
+    "difficulty": "easy"
+  },
+  {
+    "id": "mock-t-02",
+    "answerType": "team",
+    "text": "Since 2002, name a team that scored 150 or more points in a regulation game.",
+    "answers": [
+      {
+        "id": "mock-tm-01",
+        "name": "Harbor City Gulls",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-03",
+        "name": "Ridgeview Bears",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-07",
+        "name": "Mesa Verde Ravens",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-08",
+        "name": "Prairie Lake Loons",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-09",
+        "name": "Granite Wolves",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-10",
+        "name": "Old Port Anchors",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-11",
+        "name": "Briar Hill Foxes",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-15",
+        "name": "Westfield Hawks",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-16",
+        "name": "Marlow Anglers",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-17",
+        "name": "Tidewater Pilots",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-19",
+        "name": "Bayport Mariners",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-tm-20",
+        "name": "Cedar Falls Lumberjacks",
+        "tier": 4,
+        "points": 55
+      }
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "mock-p-05",
+    "answerType": "player",
+    "text": "Since 2002, name a player who scored 30 or more points in a Game 7.",
+    "answers": [
+      {
+        "id": "mock-pl-001",
+        "name": "Aldric Ashgrove",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-pl-005",
+        "name": "Marek Fairbourne",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-006",
+        "name": "Soren Ironside",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-007",
+        "name": "Galen Wrenfield",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-013",
+        "name": "Ulric Northcott",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-014",
+        "name": "Wystan Everhart",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-015",
+        "name": "Lorcan Dunmore",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-016",
+        "name": "Silas Rooksby",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-017",
+        "name": "Orrin Vexley",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-020",
+        "name": "Fenwick Garrow",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-026",
+        "name": "Tiernan Blackmere",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-028",
+        "name": "Yoran Fell",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-029",
+        "name": "Xander Penhallow",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-031",
+        "name": "Bram Ashdown",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-036",
+        "name": "Niall Ottersley",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-044",
+        "name": "Briar Hollowell",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-045",
+        "name": "Cassian Fenn",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-051",
+        "name": "Idris Mabbott",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-053",
+        "name": "Kieran Sutcliffe",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-060",
+        "name": "Joren Brask",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-068",
+        "name": "Sol Garrowby III",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-070",
+        "name": "Ty Roe",
+        "tier": 6,
+        "points": 100
+      }
+    ],
+    "difficulty": "medium"
+  },
+  {
+    "id": "mock-t-03",
+    "answerType": "team",
+    "text": "Since 2002, name a team that lost 65 or more games in a season.",
+    "answers": [
+      {
+        "id": "mock-tm-03",
+        "name": "Ridgeview Bears",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-06",
+        "name": "Fort Lowell Comets",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-09",
+        "name": "Granite Wolves",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-16",
+        "name": "Marlow Anglers",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-19",
+        "name": "Bayport Mariners",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-tm-20",
+        "name": "Cedar Falls Lumberjacks",
+        "tier": 4,
+        "points": 55
+      }
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "id": "mock-p-06",
+    "answerType": "player",
+    "text": "Since 2002, name a player who blocked 10 or more shots in a game.",
+    "answers": [
+      {
+        "id": "mock-pl-007",
+        "name": "Galen Wrenfield",
+        "tier": 2,
+        "points": 20
+      },
+      {
+        "id": "mock-pl-011",
+        "name": "Quillon Pemberton",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-016",
+        "name": "Silas Rooksby",
+        "tier": 3,
+        "points": 35
+      },
+      {
+        "id": "mock-pl-019",
+        "name": "Emrys Jessop",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-021",
+        "name": "Ivor Underhill",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-036",
+        "name": "Niall Ottersley",
+        "tier": 4,
+        "points": 55
+      },
+      {
+        "id": "mock-pl-038",
+        "name": "Quincy Harrowgate",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-039",
+        "name": "Uriah Coldwell",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-040",
+        "name": "Willem Dankworth",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-043",
+        "name": "Aubrey Stanhope",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-051",
+        "name": "Idris Mabbott",
+        "tier": 5,
+        "points": 75
+      },
+      {
+        "id": "mock-pl-055",
+        "name": "Marlow Hart-Ellison",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-056",
+        "name": "Nico Thackeray",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-057",
+        "name": "Ozias Wrightson",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-063",
+        "name": "Verne Rapids",
+        "tier": 6,
+        "points": 100
+      },
+      {
+        "id": "mock-pl-066",
+        "name": "J.J. Hartwell",
+        "tier": 6,
+        "points": 100
+      }
+    ],
+    "difficulty": "hard"
+  },
+  {
+    "id": "mock-t-04",
+    "answerType": "team",
+    "text": "Since 2002, name a team that won an NBA title.",
+    "answers": [
+      {
+        "id": "mock-tm-04",
+        "name": "Delta Bay Herons",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-05",
+        "name": "Summit Peaks",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-08",
+        "name": "Prairie Lake Loons",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-09",
+        "name": "Granite Wolves",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-11",
+        "name": "Briar Hill Foxes",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-16",
+        "name": "Marlow Anglers",
+        "tier": 1,
+        "points": 10
+      },
+      {
+        "id": "mock-tm-19",
+        "name": "Bayport Mariners",
+        "tier": 4,
+        "points": 55
+      }
+    ],
+    "difficulty": "medium"
+  }
+]

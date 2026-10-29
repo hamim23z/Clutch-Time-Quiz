@@ -34,8 +34,8 @@ Filled in by sessions as they are built.
 
 - Pipeline: TBD
 - Data spike 2 (Deep Cut): download per docs/data-source-boxscores.md, then `python3 pipeline/spike/boxscore_feasibility.py data/raw/boxscores` (counts and checks; output saved in docs/boxscore-feasibility-output.txt). Optional referee cross-check: `python3 pipeline/spike/referee_census.py data/raw/boxscores <out.parquet> 2002 2026`.
-- Website dev server: TBD
-- Tests: TBD
+- Website: `cd web && npm install` once, then `npm run dev` (dev server), `npm run build` (typecheck + production build into `web/dist`), `npm run preview` (serve the build). It reads `web/public/prompts.json` and `web/public/universe.json`; the files in the repo are MOCK data (every id starts with `mock-`, every name is invented) until session 5 exports the real ones.
+- Web tests: `cd web && npm test` (vitest; includes validating both JSON files against `schema/prompts.schema.json` and `schema/universe.schema.json`)
 
 ## Conventions
 

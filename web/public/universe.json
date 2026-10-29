@@ -1,0 +1,547 @@
+{
+  "players": [
+    {
+      "id": "mock-pl-001",
+      "name": "Aldric Ashgrove",
+      "aliases": [
+        "Al Ashgrove"
+      ]
+    },
+    {
+      "id": "mock-pl-002",
+      "name": "Corvin Larkspur",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-003",
+      "name": "Tavish Orlander",
+      "aliases": [
+        "T-Bone Orlander"
+      ]
+    },
+    {
+      "id": "mock-pl-004",
+      "name": "Bexley Thornbury",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-005",
+      "name": "Marek Fairbourne",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-006",
+      "name": "Soren Ironside",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-007",
+      "name": "Galen Wrenfield",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-008",
+      "name": "Dorian Kingsley",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-009",
+      "name": "Jaspar Hartnell",
+      "aliases": [
+        "Jas Hartnell"
+      ]
+    },
+    {
+      "id": "mock-pl-010",
+      "name": "Merrick Stillwater",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-011",
+      "name": "Quillon Pemberton",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-012",
+      "name": "Rafferty Oakhurst",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-013",
+      "name": "Ulric Northcott",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-014",
+      "name": "Wystan Everhart",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-015",
+      "name": "Lorcan Dunmore",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-016",
+      "name": "Silas Rooksby",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-017",
+      "name": "Orrin Vexley",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-018",
+      "name": "Caius Yarrow",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-019",
+      "name": "Emrys Jessop",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-020",
+      "name": "Fenwick Garrow",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-021",
+      "name": "Ivor Underhill",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-022",
+      "name": "Kellan Quarrell",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-023",
+      "name": "Perrin Calloway-Voss",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-024",
+      "name": "Rhys Hollin",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-025",
+      "name": "Anselm Marrow",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-026",
+      "name": "Tiernan Blackmere",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-027",
+      "name": "Valen Sorrel",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-028",
+      "name": "Yoran Fell",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-029",
+      "name": "Xander Penhallow",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-030",
+      "name": "Zeke Ravenscar",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-031",
+      "name": "Bram Ashdown",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-032",
+      "name": "Gideon Moorcroft",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-033",
+      "name": "Hale Thistlewood",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-034",
+      "name": "Ignatius Pryce",
+      "aliases": [
+        "Iggy Pryce"
+      ]
+    },
+    {
+      "id": "mock-pl-035",
+      "name": "Lazarus Greaves",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-036",
+      "name": "Niall Ottersley",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-037",
+      "name": "Osric Winterbourne",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-038",
+      "name": "Quincy Harrowgate",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-039",
+      "name": "Uriah Coldwell",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-040",
+      "name": "Willem Dankworth",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-041",
+      "name": "Yves Lorimer",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-042",
+      "name": "Zane Eastwick",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-043",
+      "name": "Aubrey Stanhope",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-044",
+      "name": "Briar Hollowell",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-045",
+      "name": "Cassian Fenn",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-046",
+      "name": "Dashiell Roe",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-047",
+      "name": "Elias Hargreave",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-048",
+      "name": "Finley Cobbold",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-049",
+      "name": "Gareth Pendry",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-050",
+      "name": "Hollis Tarrant",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-051",
+      "name": "Idris Mabbott",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-052",
+      "name": "Jory Whitlock",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-053",
+      "name": "Kieran Sutcliffe",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-054",
+      "name": "Leander Gaskell",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-055",
+      "name": "Marlow Hart-Ellison",
+      "aliases": [
+        "Marlow Hart Ellison"
+      ]
+    },
+    {
+      "id": "mock-pl-056",
+      "name": "Nico Thackeray",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-057",
+      "name": "Ozias Wrightson",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-058",
+      "name": "Pascal Lindqvist-Roe",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-059",
+      "name": "Caelan O'Brask",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-060",
+      "name": "Joren Brask",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-061",
+      "name": "Dex Marrow (2003-2009)",
+      "aliases": [
+        "Dex Marrow Sr."
+      ]
+    },
+    {
+      "id": "mock-pl-062",
+      "name": "Dex Marrow (2015-2022)",
+      "aliases": [
+        "Dex Marrow Jr."
+      ]
+    },
+    {
+      "id": "mock-pl-063",
+      "name": "Verne Rapids",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-064",
+      "name": "Zebediah Quarrelly",
+      "aliases": [
+        "Zeb Rainwater"
+      ]
+    },
+    {
+      "id": "mock-pl-065",
+      "name": "Bartholomew Underwood",
+      "aliases": [
+        "Bart Underwood"
+      ]
+    },
+    {
+      "id": "mock-pl-066",
+      "name": "J.J. Hartwell",
+      "aliases": [
+        "JJ Hartwell"
+      ]
+    },
+    {
+      "id": "mock-pl-067",
+      "name": "Tobias Rennick Jr.",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-068",
+      "name": "Sol Garrowby III",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-069",
+      "name": "Bo Li",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-070",
+      "name": "Ty Roe",
+      "aliases": []
+    },
+    {
+      "id": "mock-pl-071",
+      "name": "Renato Silvestre",
+      "aliases": [
+        "Renato Silvéstre"
+      ]
+    },
+    {
+      "id": "mock-pl-072",
+      "name": "Ansel Cray",
+      "aliases": []
+    }
+  ],
+  "teams": [
+    {
+      "id": "mock-tm-01",
+      "name": "Harbor City Gulls",
+      "aliases": [
+        "Gulls",
+        "Harbor City"
+      ]
+    },
+    {
+      "id": "mock-tm-02",
+      "name": "Lakeshore Rapids",
+      "aliases": [
+        "Rapids",
+        "Lakeshore"
+      ]
+    },
+    {
+      "id": "mock-tm-03",
+      "name": "Ridgeview Bears",
+      "aliases": [
+        "Bears",
+        "Ridgeview"
+      ]
+    },
+    {
+      "id": "mock-tm-04",
+      "name": "Delta Bay Herons",
+      "aliases": [
+        "Herons",
+        "Delta Bay"
+      ]
+    },
+    {
+      "id": "mock-tm-05",
+      "name": "Summit Peaks",
+      "aliases": [
+        "Peaks",
+        "Summit"
+      ]
+    },
+    {
+      "id": "mock-tm-06",
+      "name": "Fort Lowell Comets",
+      "aliases": [
+        "Comets",
+        "Fort Lowell"
+      ]
+    },
+    {
+      "id": "mock-tm-07",
+      "name": "Mesa Verde Ravens",
+      "aliases": [
+        "Ravens",
+        "Mesa Verde"
+      ]
+    },
+    {
+      "id": "mock-tm-08",
+      "name": "Prairie Lake Loons",
+      "aliases": [
+        "Loons",
+        "Prairie Lake"
+      ]
+    },
+    {
+      "id": "mock-tm-09",
+      "name": "Granite Wolves",
+      "aliases": [
+        "Wolves",
+        "Granite"
+      ]
+    },
+    {
+      "id": "mock-tm-10",
+      "name": "Old Port Anchors",
+      "aliases": [
+        "Anchors",
+        "Old Port"
+      ]
+    },
+    {
+      "id": "mock-tm-11",
+      "name": "Briar Hill Foxes",
+      "aliases": [
+        "Foxes",
+        "Briar Hill"
+      ]
+    },
+    {
+      "id": "mock-tm-12",
+      "name": "Stonebridge Wardens",
+      "aliases": [
+        "Wardens",
+        "Stonebridge"
+      ]
+    },
+    {
+      "id": "mock-tm-13",
+      "name": "Harlan Miners",
+      "aliases": [
+        "Miners",
+        "Harlan"
+      ]
+    },
+    {
+      "id": "mock-tm-14",
+      "name": "Copper Ridge Smelters",
+      "aliases": [
+        "Smelters",
+        "Copper Ridge"
+      ]
+    },
+    {
+      "id": "mock-tm-15",
+      "name": "Westfield Hawks",
+      "aliases": [
+        "Hawks",
+        "Westfield"
+      ]
+    },
+    {
+      "id": "mock-tm-16",
+      "name": "Marlow Anglers",
+      "aliases": [
+        "Anglers"
+      ]
+    },
+    {
+      "id": "mock-tm-17",
+      "name": "Tidewater Pilots",
+      "aliases": [
+        "Pilots",
+        "Tidewater"
+      ]
+    },
+    {
+      "id": "mock-tm-18",
+      "name": "Pinecrest Cardinals",
+      "aliases": [
+        "Cardinals",
+        "Pinecrest"
+      ]
+    },
+    {
+      "id": "mock-tm-19",
+      "name": "Bayport Mariners",
+      "aliases": [
+        "Mariners",
+        "Bayport"
+      ]
+    },
+    {
+      "id": "mock-tm-20",
+      "name": "Cedar Falls Lumberjacks",
+      "aliases": [
+        "Lumberjacks",
+        "Cedar Falls"
+      ]
+    }
+  ]
+}
