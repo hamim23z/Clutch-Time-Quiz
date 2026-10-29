@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useReducer, useRef } from 'react';
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import { Final } from './components/Final';
 import { PromptScreen } from './components/PromptScreen';
 import { Reveal } from './components/Reveal';
-import { currentPrompt, diveReducer, isOver, isRevealed, startDive, totalPoints } from './dive';
+import { Scoreboard } from './components/Scoreboard';
+import { useReducedMotion } from './motion';
+import { currentPrompt, diveReducer, isOver, isRevealed, startDive, totalPoints } from './dive2';
 import type { Index } from './matching';
 import type { Prompt, PromptResult } from './types';
 
@@ -17,14 +19,18 @@ interface Props {
   onHome: () => void;
   onArchive: () => void;
   onHowTo: () => void;
+  /** Streak shown on the results screen, and whether it just went up. */
+  streak?: { value: number; increased: boolean };
 }
 
-export function Dive({ prompts, index, diveNumber, outsideNames, onFinish, onHome, onArchive, onHowTo }: Props) {
+export function Dive({ prompts, index, diveNumber, outsideNames, onFinish, onHome, onArchive, onHowTo, streak }: Props) {
   const [state, dispatch] = useReducer(diveReducer, undefined, () => startDive([...prompts]));
   const resultRef = useRef<HTMLHeadingElement>(null);
   const finalRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
   const finished = useRef(false);
+  const reduced = useReducedMotion();
+  const [skippedAt, setSkippedAt] = useState(-1); // the prompt whose shot the player skipped
 
   const prompt = currentPrompt(state);
   const over = isOver(state);
@@ -50,21 +56,48 @@ export function Dive({ prompts, index, diveNumber, outsideNames, onFinish, onHom
   }, [over, state.results, onFinish]);
 
   if (over || !prompt) {
-    return <Final prompts={state.prompts} results={state.results} diveNumber={diveNumber} headingRef={finalRef} onHome={onHome} onArchive={onArchive} onHowTo={onHowTo} />;
+    return <Final prompts={state.prompts} results={state.results} diveNumber={diveNumber} headingRef={finalRef} onHome={onHome} onArchive={onArchive} onHowTo={onHowTo} streak={streak} />;
   }
-  if (revealed && result) {
-    return <Reveal prompt={prompt} result={result} isLast={state.index === state.prompts.length - 1} headingRef={resultRef} onNext={() => dispatch({ type: 'next' })} />;
-  }
-  return (
-    <PromptScreen
-      key={prompt.id}
-      prompt={prompt}
-      index={index}
+  const skipped = skippedAt === state.index;
+  const before = totalPoints(state.results.slice(0, state.index));
+  const board = (
+    <Scoreboard
       number={state.index + 1}
       total={state.prompts.length}
+      pointsBefore={revealed ? before : points}
       points={points}
-      outsideNames={outsideNames}
-      onResult={(r: PromptResult) => dispatch({ type: 'submit', result: r })}
+      diveNumber={diveNumber}
+      rollDelayMs={reduced || skipped ? 0 : 950}
+      instant={reduced || skipped || !revealed}
     />
+  );
+  if (revealed && result) {
+    return (
+      <>
+        {board}
+        <Reveal
+          key={prompt.id}
+          prompt={prompt}
+          result={result}
+          isLast={state.index === state.prompts.length - 1}
+          headingRef={resultRef}
+          onNext={() => dispatch({ type: 'next' })}
+          skipped={skipped}
+          onSkip={() => setSkippedAt(state.index)}
+        />
+      </>
+    );
+  }
+  return (
+    <>
+      {board}
+      <PromptScreen
+        key={prompt.id}
+        prompt={prompt}
+        index={index}
+        outsideNames={outsideNames}
+        onResult={(r: PromptResult) => dispatch({ type: 'submit', result: r })}
+      />
+    </>
   );
 }

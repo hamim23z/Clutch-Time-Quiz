@@ -26,6 +26,7 @@ export function AnswerInput({ index, onSubmitText, onPick, labelledBy, onTextCha
   const [active, setActive] = useState(-1);
   const [hint, setHint] = useState('');
   const [choices, setChoices] = useState<Entry[] | null>(null);
+  const [shake, setShake] = useState(0); // bumped to replay a short shake when a name needs a second look (two alternating keyframes restart it without remounting the input)
 
   useEffect(() => {
     inputRef.current?.focus();
@@ -60,7 +61,10 @@ export function AnswerInput({ index, onSubmitText, onPick, labelledBy, onTextCha
 
   const submit = (): void => {
     setOpen(false);
-    onSubmitText(text, setHint, (entries) => {
+    onSubmitText(text, (h) => {
+      setHint(h);
+      setShake((n) => n + 1);
+    }, (entries) => {
       setChoices(entries);
       setOpen(true);
       setActive(0);
@@ -93,7 +97,7 @@ export function AnswerInput({ index, onSubmitText, onPick, labelledBy, onTextCha
       <label htmlFor={`${id}-input`} className="answer__label">
         Your answer
       </label>
-      <div className="answer__row">
+      <div className={`answer__row${shake > 0 ? ` shake shake--${shake % 2}` : ''}`}>
         <input
           ref={inputRef}
           id={`${id}-input`}

@@ -1,9 +1,12 @@
 import type { Streaks } from '../streaks';
+import { StreakBadge } from './StreakBadge';
 
 interface Props {
   number: number;
   played: boolean;
   streaks: Streaks;
+  /** True when the streak has gone up since the home screen was last shown: it pops. */
+  streakUp: boolean;
   /** False when the browser will not keep anything, so streaks and the archive cannot last. */
   saving: boolean;
   onPlay: () => void;
@@ -14,7 +17,7 @@ interface Props {
 
 const days = (n: number): string => `${n} ${n === 1 ? 'day' : 'days'}`;
 
-export function Home({ number, played, streaks, saving, onPlay, onResults, onArchive, onHowTo }: Props) {
+export function Home({ number, played, streaks, streakUp, saving, onPlay, onResults, onArchive, onHowTo }: Props) {
   return (
     <section className="card home" aria-labelledby="home-heading">
       <h2 id="home-heading">The daily trivia game where the obvious answer loses.</h2>
@@ -23,7 +26,7 @@ export function Home({ number, played, streaks, saving, onPlay, onResults, onArc
       <dl className="streaks" aria-label="Streaks">
         <div>
           <dt>Streak</dt>
-          <dd data-testid="streak-current">{days(streaks.current)}</dd>
+          <dd><StreakBadge value={streaks.current} increased={streakUp} /></dd>
         </div>
         <div>
           <dt>Best streak</dt>

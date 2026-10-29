@@ -1,5 +1,5 @@
 import type { PromptResult, Tier } from './types';
-import { totalPoints } from './dive';
+import { totalPoints } from './dive2';
 
 /** One colored square per tier, from the common answers (white) to the deepest cuts (purple); a miss is black. */
 export const TIER_SQUARES: Record<Tier, string> = { 1: '⬜', 2: '🟦', 3: '🟩', 4: '🟨', 5: '🟧', 6: '🟪' };

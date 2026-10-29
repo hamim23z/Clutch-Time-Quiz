@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { divePrompts } from './schedule';
-import { diveReducer, isOver, isRevealed, pointsMatchTier, startDive, totalPoints } from './dive';
+import { diveReducer, isOver, isRevealed, pointsMatchTier, startDive, totalPoints } from './dive2';
 import { MAX_DIVE_POINTS, PROMPTS_PER_DIVE, SECONDS_PER_PROMPT, TIER_POINTS } from './tiers';
 import { mockPrompts } from './testUtils';
 import type { PromptResult, Tier } from './types';

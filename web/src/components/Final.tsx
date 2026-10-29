@@ -1,9 +1,15 @@
-import { useState, type Ref } from 'react';
+import { useState, type CSSProperties, type Ref } from 'react';
 import { useAnnounce } from '../announcer';
-import { totalPoints } from '../dive';
+import { totalPoints } from '../dive2';
+import { useReducedMotion } from '../motion';
+import { shotForResult } from '../shots';
 import { copyText, shareLine } from '../share';
 import { MAX_DIVE_POINTS, TIERS, TIER_POINTS, TIER_RANGES } from '../tiers';
 import type { Prompt, PromptResult } from '../types';
+import { Confetti } from './Confetti';
+import { CourtIcon } from './CourtIcon';
+import { RollingNumber } from './RollingNumber';
+import { StreakBadge } from './StreakBadge';
 
 interface Props {
   prompts: readonly Prompt[];
@@ -13,6 +19,7 @@ interface Props {
   onHome: () => void;
   onArchive: () => void;
   onHowTo: () => void;
+  streak?: { value: number; increased: boolean };
 }
 
 function describe(r: PromptResult): string {
@@ -22,10 +29,18 @@ function describe(r: PromptResult): string {
   return 'not a valid answer, 0 points';
 }
 
-export function Final({ prompts, results, diveNumber, headingRef, onHome, onArchive, onHowTo }: Props) {
+/** A total of at least this share of the maximum earns confetti. */
+export const STRONG_SHARE = 0.6;
+const STEP_MS = 170; // one shot every 170 ms in the playback
+
+export function Final({ prompts, results, diveNumber, headingRef, onHome, onArchive, onHowTo, streak }: Props) {
   const announce = useAnnounce();
   const [copyFailed, setCopyFailed] = useState(false);
+  const reduced = useReducedMotion();
+  const [replay, setReplay] = useState(0); // bumped by the replay button to play the seven shots again
   const total = totalPoints(results);
+  const strong = total >= STRONG_SHARE * MAX_DIVE_POINTS;
+  const sequenceMs = reduced ? 0 : results.length * STEP_MS + 150;
   const line = shareLine(diveNumber, results);
 
   const share = async (): Promise<void> => {
@@ -40,17 +55,40 @@ export function Final({ prompts, results, diveNumber, headingRef, onHome, onArch
         Dive complete
       </h2>
       <p className="final__number">Dive #{diveNumber}</p>
-      <p className="final__score" aria-label={`Total ${total} out of ${MAX_DIVE_POINTS}`}>
-        {total}
-        <span className="final__max"> / {MAX_DIVE_POINTS}</span>
-      </p>
-      <ol className="squares" aria-label="Your seven answers">
-        {results.map((r, i) => (
-          <li key={r.promptId} className={`square square--${r.tier === null ? 'miss' : `t${r.tier}`}`} aria-label={`Prompt ${i + 1}: ${describe(r)}`}>
-            <span aria-hidden="true">{r.tier ?? '×'}</span>
-          </li>
-        ))}
-      </ol>
+      <div className={`final__show${reduced ? ' is-reduced' : ''}`} key={replay} style={{ '--after': `${sequenceMs}ms` } as CSSProperties}>
+        <ol className="squares" aria-label="Your seven answers">
+          {results.map((r, i) => (
+            <li
+              key={r.promptId}
+              className={`square square--${r.tier === null ? 'miss' : `t${r.tier}`}`}
+              style={{ '--i': i, '--step': `${STEP_MS}ms` } as CSSProperties}
+              aria-label={`Prompt ${i + 1}: ${describe(r)}`}
+              title={shotForResult(r).label}
+            >
+              <CourtIcon miss={r.tier === null} />
+              <span className="square__tier" aria-hidden="true">{r.tier ?? '×'}</span>
+            </li>
+          ))}
+        </ol>
+        <p className="final__score" aria-label={`Total ${total} out of ${MAX_DIVE_POINTS}`}  >
+          <span aria-hidden="true">
+            <RollingNumber value={total} from={0} delayMs={sequenceMs} durationMs={700} instant={reduced} />
+          </span>
+          <span className="final__max" aria-hidden="true"> / {MAX_DIVE_POINTS}</span>
+        </p>
+        {strong && !reduced && <Confetti />}
+      </div>
+      {strong && <p className="final__praise">Strong dive: {Math.round((100 * total) / MAX_DIVE_POINTS)}% of the maximum.</p>}
+      <div className="final__streak">
+        {streak && (
+          <p>
+            Streak: <StreakBadge value={streak.value} increased={streak.increased} testId="final-streak" />
+          </p>
+        )}
+        <button type="button" className="secondary" onClick={() => setReplay((n) => n + 1)}>
+          Replay the shots
+        </button>
+      </div>
 
       <h3>Share</h3>
       {copyFailed ? (
