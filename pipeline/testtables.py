@@ -90,3 +90,6 @@ def make_tables(seed: int = 7, min_season_games: int = 3) -> Tables:
         players=make_players(), teams=make_teams(), games=pd.DataFrame(games), player_games=pg,
         team_games=pd.DataFrame(team_games), min_season_games=min_season_games,
     )
+
+
+NO_OVERRIDES = pd.DataFrame({"athlete_id": pd.Series([], dtype="int64"), "tier": pd.Series([], dtype="int64"), "reason": []})

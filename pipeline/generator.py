@@ -52,19 +52,19 @@ def difficulty(answer_type: str, tiers: list[int]) -> str:
 
     A short list is harder, and so is a list with many deep cuts. Each gets 0 to 2 points of hardness:
       size  - players: 100 or more answers = 0, 40 to 99 = 1, fewer than 40 = 2;
-              teams: 20 or more = 0, 10 to 19 = 1, fewer than 10 = 2
-      depth - share of answers in tier 4 or above; players: under 10% = 0, 10 to 25% = 1, 25% or more = 2;
+              teams: 25 or more = 0, 12 to 24 = 1, fewer than 12 = 2
+      depth - share of answers in tier 4 or above; players: under 3% = 0, 3 to 10% = 1, 10% or more = 2;
               teams: under 5% = 0, 5 to 15% = 1, 15% or more = 2
-    Total 0 or 1 is easy, 2 is medium, 3 or 4 is hard. The cutoffs are set to the spread of the real candidate lists:
-    most lists are mostly well-known players, so even 25% deep cuts is a high share.
+    Total 0 or 1 is easy, 2 is medium, 3 or 4 is hard. The cutoffs are set to the spread of the real candidate lists
+    under the five-metric fame score (session 5): lists are mostly well-known players, so even 10% deep cuts is a high share.
     """
     n = len(tiers)
     deep = sum(1 for t in tiers if t >= DEEP_TIER) / n
     if answer_type == PLAYER:
         size = 0 if n >= 100 else 1 if n >= 40 else 2
-        depth = 0 if deep < 0.10 else 1 if deep < 0.25 else 2
+        depth = 0 if deep < 0.03 else 1 if deep < 0.10 else 2
     else:
-        size = 0 if n >= 20 else 1 if n >= 10 else 2
+        size = 0 if n >= 25 else 1 if n >= 12 else 2
         depth = 0 if deep < 0.05 else 1 if deep < 0.15 else 2
     total = size + depth
     return "easy" if total <= 1 else "medium" if total == 2 else "hard"

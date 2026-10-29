@@ -5,190 +5,202 @@ Written by `python3 pipeline/generate.py`; do not edit by hand (the review notes
 ## How the fame score works
 
 - **Population:** 2,520 players with at least one game with a points value (2001-02 to the last season in the data).
-- **Two metrics:** career points (regular season plus playoffs), and best single-season points per game (regular season only, at least 40 games that season, games for all teams added up).
-- **Ranks:** each metric is ranked across all players (rank 1 = most famous; ties share the better rank). A player's fame rank is the better (lower) of the two, so a short-career star is not rated obscure. Players with no 40-game season have no points-per-game rank and are ranked by career points alone. Both percentiles divide by the same number of players, so they are on the same scale.
+- **Five metrics:** career points (regular season plus playoffs), career rebounds, career assists, career steals plus blocks, and best single-season points per game (regular season only, at least 40 games that season, games for all teams added up).
+- **Ranks:** each metric is ranked across all players (rank 1 = most famous; ties share the better rank). A player's fame rank is the best (lowest) of the five, so a short-career star, a rebounder or a defender is not rated obscure. Players with no 40-game season have no points-per-game rank, and a career total of zero in rebounds, assists or steals plus blocks is not ranked. All percentiles divide by the same number of players, so they are on the same scale.
 - **Tier:** from the global percentile = fame rank / players: top 3% is tier 1 (10 points), 3 to 10% tier 2 (20), 10 to 25% tier 3 (35), 25 to 50% tier 4 (55), 50 to 75% tier 5 (75), the rest tier 6 (100). A player exactly on a cutoff gets the better-known tier.
+- **Hand-set tiers:** `pipeline/data/fame_overrides.csv` sets the tier for players the metrics get clearly wrong (listed below). The percentile still shows what the metrics said.
 - **Only games in the data count**, so a player whose career started before 2001-02 is judged on his later years only.
 
 ## Players per tier
 
 | tier | points | percentile band | nominal share | nominal players | actual players | actual share |
 |---|---|---|---|---|---|---|
-| 1 | 10 | top 3% | 3% | 76 | 112 | 4.4% |
-| 2 | 20 | 3 to 10% | 7% | 176 | 205 | 8.1% |
-| 3 | 35 | 10 to 25% | 15% | 378 | 427 | 16.9% |
-| 4 | 55 | 25 to 50% | 25% | 630 | 600 | 23.8% |
-| 5 | 75 | 50 to 75% | 25% | 630 | 555 | 22.0% |
-| 6 | 100 | bottom 25% | 25% | 630 | 621 | 24.6% |
+| 1 | 10 | top 3% | 3% | 76 | 187 | 7.4% |
+| 2 | 20 | 3 to 10% | 7% | 176 | 284 | 11.3% |
+| 3 | 35 | 10 to 25% | 15% | 378 | 429 | 17.0% |
+| 4 | 55 | 25 to 50% | 25% | 630 | 556 | 22.1% |
+| 5 | 75 | 50 to 75% | 25% | 630 | 573 | 22.7% |
+| 6 | 100 | bottom 25% | 25% | 630 | 491 | 19.5% |
 
-The better-known tiers are fuller than the nominal shares (112 players in tier 1 against 76). That follows from the method: taking the better of two ranks lets a player in through either door, so up to twice as many players can sit in the top 3% (tier 1 and 2 together: 317).
+The better-known tiers are fuller than the nominal shares (187 players in tier 1 against 76). That follows from the method: taking the best of five ranks lets a player in through any of five doors, so more players than the nominal share sit in the top bands (tiers 1 and 2 together: 471).
 
 ## The 40 most famous players
 
 | # | player | career points | best points per game | fame percentile | tier | decided by |
 |---|---|---|---|---|---|---|
-| 1 | LeBron James | 51,932 | 31.4 (2006, 79 g) | 0.04% | 1 | career |
-| 2 | James Harden | 33,579 | 36.1 (2019, 78 g) | 0.04% | 1 | ppg |
-| 3 | Kevin Durant | 37,572 | 32.0 (2014, 81 g) | 0.08% | 1 | career |
-| 4 | Kobe Bryant | 31,731 | 35.3 (2006, 78 g) | 0.08% | 1 | ppg |
-| 5 | Luka Doncic | 16,718 | 33.9 (2024, 70 g) | 0.12% | 1 | ppg |
-| 6 | Joel Embiid | 15,181 | 33.1 (2023, 66 g) | 0.16% | 1 | ppg |
-| 7 | Dirk Nowitzki | 31,359 | 26.6 (2006, 81 g) | 0.20% | 1 | career |
-| 8 | Allen Iverson | 16,212 | 33.1 (2006, 71 g) | 0.20% | 1 | ppg |
-| 9 | Stephen Curry | 30,675 | 32.0 (2021, 63 g) | 0.24% | 1 | career |
-| 10 | Shai Gilgeous-Alexander | 15,011 | 32.7 (2025, 76 g) | 0.24% | 1 | ppg |
-| 11 | Russell Westbrook | 30,190 | 31.6 (2017, 81 g) | 0.28% | 1 | career |
-| 12 | Damian Lillard | 24,303 | 32.2 (2023, 58 g) | 0.28% | 1 | ppg |
-| 13 | Carmelo Anthony | 30,158 | 28.9 (2007, 65 g) | 0.32% | 1 | career |
-| 14 | Tracy McGrady | 15,092 | 32.1 (2003, 75 g) | 0.32% | 1 | ppg |
-| 15 | DeMar DeRozan | 28,086 | 27.9 (2022, 76 g) | 0.36% | 1 | career |
-| 16 | Dwyane Wade | 26,847 | 30.2 (2009, 79 g) | 0.40% | 1 | career |
-| 17 | Chris Paul | 26,039 | 22.8 (2009, 78 g) | 0.44% | 1 | career |
-| 18 | Paul Pierce | 25,288 | 26.8 (2006, 79 g) | 0.48% | 1 | career |
-| 19 | Tim Duncan | 24,405 | 25.5 (2002, 82 g) | 0.52% | 1 | career |
-| 20 | Bradley Beal | 18,429 | 31.3 (2021, 60 g) | 0.52% | 1 | ppg |
-| 21 | Giannis Antetokounmpo | 23,801 | 31.1 (2023, 63 g) | 0.56% | 1 | ppg |
-| 22 | Tony Parker | 23,480 | 22.0 (2009, 72 g) | 0.63% | 1 | career |
-| 23 | Jayson Tatum | 17,199 | 30.1 (2023, 74 g) | 0.63% | 1 | ppg |
-| 24 | Pau Gasol | 22,974 | 20.8 (2007, 59 g) | 0.67% | 1 | career |
-| 25 | Trae Young | 13,202 | 29.6 (2020, 60 g) | 0.67% | 1 | ppg |
-| 26 | Joe Johnson | 22,235 | 25.0 (2007, 57 g) | 0.71% | 1 | career |
-| 27 | Nikola Jokic | 20,744 | 29.6 (2025, 70 g) | 0.71% | 1 | ppg |
-| 28 | LaMarcus Aldridge | 22,023 | 23.4 (2015, 71 g) | 0.75% | 1 | career |
-| 29 | Gilbert Arenas | 11,932 | 29.3 (2006, 80 g) | 0.75% | 1 | ppg |
-| 30 | Paul George | 21,919 | 28.0 (2019, 77 g) | 0.79% | 1 | career |
-| 31 | Vince Carter | 21,804 | 25.2 (2007, 82 g) | 0.83% | 1 | career |
-| 32 | Isaiah Thomas | 10,287 | 28.9 (2017, 76 g) | 0.83% | 1 | ppg |
-| 33 | Dwight Howard | 21,351 | 22.9 (2011, 78 g) | 0.87% | 1 | career |
-| 34 | Anthony Edwards | 12,200 | 28.8 (2026, 61 g) | 0.87% | 1 | ppg |
-| 35 | Anthony Davis | 20,933 | 28.1 (2018, 75 g) | 0.91% | 1 | career |
-| 36 | Jalen Brunson | 12,988 | 28.7 (2024, 77 g) | 0.91% | 1 | ppg |
-| 37 | Jaylen Brown | 16,249 | 28.7 (2026, 71 g) | 0.95% | 1 | ppg |
-| 38 | Kyrie Irving | 20,602 | 27.1 (2023, 60 g) | 0.99% | 1 | career |
-| 39 | Tyrese Maxey | 9,173 | 28.3 (2026, 70 g) | 0.99% | 1 | ppg |
-| 40 | Klay Thompson | 20,346 | 22.3 (2017, 78 g) | 1.03% | 1 | career |
+| 1 | LeBron James | 51,932 | 31.4 (2006, 79 g) | 0.04% | 1 | career points |
+| 2 | James Harden | 33,579 | 36.1 (2019, 78 g) | 0.04% | 1 | best points per game |
+| 3 | Dwight Howard | 21,351 | 22.9 (2011, 78 g) | 0.04% | 1 | career rebounds |
+| 4 | Kevin Durant | 37,572 | 32.0 (2014, 81 g) | 0.08% | 1 | career points |
+| 5 | Kobe Bryant | 31,731 | 35.3 (2006, 78 g) | 0.08% | 1 | best points per game |
+| 6 | Chris Paul | 26,039 | 22.8 (2009, 78 g) | 0.08% | 1 | career assists |
+| 7 | Tim Duncan | 24,405 | 25.5 (2002, 82 g) | 0.08% | 1 | career steals + blocks |
+| 8 | Russell Westbrook | 30,190 | 31.6 (2017, 81 g) | 0.12% | 1 | career assists |
+| 9 | Luka Doncic | 16,718 | 33.9 (2024, 70 g) | 0.12% | 1 | best points per game |
+| 10 | Pau Gasol | 22,974 | 20.8 (2007, 59 g) | 0.16% | 1 | career rebounds |
+| 11 | Joel Embiid | 15,181 | 33.1 (2023, 66 g) | 0.16% | 1 | best points per game |
+| 12 | Dirk Nowitzki | 31,359 | 26.6 (2006, 81 g) | 0.20% | 1 | career points |
+| 13 | Kevin Garnett | 20,015 | 24.2 (2004, 82 g) | 0.20% | 1 | career rebounds |
+| 14 | Steve Nash | 16,471 | 18.8 (2006, 78 g) | 0.20% | 1 | career assists |
+| 15 | Allen Iverson | 16,212 | 33.1 (2006, 71 g) | 0.20% | 1 | best points per game |
+| 16 | Ben Wallace | 5,772 | 9.7 (2005, 74 g) | 0.20% | 1 | career steals + blocks |
+| 17 | Stephen Curry | 30,675 | 32.0 (2021, 63 g) | 0.24% | 1 | career points |
+| 18 | Anthony Davis | 20,933 | 28.1 (2018, 75 g) | 0.24% | 1 | career steals + blocks |
+| 19 | Shai Gilgeous-Alexander | 15,011 | 32.7 (2025, 76 g) | 0.24% | 1 | best points per game |
+| 20 | Andre Drummond | 11,905 | 17.7 (2020, 57 g) | 0.24% | 1 | career rebounds |
+| 21 | Rajon Rondo | 11,006 | 13.7 (2010, 81 g) | 0.24% | 1 | career assists |
+| 22 | Damian Lillard | 24,303 | 32.2 (2023, 58 g) | 0.28% | 1 | best points per game |
+| 23 | Brook Lopez | 19,403 | 20.6 (2016, 73 g) | 0.28% | 1 | career steals + blocks |
+| 24 | Rudy Gobert | 12,404 | 15.9 (2019, 81 g) | 0.28% | 1 | career rebounds |
+| 25 | Jason Kidd | 12,347 | 18.7 (2003, 80 g) | 0.28% | 1 | career assists |
+| 26 | Carmelo Anthony | 30,158 | 28.9 (2007, 65 g) | 0.32% | 1 | career points |
+| 27 | Tony Parker | 23,480 | 22.0 (2009, 72 g) | 0.32% | 1 | career assists |
+| 28 | Tracy McGrady | 15,092 | 32.1 (2003, 75 g) | 0.32% | 1 | best points per game |
+| 29 | Josh Smith | 14,061 | 18.8 (2012, 66 g) | 0.32% | 1 | career steals + blocks |
+| 30 | DeAndre Jordan | 10,105 | 12.7 (2016, 77 g) | 0.32% | 1 | career rebounds |
+| 31 | DeMar DeRozan | 28,086 | 27.9 (2022, 76 g) | 0.36% | 1 | career points |
+| 32 | Kyle Lowry | 18,204 | 22.4 (2017, 60 g) | 0.36% | 1 | career assists |
+| 33 | Dwyane Wade | 26,847 | 30.2 (2009, 79 g) | 0.40% | 1 | career points |
+| 34 | Tyson Chandler | 10,026 | 11.8 (2008, 79 g) | 0.40% | 1 | career rebounds |
+| 35 | Nikola Vucevic | 17,987 | 23.4 (2021, 70 g) | 0.44% | 1 | career rebounds |
+| 36 | Andre Miller | 14,926 | 17.0 (2008, 82 g) | 0.44% | 1 | career assists |
+| 37 | Paul Pierce | 25,288 | 26.8 (2006, 79 g) | 0.48% | 1 | career points |
+| 38 | Zach Randolph | 19,733 | 23.6 (2007, 68 g) | 0.48% | 1 | career rebounds |
+| 39 | Mike Conley | 18,263 | 21.1 (2019, 70 g) | 0.48% | 1 | career assists |
+| 40 | Shawn Marion | 17,158 | 21.9 (2006, 80 g) | 0.48% | 1 | career steals + blocks |
+
+## Hand-set tiers
+
+| player | metrics said | tier set | reason |
+|---|---|---|---|
+| Michael Jordan | 3.61% (tier 2) | 1 | Michael Jordan: all-time great, but only his last two seasons (2001-02 and 2002-03) are in the data. |
+| Karl Malone | 4.21% (tier 2) | 1 | Karl Malone: Hall of Famer and second all-time scorer at his retirement; only 2001-02 to 2003-04 are in the data. |
+| Reggie Miller | 11.90% (tier 3) | 2 | Reggie Miller: Hall of Famer and long-time three-point record holder; only 2001-02 to 2004-05 are in the data. |
+| John Stockton | 12.70% (tier 3) | 2 | John Stockton: Hall of Famer and the all-time assists and steals leader; only 2001-02 and 2002-03 are in the data. |
+| Scottie Pippen | 22.06% (tier 3) | 2 | Scottie Pippen: Hall of Famer and six-time champion; only 2001-02 to 2003-04 are in the data. |
+| Patrick Ewing | 49.44% (tier 4) | 2 | Patrick Ewing: Hall of Famer; only his final season (2001-02, 69 games) is in the data. |
 
 ## 15 random players per tier (seed 2026)
 
-### Tier 1 (10 points, top 3%): 112 players
+### Tier 1 (10 points, top 3%): 187 players
 
 | player | career points | best points per game | fame percentile |
 |---|---|---|---|
-| Luka Doncic | 16,718 | 33.9 (2024, 70 g) | 0.12% |
-| Russell Westbrook | 30,190 | 31.6 (2017, 81 g) | 0.28% |
-| Tim Duncan | 24,405 | 25.5 (2002, 82 g) | 0.52% |
-| Klay Thompson | 20,346 | 22.3 (2017, 78 g) | 1.03% |
-| Kawhi Leonard | 19,679 | 27.9 (2026, 65 g) | 1.15% |
-| Devin Booker | 19,520 | 27.8 (2023, 53 g) | 1.23% |
-| Chris Bosh | 18,534 | 24.0 (2010, 70 g) | 1.43% |
-| CJ McCollum | 18,297 | 23.1 (2021, 47 g) | 1.55% |
-| Mike Conley | 18,263 | 21.1 (2019, 70 g) | 1.59% |
-| De'Aaron Fox | 13,254 | 26.6 (2024, 74 g) | 1.63% |
-| Lou Williams | 16,607 | 22.6 (2018, 79 g) | 2.18% |
-| Richard Hamilton | 16,229 | 20.1 (2006, 80 g) | 2.34% |
-| Andre Iguodala | 15,615 | 19.9 (2008, 82 g) | 2.62% |
-| Jeff Green | 15,360 | 16.9 (2014, 82 g) | 2.78% |
-| Khris Middleton | 15,191 | 20.9 (2020, 62 g) | 2.94% |
+| Chris Paul | 26,039 | 22.8 (2009, 78 g) | 0.08% |
+| Ben Wallace | 5,772 | 9.7 (2005, 74 g) | 0.20% |
+| Jason Kidd | 12,347 | 18.7 (2003, 80 g) | 0.28% |
+| Deron Williams | 15,202 | 21.0 (2012, 55 g) | 0.52% |
+| Jrue Holiday | 18,921 | 21.2 (2019, 67 g) | 0.56% |
+| Nikola Jokic | 20,744 | 29.6 (2025, 70 g) | 0.60% |
+| Draymond Green | 10,162 | 14.0 (2016, 81 g) | 0.71% |
+| LaMarcus Aldridge | 22,023 | 23.4 (2015, 71 g) | 0.75% |
+| Raymond Felton | 11,294 | 15.5 (2011, 75 g) | 1.15% |
+| Jeff Teague | 11,049 | 16.5 (2014, 79 g) | 1.27% |
+| David Lee | 11,452 | 20.2 (2010, 81 g) | 1.47% |
+| Rasheed Wallace | 11,577 | 19.3 (2002, 79 g) | 2.10% |
+| Nene | 11,746 | 14.6 (2009, 77 g) | 2.26% |
+| Jason Richardson | 15,259 | 23.2 (2006, 75 g) | 2.86% |
+| Reggie Evans | 3,454 | 5.6 (2006, 66 g) | 2.94% |
 
-### Tier 2 (20 points, 3 to 10%): 205 players
-
-| player | career points | best points per game | fame percentile |
-|---|---|---|---|
-| Thaddeus Young | 14,767 | 17.9 (2014, 79 g) | 3.25% |
-| Michael Jordan | 3,015 | 22.9 (2002, 60 g) | 3.61% |
-| Myles Turner | 10,787 | 18.0 (2023, 62 g) | 6.15% |
-| Tyson Chandler | 10,026 | 11.8 (2008, 79 g) | 6.79% |
-| Evan Fournier | 9,810 | 18.5 (2020, 66 g) | 6.94% |
-| Brandon Miller | 3,158 | 20.2 (2026, 65 g) | 7.06% |
-| Mehmet Okur | 9,118 | 17.9 (2006, 81 g) | 7.58% |
-| Jalen Duren | 3,950 | 19.5 (2026, 70 g) | 7.90% |
-| Derrick White | 8,845 | 16.5 (2026, 77 g) | 8.06% |
-| O.J. Mayo | 7,822 | 18.5 (2009, 82 g) | 9.01% |
-| Juwan Howard | 7,228 | 18.4 (2003, 77 g) | 9.09% |
-| Terrence Ross | 8,396 | 15.6 (2021, 46 g) | 9.13% |
-| Nick Young | 8,342 | 17.9 (2014, 64 g) | 9.25% |
-| Devonte' Graham | 3,757 | 18.2 (2020, 63 g) | 9.37% |
-| Matt Barnes | 8,207 | 10.3 (2013, 80 g) | 9.48% |
-
-### Tier 3 (35 points, 10 to 25%): 427 players
+### Tier 2 (20 points, 3 to 10%): 284 players
 
 | player | career points | best points per game | fame percentile |
 |---|---|---|---|
-| Ty Lawson | 7,408 | 17.6 (2014, 62 g) | 10.04% |
-| Josh Richardson | 6,617 | 16.6 (2019, 73 g) | 11.83% |
-| Matas Buzelis | 1,940 | 16.3 (2026, 77 g) | 12.46% |
-| Alonzo Mourning | 3,022 | 15.7 (2002, 75 g) | 13.06% |
-| Kenneth Faried | 5,578 | 13.7 (2014, 80 g) | 15.56% |
-| Thabo Sefolosha | 5,420 | 7.7 (2013, 80 g) | 16.07% |
-| E'Twaun Moore | 4,872 | 12.5 (2018, 82 g) | 18.06% |
-| Ajay Mitchell | 1,215 | 13.6 (2026, 57 g) | 18.25% |
-| Keith Bogans | 4,417 | 9.6 (2005, 74 g) | 19.52% |
-| Georges Niang | 4,295 | 9.9 (2025, 79 g) | 19.76% |
-| Pat Connaughton | 4,206 | 9.9 (2022, 65 g) | 20.20% |
-| Cam Whitmore | 1,249 | 12.3 (2024, 47 g) | 21.83% |
-| Alex Caruso | 3,779 | 10.1 (2024, 71 g) | 22.06% |
-| Noah Clowney | 1,362 | 12.3 (2026, 66 g) | 22.14% |
-| Jannero Pargo | 3,403 | 9.2 (2007, 82 g) | 24.37% |
+| Kurt Thomas | 6,577 | 14.0 (2003, 81 g) | 3.57% |
+| Larry Hughes | 8,273 | 22.0 (2005, 61 g) | 4.68% |
+| Wesley Matthews | 11,847 | 16.4 (2014, 82 g) | 5.12% |
+| Andrea Bargnani | 7,971 | 21.4 (2011, 66 g) | 5.28% |
+| Mitchell Robinson | 3,235 | 9.7 (2020, 61 g) | 7.06% |
+| Randy Foye | 7,850 | 16.3 (2009, 70 g) | 7.18% |
+| Jeremy Lin | 5,747 | 13.4 (2013, 82 g) | 7.42% |
+| T.J. Warren | 5,593 | 19.8 (2020, 67 g) | 7.54% |
+| Greivis Vasquez | 3,733 | 13.9 (2013, 77 g) | 7.86% |
+| Adonal Foyle | 1,935 | 5.4 (2003, 82 g) | 8.57% |
+| Tony Battie | 3,632 | 7.9 (2006, 82 g) | 9.05% |
+| JaMychal Green | 4,523 | 10.3 (2018, 55 g) | 9.13% |
+| Chris Wilcox | 5,150 | 13.5 (2007, 82 g) | 9.52% |
+| Luc Mbah a Moute | 4,562 | 9.9 (2015, 67 g) | 10.00% |
+| Reggie Miller | 4,487 | 16.5 (2002, 79 g) | 11.90% |
 
-### Tier 4 (55 points, 25 to 50%): 600 players
-
-| player | career points | best points per game | fame percentile |
-|---|---|---|---|
-| Herbert Jones | 3,045 | 11.0 (2024, 76 g) | 26.43% |
-| Egor Demin | 536 | 10.3 (2026, 52 g) | 29.48% |
-| Trendon Watford | 2,071 | 10.2 (2025, 44 g) | 29.92% |
-| Amir Coffey | 2,323 | 9.7 (2025, 72 g) | 30.91% |
-| Oshae Brissett | 1,546 | 9.1 (2022, 67 g) | 35.56% |
-| Dereck Lively II | 992 | 8.8 (2024, 55 g) | 37.18% |
-| Tyrese Martin | 834 | 8.7 (2025, 60 g) | 37.42% |
-| John Konchar | 1,570 | 5.1 (2023, 72 g) | 37.54% |
-| Jeremiah Robinson-Earl | 1,294 | 7.5 (2022, 49 g) | 40.91% |
-| Alan Williams | 413 | 7.4 (2017, 47 g) | 43.21% |
-| Eddie Robinson | 969 | 6.7 (2004, 51 g) | 44.92% |
-| John Crotty | 325 | 6.9 (2002, 41 g) | 45.60% |
-| Allan Ray | 290 | 6.7 (2007, 43 g) | 46.31% |
-| Drake Powell | 408 | 6.5 (2026, 63 g) | 47.62% |
-| Dalen Terry | 780 | 4.5 (2025, 73 g) | 48.17% |
-
-### Tier 5 (75 points, 50 to 75%): 555 players
+### Tier 3 (35 points, 10 to 25%): 429 players
 
 | player | career points | best points per game | fame percentile |
 |---|---|---|---|
-| Jan Vesely | 590 | 4.7 (2012, 57 g) | 51.83% |
-| Danny Manning | 201 | 4.0 (2002, 41 g) | 57.90% |
-| Jerome Adolphus Jordan | 182 | 3.1 (2015, 44 g) | 61.39% |
-| Jaylen Hoard | 271 | none | 61.67% |
-| Jermaine Jackson | 259 | 2.3 (2003, 53 g) | 62.10% |
-| Dominique Jones | 246 | none | 62.74% |
-| Johnathan Motley | 226 | none | 63.93% |
-| Mengke Bateer | 156 | none | 68.85% |
-| Billy Thomas | 147 | none | 69.52% |
-| Tyler Burton | 129 | none | 71.03% |
-| Justin Robinson | 112 | none | 72.46% |
-| Cole Swider | 110 | none | 72.62% |
-| Cameron Reynolds | 110 | none | 72.62% |
-| Mac McClung | 100 | none | 73.65% |
-| Jeremy Richardson | 88 | none | 75.00% |
+| Bennedict Mathurin | 4,506 | 17.6 (2026, 54 g) | 10.08% |
+| Luke Walton | 3,013 | 11.4 (2007, 59 g) | 11.87% |
+| Jason Maxiell | 3,644 | 7.9 (2008, 82 g) | 12.30% |
+| Matt Bonner | 4,878 | 8.4 (2009, 79 g) | 13.21% |
+| Nenad Krstic | 4,499 | 13.5 (2006, 80 g) | 13.97% |
+| Eddie House | 5,334 | 9.9 (2006, 80 g) | 15.48% |
+| Marquis Daniels | 4,595 | 13.6 (2009, 54 g) | 16.19% |
+| Rondae Hollis Jefferson | 2,815 | 13.8 (2018, 67 g) | 17.62% |
+| Josh Childress | 3,598 | 13.0 (2007, 55 g) | 18.69% |
+| Luther Head | 2,878 | 10.9 (2007, 80 g) | 21.47% |
+| Bub Carrington | 1,685 | 10.7 (2026, 82 g) | 21.87% |
+| Frank Kaminsky | 3,702 | 11.7 (2017, 75 g) | 22.02% |
+| Greg Buckner | 2,501 | 6.7 (2006, 73 g) | 22.62% |
+| Matt Carroll | 3,017 | 12.1 (2007, 72 g) | 22.78% |
+| Dahntay Jones | 3,583 | 10.2 (2010, 76 g) | 23.21% |
 
-### Tier 6 (100 points, bottom 25%): 621 players
+### Tier 4 (55 points, 25 to 50%): 556 players
 
 | player | career points | best points per game | fame percentile |
 |---|---|---|---|
-| Sergei Monia | 77 | none | 76.75% |
-| Nicolas Laprovittola | 59 | none | 78.57% |
-| Cassius Winston | 57 | none | 78.97% |
-| Melvin Sanders | 41 | none | 82.18% |
-| Jordan Hall | 28 | none | 85.52% |
-| Malik Williams | 19 | none | 88.17% |
-| Dereon Seabron | 18 | none | 88.41% |
-| Jalen Lecque | 15 | none | 89.29% |
-| Armel Traore | 14 | none | 89.84% |
-| Petr Cornelie | 14 | none | 89.84% |
-| Antonio Harvey | 13 | none | 90.52% |
-| Charles Cooke | 6 | none | 93.69% |
-| Filip Petrusev | 3 | none | 95.83% |
-| Scottie Lewis | 1 | none | 97.54% |
-| Ibrahim Kutluay | 0 | none | 97.66% |
+| Isaiah Canaan (2014-2019) | 1,948 | 11.0 (2016, 77 g) | 26.51% |
+| Facundo Campazzo | 831 | 6.1 (2021, 65 g) | 28.21% |
+| Jake LaRavia | 1,642 | 8.2 (2026, 82 g) | 31.79% |
+| Shawne Williams | 1,801 | 7.1 (2011, 64 g) | 31.90% |
+| Duane Washington Jr. | 717 | 9.9 (2022, 48 g) | 31.98% |
+| Tim Hardaway | 714 | 9.6 (2002, 68 g) | 33.69% |
+| Rodney Carney | 1,808 | 7.3 (2009, 66 g) | 33.81% |
+| Danny Wolf | 508 | 8.9 (2026, 57 g) | 36.59% |
+| Solomon Jones | 857 | 4.0 (2010, 52 g) | 37.26% |
+| Tom Gugliotta | 819 | 6.5 (2002, 44 g) | 38.13% |
+| Rob Dillingham | 636 | 6.3 (2026, 65 g) | 39.96% |
+| Earl Barron | 640 | 7.1 (2008, 46 g) | 43.93% |
+| Terrance Ferguson | 958 | 6.9 (2019, 74 g) | 44.68% |
+| Sion James | 441 | 5.4 (2026, 82 g) | 47.10% |
+| Jeremy Pargo | 416 | 3.1 (2012, 41 g) | 47.78% |
+
+### Tier 5 (75 points, 50 to 75%): 573 players
+
+| player | career points | best points per game | fame percentile |
+|---|---|---|---|
+| T.J. Leaf | 485 | 3.9 (2019, 58 g) | 51.19% |
+| Kam Jones | 162 | none | 51.79% |
+| Lawrence Funderburke | 365 | 4.7 (2002, 56 g) | 52.06% |
+| Jorge Gutierrez | 141 | none | 57.74% |
+| Jahmai Mashack | 192 | none | 58.25% |
+| Rob Kurz | 157 | 3.9 (2009, 40 g) | 58.57% |
+| C.J. Williams | 248 | none | 58.85% |
+| Justin Williams | 165 | none | 59.29% |
+| Freddie Gillespie | 132 | none | 60.28% |
+| David Duke Jr. | 233 | none | 63.49% |
+| Chris Wright (2012-2014) | 116 | none | 64.88% |
+| Willie Warren | 37 | none | 69.48% |
+| Ray Spalding | 58 | none | 71.23% |
+| Rakeem Christmas | 63 | none | 72.06% |
+| Jack Cooley | 67 | none | 72.46% |
+
+### Tier 6 (100 points, bottom 25%): 491 players
+
+| player | career points | best points per game | fame percentile |
+|---|---|---|---|
+| Maozinha Pereira | 48 | none | 76.90% |
+| RJ Nembhard Jr. | 15 | none | 77.98% |
+| Carlik Jones | 24 | none | 79.05% |
+| Billy Garrett Jr. | 26 | none | 82.86% |
+| Elliot Perry | 11 | none | 82.86% |
+| Taze Moore | 24 | none | 83.89% |
+| Joe Chealey | 4 | none | 85.40% |
+| Mangok Mathiang | 8 | none | 87.70% |
+| Jameel Warney | 17 | none | 88.25% |
+| Jack McVeigh | 14 | none | 88.77% |
+| Jordan Ford | 12 | none | 90.40% |
+| Javin DeLaurier | 0 | none | 91.03% |
+| Charles Cooke | 6 | none | 91.03% |
+| Coty Clarke | 6 | none | 93.69% |
+| Arnoldas Kulboka | 0 | none | 97.66% |
 
 ## Sanity check on recognizable names
 
@@ -196,12 +208,12 @@ The better-known tiers are fuller than the nominal shares (112 players in tier 1
 |---|---|---|---|---|---|---|
 | LeBron James | all-time great; expect tier 1 or better | 1 | 0.04% | 51,932 | 31.4 (2006, 79 g) | ok |
 | Kobe Bryant | all-time great; expect tier 1 or better | 1 | 0.08% | 31,731 | 35.3 (2006, 78 g) | ok |
-| Tim Duncan | all-time great; expect tier 1 or better | 1 | 0.52% | 24,405 | 25.5 (2002, 82 g) | ok |
+| Tim Duncan | all-time great; expect tier 1 or better | 1 | 0.08% | 24,405 | 25.5 (2002, 82 g) | ok |
 | Dirk Nowitzki | all-time great; expect tier 1 or better | 1 | 0.20% | 31,359 | 26.6 (2006, 81 g) | ok |
 | Stephen Curry | superstar; expect tier 1 or better | 1 | 0.24% | 30,675 | 32.0 (2021, 63 g) | ok |
 | Kevin Durant | superstar; expect tier 1 or better | 1 | 0.08% | 37,572 | 32.0 (2014, 81 g) | ok |
 | Giannis Antetokounmpo | superstar; expect tier 1 or better | 1 | 0.56% | 23,801 | 31.1 (2023, 63 g) | ok |
-| Nikola Jokic | superstar; expect tier 1 or better | 1 | 0.71% | 20,744 | 29.6 (2025, 70 g) | ok |
+| Nikola Jokic | superstar; expect tier 1 or better | 1 | 0.60% | 20,744 | 29.6 (2025, 70 g) | ok |
 | Luka Doncic | young star; expect tier 1 or better | 1 | 0.12% | 16,718 | 33.9 (2024, 70 g) | ok |
 | Shai Gilgeous-Alexander | young star; expect tier 1 or better | 1 | 0.24% | 15,011 | 32.7 (2025, 76 g) | ok |
 | Victor Wembanyama | young star, few seasons; expect tier 2 or better | 1 | 2.38% | 4,762 | 25.0 (2026, 64 g) | ok |
@@ -211,20 +223,24 @@ The better-known tiers are fuller than the nominal shares (112 players in tier 1
 | Paolo Banchero | young star; expect tier 2 or better | 1 | 1.87% | 6,551 | 25.9 (2025, 46 g) | ok |
 | Chet Holmgren | young star, defensive; expect tier 2 or better | 3 | 10.63% | 3,746 | 17.1 (2026, 69 g) | **CHECK** |
 | Cooper Flagg | rookie star, one season; expect tier 2 or better | 2 | 5.83% | 1,473 | 21.0 (2026, 70 g) | ok |
-| Tyrese Haliburton | young star; expect tier 2 or better | 2 | 6.35% | 6,521 | 20.7 (2023, 56 g) | ok |
-| Michael Jordan | most famous player ever, but only his last two seasons (2001-02 and 2002-03, Wizards) are in the data; expect tier 1 or better | 2 | 3.61% | 3,015 | 22.9 (2002, 60 g) | **CHECK** |
-| Ben Wallace | four-time Defensive Player of the Year, scorer in name only; expect tier 2 or better | 3 | 14.88% | 5,772 | 9.7 (2005, 74 g) | **CHECK** |
-| Brian Scalabrine | famous bench player: a deep-ish name; expect tier 4 or worse | 4 | 36.23% | 1,697 | 6.3 (2005, 54 g) | ok |
+| Tyrese Haliburton | young star; expect tier 2 or better | 2 | 3.69% | 6,521 | 20.7 (2023, 56 g) | ok |
+| Michael Jordan | most famous player ever, but only his last two seasons (2001-02 and 2002-03, Wizards) are in the data; expect tier 1 or better | 1 | 3.61% | 3,015 | 22.9 (2002, 60 g) | ok |
+| Ben Wallace | four-time Defensive Player of the Year, scorer in name only; expect tier 2 or better | 1 | 0.20% | 5,772 | 9.7 (2005, 74 g) | ok |
+| Brian Scalabrine | famous bench player: a deep-ish name; expect tier 4 or worse | 4 | 30.20% | 1,697 | 6.3 (2005, 54 g) | ok |
 | Jason Kapono | role player; expect tier 3 or worse | 3 | 23.89% | 3,444 | 10.6 (2007, 65 g) | ok |
 
-Names that did not come out as expected: Chet Holmgren (tier 3), Michael Jordan (tier 2), Ben Wallace (tier 3).
+Names that did not come out as expected: Chet Holmgren (tier 3).
 
 ## Review notes
 
-Written by hand after reading the numbers above (the rest of this file is generated). Nothing in the top 40 looks wrong. These do:
+Written by hand after reading the numbers above (the rest of this file is generated).
 
-- **Defenders and rebounders are rated too low (clearly wrong for Ben Wallace and Chet Holmgren).** Both come out as tier 3 (35 points) although each is well known for defence. The fame score only knows points, so a player who matters for blocks, rebounds or defence but scores little is under-rated. This shows up in prompts: Ben Wallace is a valid answer in 15 candidates (rebounds, blocks, steals, a triple-double) and is worth 35 points in each, where a fan would expect a tier 2 name (20). It is a limit of the method in the brief, not a bug. Fixing it needs another metric (rebounds, blocks, awards) or hand-set overrides, which is a decision for the next session or the owner.
-- **Michael Jordan is tier 2, not tier 1.** Only his last two seasons (2001-02 and 2002-03, Wizards) are in the data, so he is judged on 3,015 career points and a best average of 22.9. This is the data window and it affects anyone whose prime was before 2001-02. It matters for prompts: Jordan scored 51 points twice in the data, so he is a valid answer to the 40+, 45+ and 50+ regular-season points prompts (6 candidates in all), where he is worth 20 points instead of 10.
-- **One great season can make a modest-career player tier 1.** The "better of the two ranks" rule does what it was asked to, but it lets volume scorers in on a single season: Isaiah Thomas, Gilbert Arenas and Tyrese Maxey are all in the top 40. They are real stars, so this is not wrong, but tier 1 is fuller than 3% (112 players, 4.4%) and tiers 1 and 2 together hold 317 players (12.6%) against a nominal 10%.
-- **Points per game uses the regular season only** (at least 40 games, games for all teams added up); career points include the playoffs, as the brief says. A player who was great in the playoffs but short on regular-season games gets no credit for it in the points-per-game rank.
-- **Most lists are mostly well-known players.** Because tiers are global, 35 of the 53 player candidates have fewer than 10% of their answers at tier 4 or above, and only 7 have 25% or more. Those 7 come from `blocks` (15% to 36%), `rebounds` and `franchises`. If the game needs more deep cuts per prompt, the thresholds or the tier cutoffs are the levers.
+**Fixed in session 5.** The score now takes the best of five ranks (career points, rebounds, assists, steals plus blocks, best points per game), so Ben Wallace (decided by steals plus blocks) moved from tier 3 to tier 1 and the other 20 sanity names that were fine stayed fine. Six Hall of Famers whose prime was before 2001-02 have hand-set tiers (table above): Michael Jordan and Karl Malone tier 1; John Stockton, Scottie Pippen, Reggie Miller and Patrick Ewing tier 2.
+
+**Still wrong:**
+
+- **Chet Holmgren is tier 3 (10.63%).** The sanity list expects tier 2 or better for a top-pick young defender. He has played few seasons (3,746 career points, 17.1 points per game at best) and none of the five metrics lifts him into the top 10%. I did not add an override because nothing in the data proves it; it needs an owner decision (add him to `fame_overrides.csv` if you agree).
+- **Tier 1 is crowded: 187 players (7.4%) against a nominal 3%, and tiers 1 and 2 hold 471 (18.7%) against 10%.** Taking the best of five ranks lets a player in through any of five doors, including some who are very good at one counting stat but not household names (Andre Drummond, Josh Smith and Brook Lopez are all tier 1). The cutoffs were kept as asked. If the bands should be fuller or emptier, the cutoffs are the lever.
+- **Players with a pre-2002 prime who are not in the override file are still judged on a partial career** (for example Alonzo Mourning, tier 3, whose data covers 2001-02 to 2007-08 only). I only overrode players where the gap is large and the name is beyond doubt.
+- **Points per game is regular season only** (at least 40 games, games for all teams added up); career points include the playoffs.
+- **Most lists are mostly well-known players.** Because tiers are global and the top bands are full, 47 of the 53 player candidates have fewer than 10% of their answers at tier 4 or above, and none has 25% or more (the highest is 19%, blocks 6 or more). Difficulty cutoffs were re-set for this (see `difficulty()` in `pipeline/generator.py`).

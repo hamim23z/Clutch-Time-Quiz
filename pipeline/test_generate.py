@@ -32,13 +32,16 @@ def _write_processed(directory: Path) -> None:
 
 def test_command_writes_candidates_fame_and_both_reports(tmp_path, small_templates, capsys):
     _write_processed(tmp_path / "processed")
-    code = generate.main(["--processed-dir", str(tmp_path / "processed"), "--out-dir", str(tmp_path / "out"),
+    (tmp_path / "overrides.csv").write_text("athlete_id,tier,reason\n1,1,test override\n")
+    code = generate.main(["--overrides", str(tmp_path / "overrides.csv"), "--processed-dir", str(tmp_path / "processed"), "--out-dir", str(tmp_path / "out"),
                           "--docs-dir", str(tmp_path / "docs")])
     assert code == 0
     prompts = json.loads((tmp_path / "out" / "candidates.json").read_text())
     generator.validate(prompts)
     assert [p["id"] for p in prompts] == ["cand-points-low-20", "cand-points-low-30"]
-    assert len(pd.read_parquet(tmp_path / "out" / "fame.parquet")) == 40
+    fame = pd.read_parquet(tmp_path / "out" / "fame.parquet")
+    assert len(fame) == 40
+    assert fame.set_index("player_id").loc[1, "override_reason"] == "test override"
     assert json.loads((tmp_path / "out" / "candidates_meta.json").read_text())["attempts"][-1]["status"] == "too_few"
     assert "Fame" in (tmp_path / "docs" / "fame-report.md").read_text()
     assert "points-low" in (tmp_path / "docs" / "prompt-candidates.md").read_text()

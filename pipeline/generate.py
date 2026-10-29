@@ -16,7 +16,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from fame import compute_fame
+from fame import OVERRIDES_PATH, compute_fame, load_overrides
 from generator import generate, write_candidates
 from reports import write_reports
 from templates import TEMPLATES, Tables
@@ -36,11 +36,12 @@ def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--processed-dir", type=Path, default=Path("data/processed"))
     ap.add_argument("--out-dir", type=Path, default=Path("data/generated"))
+    ap.add_argument("--overrides", type=Path, default=OVERRIDES_PATH, help="hand-set fame tiers (athlete_id,tier,reason)")
     ap.add_argument("--docs-dir", type=Path, default=HERE.parent / "docs")
     args = ap.parse_args(argv)
 
     tables = load_tables(args.processed_dir)
-    fame = compute_fame(tables.player_games, tables.players, tables.min_season_games)
+    fame = compute_fame(tables.player_games, tables.players, tables.min_season_games, load_overrides(args.overrides))
     args.out_dir.mkdir(parents=True, exist_ok=True)
     fame.to_parquet(args.out_dir / "fame.parquet", compression="zstd", index=False)
     result = generate(tables, fame)
