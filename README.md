@@ -4,17 +4,19 @@ A daily basketball trivia game where the obvious answer loses. Every day there i
 
 It is a static website (Vite, React, TypeScript) with no backend, no accounts, no analytics and no cookies. The prompts come from an offline Python pipeline that turns real NBA box scores (2001-02 to 2025-26) into two JSON files.
 
-| Phone | | |
-| --- | --- | --- |
-| ![A prompt with the shot clock](docs/screenshots/phone-prompt.png) | ![A reveal after a correct answer](docs/screenshots/phone-reveal-clank.png) | ![The results screen](docs/screenshots/phone-results.png) |
+![The home screen on desktop: the panel on the left, the court on the right](docs/screenshots/court/1280-1-home.jpg)
 
-Screenshots are from a development build; more are in [docs/screenshots](docs/screenshots).
+| Phone: home | Phone: a prompt | Phone: a deep cut reveal | Phone: results |
+| --- | --- | --- | --- |
+| ![](docs/screenshots/court/360-1-home.jpg) | ![](docs/screenshots/court/360-2-prompt.jpg) | ![](docs/screenshots/court/360-3-reveal-high.jpg) | ![](docs/screenshots/court/360-4-results.jpg) |
+
+On a screen 900 px wide or more the game is a split screen: the questions on the left, a persistent basketball court on the right (the jumbotron shows the prompt, points and dive; the shot clock counts the 25 seconds; every answer is a shot on that court). On a phone the court is a strip at the top. More screenshots at four widths are in [docs/screenshots/court](docs/screenshots/court), and [docs/design.md](docs/design.md) explains the design.
 
 ## How it plays
 
 - **A dive** is 7 prompts, 25 seconds each. Type a name (autocomplete suggests from the whole list of players and teams, so it never gives an answer away) and press Enter.
 - **Scoring** is by tier: 10, 20, 35, 55, 75 or 100 points for a valid answer, 0 for a wrong or late one. A dive is worth at most 700.
-- **The reveal** plays a short basketball shot for your tier (an airball for 0, a slam dunk for 100), then shows the most famous and the rarest valid answers.
+- **The reveal** plays a short basketball shot on the court for your tier (an airball for 0, a clank for 10, a rim rattle, a bank shot, a swish, a deep swish, and a slam dunk for 100), taken from a spot on the floor that gets deeper as the points go up, then shows the most famous and the rarest valid answers. At the end the seven shots are replayed, with a rank label for your total.
 - **Streaks and the archive:** finish each day's dive to keep your streak; past dives are in the archive and do not count for the streak. Everything is kept in your browser (localStorage); there is no account.
 - A real player from before 2001-02 gets an "outside the data range" message, not a miss.
 
@@ -39,7 +41,7 @@ Other commands, all in `web/`:
 | `npm run preview` | serve the production build locally |
 | `npm run sync-data` | copy `data/export/*.json` and the outside-range list into `web/public/` |
 
-Useful URLs while developing: `/?preview=1` shows a Play-test before launch, `/?preview=1&today=2026-11-10` pretends it is that day (with its own saved progress), and `/?animations=1` (development) or `/?preview=1&animations=1` (a build) loops every shot animation.
+Useful URLs while developing: `/?preview=1` shows a Play-test before launch, `/?preview=1&today=2026-11-10` pretends it is that day (with its own saved progress), and `/?animations=1` (development) or `/?preview=1&animations=1` (a build) shows every shot on the court, on a loop or one at a time.
 
 ## Regenerate the data
 
@@ -63,7 +65,7 @@ Every prompt states its era, "Since 2001-02 (through 2025-26)", and its valid an
 
 ## Daily rotation and the launch date
 
-Dive number = days since the launch date + 1, counted on the calendar in **America/New_York**, so everyone gets the same dive and it changes at midnight New York time. Dive N plays prompts 7(N-1) to 7(N-1)+6 of `prompts.json`, and the file starts again after its last dive (every 72 days). The launch date, time zone and site address are constants in [`web/src/config.ts`](web/src/config.ts): `LAUNCH_DATE` is `2026-11-03`, and before it the site shows a "Coming soon" screen. `SITE_URL` is a placeholder that goes into the share line and the social tags: set it to the real address before launch.
+Dive number = days since the launch date + 1, counted on the calendar in **America/New_York**, so everyone gets the same dive and it changes at midnight New York time. Dive N plays prompts 7(N-1) to 7(N-1)+6 of `prompts.json`, and the file starts again after its last dive (every 72 days). The launch date, time zone and site address are constants in [`web/src/config.ts`](web/src/config.ts): `LAUNCH_DATE` is `2026-10-29` (dive #1), and before it the site shows a "Coming soon" screen (`?preview=1` still lets a tester in). `SITE_URL` is `https://nba-deep-cut.vercel.app`; it goes into the share line and the social tags.
 
 ## Deploy
 

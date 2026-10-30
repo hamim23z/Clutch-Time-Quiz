@@ -1,5 +1,6 @@
 import type { Streaks } from '../streaks';
 import { StreakBadge } from './StreakBadge';
+import { Wordmark } from './Wordmark';
 
 interface Props {
   number: number;
@@ -19,14 +20,38 @@ const days = (n: number): string => `${n} ${n === 1 ? 'day' : 'days'}`;
 
 export function Home({ number, played, streaks, streakUp, saving, onPlay, onResults, onArchive, onHowTo }: Props) {
   return (
-    <section className="card home" aria-labelledby="home-heading">
-      <h2 id="home-heading">The daily trivia game where the obvious answer loses.</h2>
-      <p>Seven basketball prompts, 25 seconds each. Name a valid answer, and the more obscure it is, the more it scores.</p>
-      <p className="today">Today&rsquo;s dive: <strong>#{number}</strong></p>
+    <section className="home" aria-label="Home">
+      <Wordmark />
+      <p className="home__tagline">The daily basketball trivia game where the obvious answer loses.</p>
+      <p className="home__rules">Seven prompts, 25 seconds each. Name a valid answer: the more obscure it is, the more it scores.</p>
+      <p className="today">
+        Today&rsquo;s dive: <strong>#{number}</strong>
+      </p>
+      <div className="actions actions--home">
+        {played ? (
+          <button type="button" className="primary primary--big" onClick={onResults}>
+            View results
+          </button>
+        ) : (
+          <button type="button" className="primary primary--big" onClick={onPlay}>
+            Play today&rsquo;s dive
+          </button>
+        )}
+        <div className="actions__row">
+          <button type="button" className="secondary" onClick={onArchive}>
+            Archive
+          </button>
+          <button type="button" className="secondary" onClick={onHowTo}>
+            How to play
+          </button>
+        </div>
+      </div>
       <dl className="streaks" aria-label="Streaks">
         <div>
           <dt>Streak</dt>
-          <dd><StreakBadge value={streaks.current} increased={streakUp} /></dd>
+          <dd>
+            <StreakBadge value={streaks.current} increased={streakUp} />
+          </dd>
         </div>
         <div>
           <dt>Best streak</dt>
@@ -34,23 +59,6 @@ export function Home({ number, played, streaks, streakUp, saving, onPlay, onResu
         </div>
       </dl>
       {!saving && <p className="caveat">This browser is not saving anything, so your streaks and past dives will be gone when you close the page.</p>}
-      <div className="actions">
-        {played ? (
-          <button type="button" className="primary" onClick={onResults}>
-            Today&rsquo;s results
-          </button>
-        ) : (
-          <button type="button" className="primary" onClick={onPlay}>
-            Play
-          </button>
-        )}
-        <button type="button" className="secondary" onClick={onArchive}>
-          Archive
-        </button>
-        <button type="button" className="secondary" onClick={onHowTo}>
-          How to play
-        </button>
-      </div>
     </section>
   );
 }

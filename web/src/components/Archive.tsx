@@ -19,7 +19,7 @@ const label = (r: PromptResult, i: number): string => (r.tier === null ? `prompt
 export function Archive({ today, history, saving, onPlay, onResults, onBack }: Props) {
   const numbers = Array.from({ length: today }, (_, i) => today - i); // newest first
   return (
-    <section className="card archive" aria-labelledby="archive-heading">
+    <section className="archive" aria-labelledby="archive-heading">
       <h2 id="archive-heading">Archive</h2>
       <p>Every past dive. Playing one here counts for the archive only, not for your streak.</p>
       {!saving && <p className="caveat">This browser is not saving anything, so the archive will only remember this visit.</p>}
