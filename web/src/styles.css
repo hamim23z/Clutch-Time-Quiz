@@ -1,6 +1,7 @@
 /*
- * Deep Cut: pixel art. Black and orange, a tight palette, chunky pixels and hard edges.
- * No gradients that blend, no blur, no rounded corners: borders are notched, shadows are hard offsets, motion is stepped.
+ * Deep Cut: flat and hard-edged, in black and orange, with pixel type. The panel's borders are notched, its shadows are hard
+ * offsets and its motion is stepped; the shot chart on the right is its own flat SVG (chart/chart.css).
+ * No blur, no glow, no gradients that blend, no rounded corners.
  * The palette and the tier colours are tokens: change them here and nowhere else (docs/design.md).
  */
 :root {
@@ -58,10 +59,6 @@
 *::after {
   box-sizing: border-box;
   border-radius: 0;
-}
-
-img {
-  image-rendering: pixelated;
 }
 
 body {
@@ -152,7 +149,7 @@ a {
   color: var(--ink);
 }
 
-/* ---------- the page: the panel with the questions, the court beside it (or above it on a phone) ---------- */
+/* ---------- the page: the panel with the questions, the shot chart beside it (or above it on a phone) ---------- */
 .shell {
   display: flex;
   flex-direction: column;
@@ -172,20 +169,20 @@ a {
   margin-right: auto;
 }
 
-.court-pane {
+.chart-pane {
   position: relative;
   order: -1;
   width: 100%;
-  height: 288px; /* two screen pixels per game pixel for the 142 rows every shot needs (src/court/geometry.ts), plus the 4px border */
-  overflow: hidden;
-  background: var(--ink);
-  border-bottom: 4px solid var(--orange);
+  aspect-ratio: 688 / 860;
+  max-height: 60vh;
+  background: #060606;
+  border-bottom: 4px solid var(--line);
 }
 
-.court-fallback {
+.chart-fallback {
   position: absolute;
   inset: 0;
-  background: repeating-conic-gradient(var(--ink) 0 25%, var(--panel) 0 50%) 0 0 / 8px 8px;
+  background: #060606;
 }
 
 @media (max-width: 899px) {
@@ -205,29 +202,6 @@ a {
     margin-bottom: 0.6rem;
   }
 
-  .court-pane {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-  }
-
-  .panel h2,
-  .panel h3,
-  .panel :focus {
-    scroll-margin-top: 304px;
-  }
-}
-
-@media (min-width: 520px) and (max-width: 899px) {
-  .court-pane {
-    height: 430px; /* three screen pixels per game pixel */
-  }
-
-  .panel h2,
-  .panel h3,
-  .panel :focus {
-    scroll-margin-top: 446px;
-  }
 }
 
 @media (min-width: 900px) {
@@ -237,14 +211,16 @@ a {
     align-items: stretch;
   }
 
-  .court-pane {
+  .chart-pane {
     order: 2;
     position: sticky;
     top: 0;
+    aspect-ratio: auto;
+    max-height: none;
     height: 100vh;
     height: 100dvh;
     border-bottom: 0;
-    border-left: 4px solid var(--orange);
+    border-left: 4px solid var(--line);
   }
 
   .panel {
@@ -1346,13 +1322,35 @@ h2.eyebrow {
   text-align: center;
 }
 
-/* the 13 x 13 ball sprite at 4x, bouncing in steps */
+/* a flat orange ball with two seams, bouncing in steps */
 .loading__ball {
-  width: 52px;
-  height: 52px;
-  background: url('./assets/pixel/ball.png') 0 0 / 52px 52px no-repeat;
-  image-rendering: pixelated;
+  position: relative;
+  width: 48px;
+  height: 48px;
+  background: var(--orange);
+  clip-path: circle(50%);
   animation: ball-bounce 700ms steps(5, end) infinite alternate;
+}
+
+.loading__ball::before,
+.loading__ball::after {
+  content: '';
+  position: absolute;
+  background: var(--ink);
+}
+
+.loading__ball::before {
+  left: 0;
+  right: 0;
+  top: 22px;
+  height: 4px;
+}
+
+.loading__ball::after {
+  top: 0;
+  bottom: 0;
+  left: 22px;
+  width: 4px;
 }
 
 .loading__shadow {
@@ -1402,11 +1400,11 @@ h2.eyebrow {
   min-height: 100vh;
 }
 
-.animations__court {
+.animations__chart {
   position: relative;
-  height: 288px;
-  border-bottom: 4px solid var(--orange);
-  overflow: hidden;
+  aspect-ratio: 688 / 860;
+  max-height: 60vh;
+  background: #060606;
 }
 
 .animations__panel {
@@ -1429,23 +1427,18 @@ h2.eyebrow {
   margin-top: 1rem;
 }
 
-.animations__grid {
-  display: grid;
-  gap: 1rem;
-}
-
 @media (min-width: 900px) {
   .animations {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
 
-  .animations__court {
+  .animations__chart {
     order: 2;
+    aspect-ratio: auto;
+    max-height: none;
     height: 100vh;
     position: sticky;
     top: 0;
-    border-bottom: 0;
-    border-left: 4px solid var(--orange);
   }
 }
 
@@ -1471,9 +1464,7 @@ h2.eyebrow {
 
   .particle,
   .confetti,
-  .confetti__piece,
-  .court__particle,
-  .court__flash {
+  .confetti__piece {
     display: none !important;
   }
 }

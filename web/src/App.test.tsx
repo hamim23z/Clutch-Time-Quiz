@@ -1,3 +1,4 @@
+import { displayText } from './components/PromptText';
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -163,7 +164,7 @@ describe('a prompt', () => {
   it('shows the prompt, a 25 second countdown and a text input', async () => {
     const user = setup();
     await start(user);
-    expect(promptText()).toBe(expectedDive()[0]!.text);
+    expect(promptText()).toBe(displayText(expectedDive()[0]!.text));
     expect(screen.getByText(/Prompt 1 of 7/)).toBeInTheDocument();
     expect(screen.getByRole('timer')).toHaveTextContent('25');
     expect(screen.getByRole('combobox')).toHaveFocus();
@@ -295,7 +296,7 @@ describe('a full dive', () => {
 
     for (let i = 0; i < 7; i++) {
       const p = dive[i]!;
-      expect(promptText()).toBe(p.text);
+      expect(promptText()).toBe(displayText(p.text));
       expect(screen.getByText(new RegExp(`Prompt ${i + 1} of 7`))).toBeInTheDocument();
       const answers = validAnswers(p);
       if (i === 0) {
@@ -366,7 +367,7 @@ describe('the daily rotation', () => {
     serveFiles(twoDives());
     const user = setup();
     await start(user, DAY.second);
-    expect(promptText()).toBe(twoDives()[7]!.text); // dive #2 is prompts 7 to 13
+    expect(promptText()).toBe(displayText(twoDives()[7]!.text)); // dive #2 is prompts 7 to 13
     expect(screen.getByText(/Prompt 1 of 7/)).toBeInTheDocument();
   });
 
@@ -374,7 +375,7 @@ describe('the daily rotation', () => {
     serveFiles(twoDives());
     const user = setup();
     await start(user, DAY.third); // dive #3 of a 2-dive file is dive #1 again
-    expect(promptText()).toBe(twoDives()[0]!.text);
+    expect(promptText()).toBe(displayText(twoDives()[0]!.text));
   });
 
   it('gives everyone the same dive on the same New York day, whatever the clock says in UTC', async () => {
@@ -400,7 +401,7 @@ describe('before the launch', () => {
     const { storage } = renderApp(DAY.beforeLaunch, { search: '?preview=1' });
     await user.click(await screen.findByRole('button', { name: 'Play-test' }));
     await screen.findByRole('combobox');
-    expect(promptText()).toBe(expectedDive()[0]!.text);
+    expect(promptText()).toBe(displayText(expectedDive()[0]!.text));
     await playWholeDive(user, expectedDive());
     await user.click(screen.getByRole('button', { name: 'Home' }));
     expect(await screen.findByRole('heading', { name: 'Coming soon' })).toBeInTheDocument();

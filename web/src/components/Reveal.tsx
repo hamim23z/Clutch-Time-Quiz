@@ -1,6 +1,6 @@
 import { useEffect, useState, type Ref } from 'react';
 import { useAnnounce } from '../announcer';
-import { useCourtStore } from '../court/courtStore';
+import { useChartStore } from '../chart/chartStore';
 import { useReducedMotion } from '../motion';
 import { shotForResult } from '../shots';
 import { useSound } from '../sound';
@@ -113,12 +113,12 @@ export function Reveal({ prompt, result, isLast, headingRef, onNext, skipped, on
   const reduced = useReducedMotion();
   const announce = useAnnounce();
   const { play } = useSound();
-  const court = useCourtStore();
+  const chart = useChartStore();
 
   // Say the result once, and play its sound. The page text below carries the same words for everyone else.
   useEffect(() => {
     announce(`${headline(result)}. ${shot.label}.`);
-    court.set({ phase: 'shot', shot, shotKey: court.get().shotKey + 1, skipped: false });
+    chart.set({ phase: 'shot', shot, shotKey: chart.get().shotKey + 1, skipped: false });
     if (!reduced) play(shot.name);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once per result
   }, [result.promptId]);

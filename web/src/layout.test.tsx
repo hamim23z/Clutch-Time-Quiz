@@ -70,14 +70,14 @@ describe('the shell', () => {
 
   const show = () => render(<App now={() => new Date('2026-11-04T17:00:00Z')} search="" storage={null} />);
 
-  it('marks the layout, and puts the panel before the court in the page, so reading starts with the questions', async () => {
+  it('marks the layout, and puts the panel before the chart in the page, so reading starts with the questions', async () => {
     mockMedia(true);
     const { container } = show();
     await screen.findByRole('button', { name: /^Play today/ });
     const shell = container.querySelector('.shell')!;
     expect(shell).toHaveAttribute('data-layout', 'split');
     expect(shell.firstElementChild).toHaveClass('panel');
-    expect(shell.lastElementChild).toHaveClass('court-pane');
+    expect(shell.lastElementChild).toHaveClass('chart-pane');
   });
 
   it('is stacked on a phone', async () => {
@@ -87,31 +87,31 @@ describe('the shell', () => {
     expect(container.querySelector('.shell')).toHaveAttribute('data-layout', 'stacked');
   });
 
-  it('keeps the court mounted from the first screen: it is the same element on home, how to play and the archive', async () => {
+  it('keeps the chart mounted from the first screen: it is the same element on home, how to play and the archive', async () => {
     mockMedia(true);
     show();
-    const court = await screen.findByTestId('court');
+    const chart = await screen.findByTestId('chart');
     const { default: userEvent } = await import('@testing-library/user-event');
     const user = userEvent.setup();
     await user.click(await screen.findByRole('button', { name: 'Archive' }));
     expect(await screen.findByRole('heading', { name: 'Archive' })).toBeInTheDocument();
-    expect(screen.getByTestId('court')).toBe(court);
-    expect(court).toHaveAttribute('data-phase', 'idle');
+    expect(screen.getByTestId('chart')).toBe(chart);
+    expect(chart).toHaveAttribute('data-phase', 'idle');
     await user.click(screen.getByRole('button', { name: 'Back' }));
     await user.click(await screen.findByRole('button', { name: 'How to play' }));
-    expect(screen.getByTestId('court')).toBe(court);
+    expect(screen.getByTestId('chart')).toBe(chart);
     await user.click(screen.getByRole('button', { name: 'Back' }));
     await user.click(await screen.findByRole('button', { name: /^Play today/ }));
     await screen.findByRole('combobox');
-    expect(screen.getByTestId('court')).toBe(court);
-    expect(court).toHaveAttribute('data-phase', 'prompt');
+    expect(screen.getByTestId('chart')).toBe(chart);
+    expect(chart).toHaveAttribute('data-phase', 'prompt');
   });
 
-  it('hides the court from assistive technology: it is decoration, the panel has every word', async () => {
+  it('hides the picture from assistive technology: it is decoration, the panel has every word (a live line says the result)', async () => {
     show();
-    const court = await screen.findByTestId('court');
-    expect(court).toHaveAttribute('aria-hidden', 'true');
-    expect(court.closest('.court-pane')).toHaveAttribute('aria-hidden', 'true');
-    expect(screen.queryByRole('main')?.contains(court)).toBe(false);
+    const chart = await screen.findByTestId('chart');
+    expect(chart.querySelector('svg')).toHaveAttribute('aria-hidden', 'true');
+    expect(chart.closest('.chart-pane')).not.toBeNull();
+    expect(screen.queryByRole('main')?.contains(chart)).toBe(false);
   });
 });

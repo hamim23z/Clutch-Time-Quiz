@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
-import { useCourtStore } from './court/courtStore';
+import { marksFrom, useChartStore } from './chart/chartStore';
 import { Final } from './components/Final';
 import { PromptScreen } from './components/PromptScreen';
 import { Reveal } from './components/Reveal';
@@ -42,7 +42,7 @@ export function Dive({ prompts, index, diveNumber, outsideNames, onFinish, onHom
   const firstRender = useRef(true);
   const finished = useRef(false);
   const reduced = useReducedMotion();
-  const court = useCourtStore();
+  const chart = useChartStore();
   const [skippedAt, setSkippedAt] = useState(-1); // the prompt whose shot the player skipped
 
   const prompt = currentPrompt(state);
@@ -70,12 +70,12 @@ export function Dive({ prompts, index, diveNumber, outsideNames, onFinish, onHom
     else if (revealed) resultRef.current?.focus();
   }, [state.index, revealed, over]);
 
-  // The court follows the dive: which prompt, the points, and what is on (a question or a result).
+  // The chart follows the dive: which prompt, the points, the answers so far, and what is on (a question or a result).
   const dived = totalPoints(state.results);
   useEffect(() => {
     if (over) return;
-    court.set({ phase: revealed ? 'shot' : 'prompt', promptNumber: Math.min(state.index + 1, state.prompts.length), total: state.prompts.length, points: dived, diveNumber, ...(revealed ? {} : { clock: 25, shot: null, skipped: false, replay: null }) });
-  }, [court, over, revealed, state.index, state.prompts.length, dived, diveNumber]);
+    chart.set({ phase: revealed ? 'shot' : 'prompt', promptNumber: Math.min(state.index + 1, state.prompts.length), total: state.prompts.length, points: dived, diveNumber, marks: marksFrom(state.results), ...(revealed ? {} : { clock: 25, shot: null, skipped: false }) });
+  }, [chart, over, revealed, state.index, state.results, state.prompts.length, dived, diveNumber]);
 
   useEffect(() => {
     if (over && !finished.current) {
@@ -114,7 +114,7 @@ export function Dive({ prompts, index, diveNumber, outsideNames, onFinish, onHom
           skipped={skipped}
           onSkip={() => {
             setSkippedAt(state.index);
-            court.set({ skipped: true });
+            chart.set({ skipped: true });
           }}
         />
       </>

@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef } from 'react';
 import { useAnnounce } from '../announcer';
-import { useCourtStore } from '../court/courtStore';
+import { useChartStore } from '../chart/chartStore';
 import { resolveEntry, resolveText, timeoutResult } from '../answer';
 import type { Index } from '../matching';
 import { SECONDS_PER_PROMPT } from '../tiers';
@@ -22,7 +22,7 @@ const WARNINGS = [10, 5];
 
 export function PromptScreen({ prompt, index, outsideNames, elapsedMs = 0, onResult }: Props) {
   const announce = useAnnounce();
-  const court = useCourtStore();
+  const chart = useChartStore();
   const typed = useRef('');
   const done = useRef(false);
 
@@ -38,10 +38,10 @@ export function PromptScreen({ prompt, index, outsideNames, elapsedMs = 0, onRes
   const remainingMs = useCountdown(SECONDS_PER_PROMPT, () => finish(timeoutResult(prompt, typed.current)), elapsedMs);
   const seconds = Math.ceil(remainingMs / 1000);
 
-  // the shot clock on the court follows the same count
+  // the shot clock on the chart follows the same count
   useEffect(() => {
-    court.set({ clock: seconds });
-  }, [seconds, court]);
+    chart.set({ clock: seconds });
+  }, [seconds, chart]);
 
   useEffect(() => {
     if (WARNINGS.includes(seconds) && seconds < SECONDS_PER_PROMPT) announce(`${seconds} seconds left`);

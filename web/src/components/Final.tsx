@@ -1,7 +1,7 @@
 import { useEffect, useState, type CSSProperties, type Ref } from 'react';
 import { useAnnounce } from '../announcer';
 import { totalPoints } from '../dive2';
-import { useCourtStore } from '../court/courtStore';
+import { marksFrom, useChartStore } from '../chart/chartStore';
 import { useReducedMotion } from '../motion';
 import { rankFor } from '../ranks';
 import { ARM_MS } from './Reveal';
@@ -33,13 +33,13 @@ function describe(r: PromptResult): string {
 
 /** A total of at least this share of the maximum earns confetti. */
 export const STRONG_SHARE = 0.6;
-export const STEP_MS = 480; // one shot every 480 ms, in step with the replay on the court
+export const STEP_MS = 480; // one shot every 480 ms, in step with the replay on the chart
 
 export function Final({ prompts, results, diveNumber, headingRef, onHome, onArchive, onHowTo, streak }: Props) {
   const announce = useAnnounce();
   const [copyFailed, setCopyFailed] = useState(false);
   const reduced = useReducedMotion();
-  const court = useCourtStore();
+  const chart = useChartStore();
   const [skipped, setSkipped] = useState(false);
   const [replay, setReplay] = useState(0); // bumped by the replay button to play the seven shots again
   const total = totalPoints(results);
@@ -47,9 +47,9 @@ export function Final({ prompts, results, diveNumber, headingRef, onHome, onArch
   const sequenceMs = reduced || skipped ? 0 : results.length * STEP_MS + 150;
   const rank = rankFor(total);
 
-  // The court replays the seven shots in order while the squares appear one by one. A tap or Enter skips to the total.
+  // The chart replays the seven shots in order while the squares appear one by one. A tap or Enter skips to the total.
   useEffect(() => {
-    court.set({ phase: 'results', replay: results.map(shotForResult), replayKey: court.get().replayKey + 1, points: total, diveNumber, shot: null, clock: null, skipped: false });
+    chart.set({ phase: 'results', marks: marksFrom(results), replayKey: chart.get().replayKey + 1, points: total, diveNumber, shot: null, clock: null, skipped: false });
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once per results screen
   }, [diveNumber]);
   useEffect(() => {
@@ -66,12 +66,12 @@ export function Final({ prompts, results, diveNumber, headingRef, onHome, onArch
   }, [skipped, reduced]);
   const skip = (): void => {
     setSkipped(true);
-    court.set({ skipped: true });
+    chart.set({ skipped: true });
   };
   const replayShots = (): void => {
     setReplay((n) => n + 1);
     setSkipped(false);
-    court.set({ phase: 'results', replay: results.map(shotForResult), replayKey: court.get().replayKey + 1, skipped: false });
+    chart.set({ phase: 'results', marks: marksFrom(results), replayKey: chart.get().replayKey + 1, skipped: false });
   };
   const line = shareLine(diveNumber, results);
 

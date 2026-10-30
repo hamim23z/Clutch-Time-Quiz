@@ -1,6 +1,6 @@
 import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnnouncerProvider } from './announcer';
-import { CourtProvider, useCourtStore } from './court/courtStore';
+import { ChartProvider, useChartStore } from './chart/chartStore';
 import { useLayout } from './layout';
 import { SoundProvider, useSound } from './sound';
 import { Dive } from './Dive';
@@ -23,8 +23,8 @@ import type { Prompt, PromptResult } from './types';
 
 type Load = { status: 'loading' } | { status: 'error'; message: string } | ({ status: 'ready' } & GameData);
 /** daily: today's dive, counts for the streak. archive: a past dive. test: the preview play-test, never saved. */
-// The court is the heavy art: it loads after the panel, so the home screen is quick.
-const CourtScene = lazy(() => import('./court/CourtScene'));
+// The shot chart loads after the panel, so the home screen is quick.
+const ShotChart = lazy(() => import('./chart/ShotChart'));
 
 type Mode = 'daily' | 'archive' | 'test';
 type View = { name: 'home' } | { name: 'howto' } | { name: 'archive' } | { name: 'results'; number: number } | { name: 'dive'; number: number; mode: Mode; resume?: { results: PromptResult[]; elapsedMs: number } };
@@ -43,14 +43,14 @@ interface Props {
 
 export default function App(props: Props) {
   return (
-    <CourtProvider>
+    <ChartProvider>
       <Game {...props} />
-    </CourtProvider>
+    </ChartProvider>
   );
 }
 
 function Game({ now = () => new Date(), storage, search, launchDate = LAUNCH_DATE, outsideNames }: Props) {
-  const courtStore = useCourtStore();
+  const chartStore = useChartStore();
   const layout = useLayout();
   const params = useMemo(() => new URLSearchParams(search ?? (typeof window === 'undefined' ? '' : window.location.search)), [search]);
   const preview = params.get('preview') === '1';
@@ -160,12 +160,12 @@ function Game({ now = () => new Date(), storage, search, launchDate = LAUNCH_DAT
     setLoad({ status: 'loading' });
     setAttempt((n) => n + 1);
   };
-  // The court on the right follows the screen on the left. A dive and the results publish their own state.
+  // The chart on the right follows the screen on the left. A dive and the results publish their own state.
   useEffect(() => {
     if (!view || view.name === 'dive' || view.name === 'results') return;
     const headline = view.name === 'howto' ? 'HOW TO PLAY' : view.name === 'archive' ? 'ARCHIVE' : launched ? 'NBA DEEP CUT' : 'COMING SOON';
-    courtStore.set({ phase: 'idle', headline, diveNumber: launched ? today : null, points: 0, promptNumber: 0, clock: null, shot: null, replay: null, skipped: false });
-  }, [view, launched, today, courtStore]);
+    chartStore.set({ phase: 'idle', headline, diveNumber: launched ? today : null, points: 0, promptNumber: 0, clock: null, shot: null, marks: [], skipped: false });
+  }, [view, launched, today, chartStore]);
 
   const go = (next: View): void => setView(next);
   const startDive = (number: number): void => {
@@ -260,9 +260,9 @@ function Game({ now = () => new Date(), storage, search, launchDate = LAUNCH_DAT
         {isMock && <p className="mock-note">Test data: the players, teams and prompts in this version are made up for the tests.</p>}
         <footer className="fineprint">Unofficial fan game. Not affiliated with the NBA.</footer>
       </main>
-      <div className="court-pane" aria-hidden="true">
-        <Suspense fallback={<div className="court-fallback" />}>
-          <CourtScene />
+      <div className="chart-pane">
+        <Suspense fallback={<div className="chart-fallback" aria-hidden="true" />}>
+          <ShotChart />
         </Suspense>
       </div>
       </div>

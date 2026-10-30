@@ -1,28 +1,31 @@
-import { useEffect, useState } from 'react';
-import CourtScene from './court/CourtScene';
-import { CourtProvider, createCourtStore, INITIAL_COURT } from './court/courtStore';
-import { SHOT_MS, SHOT_NAMES, shotForPoints, type ShotName } from './shots';
-import { SPOTS } from './court/geometry';
+import { useEffect, useMemo, useState } from 'react';
+import ShotChart from './chart/ShotChart';
+import { ChartProvider, createChartStore, INITIAL_CHART } from './chart/chartStore';
 import { ReducedMotionOverride } from './motion';
-import { useMemo } from 'react';
+import { shotForPoints } from './shots';
+import { TIER_POINTS } from './tiers';
+import type { Tier } from './types';
 
-const POINTS: Record<ShotName, number> = { airball: 0, clank: 10, rattle: 20, bank: 35, swish: 55, 'deep-swish': 75, dunk: 100 };
-const LOOP_MS = SHOT_MS + 1800;
+const OUTCOMES: Array<{ name: string; tier: Tier | null }> = [{ name: 'airball', tier: null }, { name: 'tier-1', tier: 1 }, { name: 'tier-2', tier: 2 }, { name: 'tier-3', tier: 3 }, { name: 'tier-4', tier: 4 }, { name: 'tier-5', tier: 5 }, { name: 'tier-6', tier: 6 }];
+const LOOP_MS = 2600;
 
 /**
- * A review page (?animations=1 in development, ?preview=1&animations=1 in a build): every shot on the real court, one after
+ * A review page (?animations=1 in development, ?preview=1&animations=1 in a build): every outcome on the real chart, one after
  * another on a loop, with buttons to play one, and a switch for the reduced-motion version.
  */
 export default function AnimationsPage() {
-  const store = useMemo(() => createCourtStore({ ...INITIAL_COURT, phase: 'shot', promptNumber: 3, total: 7, diveNumber: 12, points: 0 }), []);
-  const [current, setCurrent] = useState<ShotName>('airball');
+  const store = useMemo(() => createChartStore({ ...INITIAL_CHART, phase: 'prompt', promptNumber: 1, total: 7, diveNumber: 12, clock: 25 }), []);
+  const [current, setCurrent] = useState(OUTCOMES[0]!.name);
   const [auto, setAuto] = useState(true);
   const [reduced, setReduced] = useState(false);
 
-  const play = (name: ShotName): void => {
+  const play = (name: string): void => {
+    const outcome = OUTCOMES.find((o) => o.name === name) ?? OUTCOMES[0]!;
+    const before = store.get();
+    const marks = before.marks.length >= 7 ? [] : before.marks; // a fresh dive after seven
+    const points = (marks.length === 0 ? 0 : before.points) + (outcome.tier === null ? 0 : TIER_POINTS[outcome.tier]);
     setCurrent(name);
-    const shot = shotForPoints(POINTS[name]);
-    store.set({ phase: 'shot', shot, shotKey: store.get().shotKey + 1, skipped: false, points: store.get().points + shot.points, promptNumber: 3, diveNumber: 12 });
+    store.set({ phase: 'shot', marks: [...marks, { id: `demo-${before.shotKey + 1}`, tier: outcome.tier }], points, shot: shotForPoints(outcome.tier === null ? 0 : TIER_POINTS[outcome.tier]), shotKey: before.shotKey + 1, skipped: false, clock: null, promptNumber: marks.length + 1 });
   };
 
   useEffect(() => {
@@ -34,28 +37,28 @@ export default function AnimationsPage() {
     if (!auto) return;
     const id = setInterval(() => {
       setCurrent((c) => {
-        const next = SHOT_NAMES[(SHOT_NAMES.indexOf(c) + 1) % SHOT_NAMES.length] ?? 'airball';
-        const shot = shotForPoints(POINTS[next]);
-        store.set({ phase: 'shot', shot, shotKey: store.get().shotKey + 1, skipped: false, points: next === 'airball' ? 0 : store.get().points + shot.points });
+        const next = OUTCOMES[(OUTCOMES.findIndex((o) => o.name === c) + 1) % OUTCOMES.length]!.name;
+        play(next);
         return next;
       });
     }, LOOP_MS);
     return () => clearInterval(id);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- play only uses the store
   }, [auto, store]);
 
   return (
     <div className="animations">
-      <div className="animations__court" data-reduced={reduced}>
-        <CourtProvider store={store}>
+      <div className="animations__chart" data-reduced={reduced}>
+        <ChartProvider store={store}>
           <ReducedMotionOverride.Provider value={reduced ? true : null}>
-            <CourtScene />
+            <ShotChart />
           </ReducedMotionOverride.Provider>
-        </CourtProvider>
+        </ChartProvider>
       </div>
       <main className="animations__panel">
-        <h1 className="title">Shot animations on the court</h1>
+        <h1 className="title">Shot animations on the chart</h1>
         <p className="animations__now" data-testid="animation-now">
-          Now: <strong>{current}</strong> ({POINTS[current]} points, shot from ({SPOTS[current].x}, {SPOTS[current].y}))
+          Now: <strong>{current}</strong>
         </p>
         <label className="animations__toggle">
           <input type="checkbox" checked={auto} onChange={(e) => setAuto(e.target.checked)} /> Loop through all seven
@@ -64,9 +67,9 @@ export default function AnimationsPage() {
           <input type="checkbox" checked={reduced} onChange={(e) => setReduced(e.target.checked)} /> Show the reduced-motion version
         </label>
         <div className="animations__buttons">
-          {SHOT_NAMES.map((name) => (
-            <button key={name} type="button" className="secondary" data-testid={`demo-${name}`} aria-pressed={current === name} onClick={() => { setAuto(false); play(name); }}>
-              {name} · {POINTS[name]}
+          {OUTCOMES.map((o) => (
+            <button key={o.name} type="button" className="secondary" data-testid={`demo-${o.name}`} aria-pressed={current === o.name} onClick={() => { setAuto(false); play(o.name); }}>
+              {o.name}
             </button>
           ))}
         </div>

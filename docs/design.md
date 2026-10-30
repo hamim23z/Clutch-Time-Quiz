@@ -1,64 +1,55 @@
-# Design notes: pixel art, the court and the panel
+# Design notes: the panel and the shot chart
 
-Deep Cut is one place, not a set of screens. A pixel-art basketball court is on screen from the first moment and stays mounted while the player moves between home, a prompt, the reveal, the results, the archive and how to play. The panel next to it carries every word and number; the court is decoration (`aria-hidden`) that makes each answer a shot.
+Deep Cut is one place, not a set of screens. A flat shot chart is on screen from the first moment and stays mounted while the player moves between home, a prompt, the reveal, the results, the archive and how to play. The panel next to it carries every word and number; the chart is decoration (its SVG is `aria-hidden`) that turns each answer into a shot.
 
-The look is pixel art in black and orange, with chunky pixels, hard edges and scanlines. There are no smooth gradients, soft shadows, rounded corners or glow: edges are notched, shadows are hard offsets, dithering stands in for blending, and motion is stepped. How the pictures are made and shown is in [pixel-art.md](pixel-art.md).
+The look is flat and hard-edged, in black and orange: no gradients that blend, no blur, no glow, no raster images. The panel keeps its notched borders and hard shadows; the chart is plain SVG shapes.
 
 ## Layout
 
-- **900 px and wider** (desktop, tablet landscape): a split screen. The panel (questions, controls, results) is on the left; the court fills the right half of the viewport and stays in place while the panel scrolls. `web/src/layout.ts` holds the 900 px breakpoint (`layoutForWidth`, `useLayout`); the CSS switches on the same width.
-- **Below 900 px** (phones, narrow windows): the court is a strip at the top (288 px, two screen pixels per game pixel; 430 px from 520 px wide), and it stays at the top (sticky) while the panel scrolls under it, so a shot is never scrolled out of view. No horizontal scrolling at 360 px.
-- The page order is the panel first and the court after it, so a screen reader reads the questions first and never meets the court.
+- **900 px and wider:** a split screen. The panel (questions, controls, results) is on the left; the chart fills the right half of the viewport (background `#060606`) and stays in place while the panel scrolls. `web/src/layout.ts` holds the breakpoint; the CSS switches on the same width.
+- **Below 900 px:** the chart is above the panel, at most 60% of the screen height (its shape is 688 : 860). When a result or the results screen appears, the page scrolls back to the top so the shot is never played out of sight.
+- The page order is the panel first and the chart after it, so a screen reader reads the questions first.
 
-## The court
+## The shot chart (`web/src/chart/`)
 
-A 172 x 215 game-pixel picture shown at a whole-number scale (`web/src/court/`): `court_bare.png` (stands, spotlight cones, LED ribbon, backboard, perspective hardwood, painted lane, three-point arc) with sprites on top: two crowd-sparkle frames and two spotlight beams, a jumbotron and a shot clock (real text in Press Start 2P over the stands), the rim in two halves with the ball between them, three net frames, the shooter in two poses, the dunker, the ball, a label and a burst of square particles. The court is a lazy-loaded chunk (15.4 KB gzipped JavaScript, 2.3 KB CSS, 33 KB for the court picture); the home screen does not wait for it.
+One inline SVG, `viewBox="0 0 688 860"`, 11.2 units per foot, the basket at the top.
 
-The panel and the court talk through a tiny store (`courtStore.tsx`): the panel publishes what is on (a question, a result, the points, the seconds left, the shot, the skip) and the court draws it. The shot clock on the court is a copy: the timer in the prompt card is the accessible one.
+- **Court:** a rectangle at (96, 104), 560 x 526.4; the lane; the free-throw circle (top half solid, bottom half dashed); the restricted-area arc; the three-point line (straight sides to y = 263, then a 266-unit arc about the hoop); the half-court arc at the bottom; the backboard line and the rim (radius 8.4) at (376, 162.8). Lines are cream, 3 wide, square caps.
+- **Rarity zones:** concentric filled circles about the hoop, clipped to the court, in very dark warm tones (warmest nearest the basket), with dashed grey rings at the boundaries: T1 under 112 units from the hoop, T2 to 190.4, T3 to 266, T4 to 358.4, T5 to 440, T6 to 467.
+- **Depth gauge:** left of the court, a line at x = 84 with a tick at every boundary, and for each tier a square with its number and the points beside it (10, 20, 35, 55, 75, 100), in the middle of its band.
+- **Markers:** one 22-unit square per answer in the tier colour, with the tier number, a hard black offset shadow and a dashed line from the hoop. The latest answer has a dashed cream ring (radius 26). A wrong or late answer is a grey square with an X in the **airball zone** (a dashed rectangle under the court, three slots across and two deep; more misses wrap round, a little to the right).
+- **Placement** (`placement.ts`): the angle and the distance come from a hash of the prompt id and the dive number (the dive number stands for the dive's date), so a dive always looks the same. The distance is inside the tier's band and off its edges, the angle is 20 to 160 degrees below the hoop, the marker and its ring stay on the court, and no two markers (or a marker and the waiting ball) are closer than 34 units. Markers are placed in prompt order, so an earlier one never moves when a later answer is added.
+- **Header and readouts:** "SHOT CHART" in Press Start 2P, the tagline "Rarer answer = deeper shot." in VT323, and the clock and points from the same store the panel publishes (no second timer). Under the airball zone, three boxes: SHOTS (made / total), POINTS and BEST SHOT (tier and points).
+- **Home:** no markers, the ball at the bottom, and a "TODAY'S DIVE #N / 7 PROMPTS" box over the court. Other idle screens show their name in the same box.
 
-- **Idle:** two spotlight beams sweep in steps, the crowd sparkles between two frames, and the ball bounces at centre court on a shadow that shrinks and grows.
-- **A question is on:** the shooter waits at the top of the key dribbling; the shot clock counts down and flickers red in the last 5 seconds.
-- **A result:** the shooter walks to a spot that depends on the tier, jumps, releases (his pose swaps), the ball hops to the hoop, the net swaps between its three frames, the jumbotron rolls the points up, and the tier label (with its number: "T5 Buzzer beater") pops in. A tap or Enter skips to the end.
+The panel and the chart talk through a tiny store (`chartStore.tsx`): the panel publishes what is on (the question number, the points, the seconds left, the answers so far, the shot, the skip) and the chart draws it.
 
-| Points | Shot | From |
-| --- | --- | --- |
-| 0 | airball: the ball misses everything and drops off the bottom | the right wing |
-| 10 | clank: the ball hits the front rim and bounces away; the rim shakes | close to the hoop, right |
-| 20 | rim rattle: two hits on the rim and in | the left elbow |
-| 35 | bank shot off the square | the left wing |
-| 55 | swish, the net rings | the right, far wing |
-| 75 | deep swish: a high arc, the net rings, a flicker of the crowd | far out on the left |
-| 100 | slam dunk: a drive, the dunker hangs from the rim, 28 square particles, a flicker and a short shake | driving from the lane |
+## Animation
 
-Only `transform` and `opacity` are animated. The ball's path is generated CSS keyframes (`geometry.ts`) with `steps()` timing that start from custom properties, so every shot starts at its own spot. With reduced motion there is a still court, and the shooter, the still ball at the end of the shot and the label (a plain fade) are all that change.
+CSS only, and only `transform` and `opacity`.
+
+- **A correct answer:** a ball (orange, black seams) flies in an arc from the bottom centre to its marker (x moves with ease-out, y rises and falls); the marker pops in when it lands (scale 0.6 to a peak to 1), the target band pulses once, and the tier colour flashes behind the points readout. A rarer tier flies longer (590 ms for T1 to 940 ms for T6), arcs higher and pops bigger. **T6** also gets a brief white flash over the court and a short "DEEP CUT" stamp.
+- **A wrong or late answer:** the ball falls short into the airball zone, bounces, and the X appears.
+- **Replay:** the results screen shows all seven markers, popping in one after another (480 ms apart, in step with the squares on the left).
+- **Skip:** a tap or Enter jumps to the end state. **Reduced motion:** no flight, pulse, flash or stamp; the marker only fades in.
+- The existing sound effects are called as before.
 
 ## Type and colour
 
-Press Start 2P for headings, numbers, buttons and small labels; VT323 for prompt text, answers, the input and body copy. Both are self-hosted through `@fontsource`, imported in `main.tsx` (no font service is called).
+Press Start 2P for headings, numbers and buttons; VT323 for prompt text, answers, the input and body copy. Both are self-hosted through `@fontsource`.
 
-| Token | Colour | Use |
-| --- | --- | --- |
-| ink | `#0a0a0a` | page, inputs, the court's frame |
-| panel | `#141414` | cards |
-| line | `#3a3a3a` | borders, dividers |
-| orange | `#ff6a13` | buttons, the court frame, headings |
-| amber | `#ffb347` | points, focus ring, links |
-| cream | `#f4ead6` | text |
-| muted | `#a8a8a8` | secondary text (never dimmer on dark) |
-| deep | `#8a3c0a` | hard shadows |
+Palette: ink `#0a0a0a`, panel `#141414`, line `#3a3a3a`, orange `#ff6a13`, amber `#ffb347`, danger red `#ff3b1f`, cream `#f4ead6`, muted `#a8a8a8`, deep orange `#8a3c0a`. Tier colours, the same on the chart, the reveal, the results squares, the archive strips and the chips: 1 `#6e6e6e`, 2 `#a8a8a8`, 3 `#ededed`, 4 `#ffb020`, 5 `#ff6a13`, 6 `#ff3b1f`. Text on tier 1 is white, on the rest ink, so every pair is at least 4.5 : 1. A tier is never told by colour alone: every square, chip and marker has its number.
 
-Tier colours, the same on the court label, the reveal, the results squares, the archive strips and the chips: 1 `#6e6e6e`, 2 `#a8a8a8`, 3 `#ededed`, 4 `#ffb020`, 5 `#ff6a13`, 6 `#ff3b1f`. Text on tier 1 is white, on the rest ink, so every pair is at least 4.5 : 1 (`pixel.test.ts` computes them). A tier is never told by colour alone: every square, chip and label carries its number or its name. The share squares follow the same order: ⬛ miss, 🔲 1, 🔳 2, ⬜ 3, 🟨 4, 🟧 5, 🟥 6 (emoji have a limited palette, so the two greys are black and white buttons).
+## Accessibility
 
-Pixel shapes without images: a **notched corner** is four box-shadow bars (`--notch`), so the corners are cut, a **hard shadow** is a zero-blur offset, the **scanlines** are two-pixel stripes behind the page and over the court, and the **timer bar** is a row of segments.
+The SVG is `aria-hidden`. A visually hidden `aria-live="polite"` line next to it says each result ("Tier 3, 35 points, 55 total", or "Airball, 0 points, 55 total"). Everything on the chart is also in the panel. On a phone the small text is made larger in CSS, because the picture is about 0.55 of its size.
 
 ## Self-critique rounds
 
-Screenshots at 360, 768, 1280 and 1920 px of the home screen, a prompt with the input focused, the reveal of a high-tier and a zero-point answer, the results and the archive (`docs/screenshots/pixel/`), judged against: a place, visual hierarchy, a readable left panel, anything cramped, flat, misaligned or generic, one product, and the krillion.io look (the site could not be opened from the build environment, so the direction was taken from the brief: chunky pixels, hard edges, scanlines, tight palette, notched corners, monospace pixel type, black and orange).
+Screenshots of home, prompt 1 and 7, a correct answer, an airball, the T6 flash and the results, at 1440 x 860 and 390 x 844 (`docs/screenshots/chart/`).
 
-**Round 1 (first build).** Desktop worked at once: the court read as a place, and the wordmark, the dithered stands and the jumbotron gave a clear look. Problems: on a phone the court was drawn at one screen pixel per game pixel, tiny in a mostly black strip (the 4 px border took the height below the two-times threshold); at 1920 px the cards sat left of the header (a card margin overrode the centring); the secondary buttons vanished (dark on dark); the speaker was a smooth emoji in a pixel page; the zero-points label was a muddy grey with an orange shadow; the answer box was cramped beside its button on a phone and the prompt took seven lines; the shooter was clipped at the edge of the 640 px pane at the far spots; the tier 1 share square was tiny. Fixed: the strip is 288 px (and 430 px on tablets), the card margins, a pixel speaker drawn in 2 px squares, a grey shadow for a miss, a stacked answer row and smaller prompt text under 30 rem, shooting spots moved in from the edges, and new share squares.
+**Round 1.** Found: on a phone the page scrolled to the result heading and the chart left the screen, so the shot was missed; a tier-4 marker sat on the court line with its ring outside it; the "100" of the gauge touched the axis; five tier-1 markers on the results screen carried a ring over the cluster; the pulse of a zone was a strong tan band; the zone tones were too close to tell apart. Fixed: the chart scrolls back into view on a phone, markers keep their ring on the court, the gauge text is smaller, the ring is only for the live shot, the pulse is lighter, and the zone tones are further apart.
 
-**Round 2.** Secondary buttons were still faint on the page, so they take the panel grey on the page and ink inside a card; the phone home screen put the play button at the fold, so the type and spacing are tighter there; at 1600 px and wider the wordmark and tagline grow. Axe (home, prompt, reveal, results, archive: no violations), a keyboard-only dive (Tab to Play, type, arrow, Enter, no pointer), the console (no errors) and reduced motion (no running animation on the court) were checked.
+**Round 2.** Rechecked every state at both sizes: no horizontal scroll, no overlapping labels, no marker outside the court, the gauge ticks on the band rings, the left panel unchanged except the capital on the question. Nothing more failed.
 
-**Round 3.** A contact sheet of all seven shots at three moments each (`all-seven-shots.png`) showed each shot distinct, the dunker on the rim, the flicker on the deep swish and the dunk, and the label legible; the final screenshots were retaken.
-
-**Still weak, honestly.** The shooter is one sprite size at every spot, because a fractional scale would smear its pixels, so a deep shot does not look farther away, only farther along the floor. The waiting shooter faces away from the viewer. On tablets in portrait the court sits in black bars at three screen pixels per game pixel. At two screen pixels per game pixel the jumbotron's text is the 8 px minimum of the font. The two greys in the share squares are approximations. The ball does not spin. A next round would draw a second shooter facing the viewer and shorter jumbotron labels for small strips.
+**Limits, honestly.** On a phone the picture is about 0.55 of its size, so the gauge and the stats are small even after being enlarged; five or more tier-1 markers sit close together near the basket because that zone is small; the page is 9 px taller than a 860 px window (a margin in the panel, as before), so the whole page can scroll by that much; focus goes to the result heading after an answer (as before) and to the next question's input, not to the same input.

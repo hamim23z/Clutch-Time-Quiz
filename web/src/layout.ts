@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 
-/** At this width and wider the game is a split screen: the panel on the left, the court on the right. */
+/** At this width and wider the game is a split screen: the panel on the left, the shot chart on the right. */
 export const SPLIT_MIN_WIDTH = 900;
 
 export type Layout = 'split' | 'stacked';
 
-/** split from 900 px up (desktop, tablet landscape); stacked below it (phones, narrow windows): a court strip above the panel. */
+/** split from 900 px up (desktop, tablet landscape); stacked below it (phones, narrow windows): the chart above the panel. */
 export function layoutForWidth(width: number): Layout {
   return width >= SPLIT_MIN_WIDTH ? 'split' : 'stacked';
 }

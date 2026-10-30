@@ -6,7 +6,6 @@ import App from './App';
 import { STRONG_SHARE } from './components/Final';
 import { MAX_DIVE_POINTS } from './tiers';
 import { divePrompts } from './schedule';
-import { SHOT_NAMES } from './shots';
 import type { StorageLike } from './storage';
 import { MOCK_OUTSIDE_RANGE_NAMES } from './outsideRange';
 import { PROMPTS_PATH, UNIVERSE_PATH, mockPrompts, readJson } from './testUtils';
@@ -72,22 +71,24 @@ describe('the scoreboard', () => {
   });
 });
 
-const court = (): Promise<HTMLElement> => screen.findByTestId('court');
+const chartEl = (): Promise<HTMLElement> => screen.findByTestId('chart');
 const letArm = () => act(async () => void vi.advanceTimersByTime(250)); // Enter skips only a moment after the result appears
 
 describe('the shot after an answer', () => {
-  it('plays the shot for the tier on the court and shows the points and the tier name in the panel', async () => {
+  it('plays the shot for the tier on the chart and shows the points and the tier name in the panel', async () => {
     const user = setup();
     await begin(user);
     const first = dive()[0]!.answers[0]!;
     await answer(user, first.name);
     await screen.findByRole('heading', { level: 3, name: /points/ });
-    const stage = await court();
+    const stage = await chartEl();
     await vi.waitFor(() => expect(stage).toHaveAttribute('data-phase', 'shot'));
-    expect(stage.getAttribute('data-shot')).toMatch(/^(clank|rattle|bank|swish|deep-swish|dunk)$/);
-    expect(stage.querySelector('.court__ball--shot')).not.toBeNull();
+    expect(stage.getAttribute('data-tier')).toBe(String(first.tier));
+    expect(stage.querySelector('.chart__fly-y')).not.toBeNull(); // the ball flies to its marker
+    expect(stage.querySelector('.chart__mark')).not.toBeNull();
+    expect(screen.getByTestId('chart-live')).toHaveTextContent(`Tier ${first.tier}, ${first.points} points, ${first.points} total`);
     expect(document.querySelector('.reveal .shot-label')).toHaveTextContent(String(first.points));
-    expect(stage).toHaveAttribute('aria-hidden', 'true'); // decoration: the panel has every word
+    expect(stage.querySelector('svg')).toHaveAttribute('aria-hidden', 'true'); // decoration: the panel has every word
   });
 
   it('announces the points and the tier name when an answer is submitted', async () => {
@@ -101,14 +102,15 @@ describe('the shot after an answer', () => {
     expect(said).toMatch(/Garbage time|Bench mob|Starting five|All-Star|Buzzer beater|Poster dunk/);
   });
 
-  it('announces a miss as an airball, and the court takes the airball', async () => {
+  it('announces a miss as an airball, and the chart takes the airball', async () => {
     const user = setup();
     await begin(user);
     await answer(user, 'qwerty zxcv');
     await screen.findByRole('heading', { level: 3, name: /0 points/ });
     expect(announcer()).toContain('Not a valid answer: 0 points. Airball.');
-    const stage = await court();
-    await vi.waitFor(() => expect(stage).toHaveAttribute('data-shot', 'airball'));
+    const stage = await chartEl();
+    await vi.waitFor(() => expect(stage).toHaveAttribute('data-tier', 'miss'));
+    expect(stage.querySelector('.chart__fly-y--miss')).not.toBeNull();
   });
 
   it('an outside-the-range name is a gentle airball, with a shake of the message', async () => {
@@ -117,7 +119,7 @@ describe('the shot after an answer', () => {
     await answer(user, 'Orson Quillfeather');
     const heading = await screen.findByRole('heading', { level: 3, name: 'Outside the data range' });
     expect(heading).toHaveClass('shake');
-    await vi.waitFor(async () => expect(await court()).toHaveAttribute('data-shot', 'airball'));
+    await vi.waitFor(async () => expect(await chartEl()).toHaveAttribute('data-tier', 'miss'));
     expect(screen.getByText(/does not count against you/i)).toBeInTheDocument();
   });
 
@@ -132,7 +134,7 @@ describe('the shot after an answer', () => {
     expect(reveal).not.toHaveClass('is-skipped');
     await user.keyboard('{Enter}');
     expect(reveal).toHaveClass('is-skipped');
-    expect(await court()).toHaveClass('is-skipped');
+    expect(await chartEl()).toHaveClass('is-skipped');
     // the next prompt is not skipped, and its input takes focus and typing at once
     await user.click(screen.getByRole('button', { name: 'Next prompt' }));
     const input = await screen.findByRole('combobox');
@@ -149,7 +151,7 @@ describe('the shot after an answer', () => {
     const reveal = document.querySelector('.reveal')!;
     await user.pointer({ target: reveal.querySelector('.reveal__banner')!, keys: '[MouseLeft]' });
     expect(reveal).toHaveClass('is-skipped');
-    expect(await court()).toHaveClass('is-skipped');
+    expect(await chartEl()).toHaveClass('is-skipped');
   });
 
   it('a skipped shot puts the points on the scoreboard at once', async () => {
@@ -176,7 +178,7 @@ describe('the input', () => {
 });
 
 describe('reduced motion', () => {
-  it('replaces the shot with the still hoop: no ball, no player, no particles, and the label is still there', async () => {
+  it('replaces the flight with a fade: no ball in the air, no pulse or flash, and the label is still there', async () => {
     vi.stubGlobal('matchMedia', vi.fn(() => ({ matches: true, addEventListener: () => undefined, removeEventListener: () => undefined })));
     const user = setup();
     await begin(user);
@@ -184,9 +186,10 @@ describe('reduced motion', () => {
     await screen.findByRole('heading', { level: 3, name: /points/ });
     const reveal = document.querySelector('.reveal')!;
     expect(reveal).toHaveClass('is-reduced');
-    const stage = await court();
+    const stage = await chartEl();
     await vi.waitFor(() => expect(stage).toHaveClass('is-reduced'));
-    for (const sel of ['.court__ball--shot', '.court__particle', '.court__flash', '.court__idle-bounce']) expect(stage.querySelector(sel), sel).toBeNull();
+    for (const sel of ['.chart__fly-x', '.chart__pulse', '.chart__heat', '.chart__stamp']) expect(stage.querySelector(sel), sel).toBeNull();
+    expect(stage.querySelector('.chart__mark')).not.toBeNull(); // the marker is there at once
     expect(reveal.querySelector('.shot-label')).not.toBeNull();
     expect(announcer()).toMatch(/points\./); // still announced
     expect(screen.getByTestId('scoreboard-points')).not.toHaveTextContent(/^$/);
@@ -221,7 +224,7 @@ async function playWith(user: User, pick: (p: Prompt) => string): Promise<number
 }
 
 describe('the results screen', () => {
-  it('plays back seven mini courts colored by tier, then the total', async () => {
+  it('plays back seven squares colored by tier, then the total', async () => {
     const user = setup();
     await begin(user);
     await playWith(user, (p) => p.answers[0]!.name);
@@ -310,29 +313,28 @@ describe('the sound toggle', () => {
 });
 
 describe('the animation review page', () => {
-  it('shows every shot on the court, one button for each, and a reduced-motion version on request', async () => {
+  it('shows every outcome on the chart, one button for each, and a reduced-motion version on request', async () => {
     const user = setup();
     render(<AnimationsPage />);
-    const stage = await screen.findByTestId('court');
-    for (const name of SHOT_NAMES) expect(screen.getByTestId(`demo-${name}`)).toBeInTheDocument();
-    await user.click(screen.getByTestId('demo-dunk'));
-    await vi.waitFor(() => expect(stage).toHaveAttribute('data-shot', 'dunk'));
-    expect(stage.querySelectorAll('.court__particle').length).toBeGreaterThan(0);
-    expect(stage.querySelectorAll('.court__particle').length).toBeLessThanOrEqual(40);
+    const stage = await screen.findByTestId('chart');
+    for (const name of ['airball', 'tier-1', 'tier-2', 'tier-3', 'tier-4', 'tier-5', 'tier-6']) expect(screen.getByTestId(`demo-${name}`)).toBeInTheDocument();
+    await user.click(screen.getByTestId('demo-tier-6'));
+    await vi.waitFor(() => expect(stage).toHaveAttribute('data-tier', '6'));
+    expect(stage.querySelector('.chart__stamp')).not.toBeNull();
     await user.click(screen.getByRole('checkbox', { name: /reduced-motion/i }));
     await vi.waitFor(() => expect(stage).toHaveClass('is-reduced'));
-    expect(stage.querySelector('.court__particle')).toBeNull();
+    expect(stage.querySelector('.chart__stamp')).toBeNull();
   });
 
-  it('loops through all seven shots in turn', async () => {
+  it('loops through every outcome in turn', async () => {
     render(<AnimationsPage />);
-    const stage = await screen.findByTestId('court');
+    const stage = await screen.findByTestId('chart');
     const seen = new Set<string>();
     for (let i = 0; i < 8; i++) {
-      await vi.waitFor(() => expect(stage.getAttribute('data-shot')).not.toBe(''));
-      seen.add(stage.getAttribute('data-shot') ?? '');
-      await act(async () => void vi.advanceTimersByTime(3100));
+      await vi.waitFor(() => expect(stage.getAttribute('data-tier')).not.toBe(''));
+      seen.add(stage.getAttribute('data-tier') ?? '');
+      await act(async () => void vi.advanceTimersByTime(2700));
     }
-    expect([...seen].sort()).toEqual([...SHOT_NAMES].sort());
+    expect([...seen].sort()).toEqual(['1', '2', '3', '4', '5', '6', 'miss']);
   });
 });
