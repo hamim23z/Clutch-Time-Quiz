@@ -63,11 +63,42 @@ export interface GameData {
   outsideNames: string[];
 }
 
-export async function loadData(baseUrl: string): Promise<GameData> {
+const cache = new Map<string, Promise<GameData>>();
+
+/** Forget what was loaded (a retry after an error, or a test). */
+export function clearDataCache(): void {
+  cache.clear();
+}
+
+/**
+ * Load and check the three data files. The result is cached in memory by base URL, so the big prompts file is fetched and
+ * parsed once per visit however often the app asks. A failure is not cached: retrying fetches again.
+ */
+export function loadData(baseUrl: string): Promise<GameData> {
+  const cached = cache.get(baseUrl);
+  if (cached) return cached;
+  const pending = fetchAll(baseUrl).catch((err: unknown) => {
+    cache.delete(baseUrl);
+    throw err;
+  });
+  cache.set(baseUrl, pending);
+  return pending;
+}
+
+async function fetchAll(baseUrl: string): Promise<GameData> {
   const get = async (file: string): Promise<unknown> => {
-    const response = await fetch(`${baseUrl}${file}`);
+    let response: Response;
+    try {
+      response = await fetch(`${baseUrl}${file}`);
+    } catch {
+      throw new Error(`Could not load ${file} (no connection)`);
+    }
     if (!response.ok) throw new Error(`Could not load ${file} (${response.status})`);
-    return (await response.json()) as unknown;
+    try {
+      return (await response.json()) as unknown;
+    } catch {
+      throw new Error(`Could not read ${file} (it is not valid JSON)`);
+    }
   };
   const universe = parseUniverse(await get('universe.json'));
   const prompts = parsePrompts(await get('prompts.json'), universe);

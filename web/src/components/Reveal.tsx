@@ -1,4 +1,4 @@
-import { useEffect, type Ref } from 'react';
+import { useEffect, useState, type Ref } from 'react';
 import { useAnnounce } from '../announcer';
 import { useReducedMotion } from '../motion';
 import { shotForResult } from '../shots';
@@ -26,6 +26,37 @@ export const mostFamous = (answers: readonly Answer[], n = 3): Answer[] =>
 /** The rarest valid answers: highest tier first, and the later ones in the file first within a tier. */
 export const rarest = (answers: readonly Answer[], n = 3): Answer[] =>
   answers.map((a, i) => ({ a, i })).sort((x, y) => y.a.tier - x.a.tier || y.i - x.i).slice(0, n).map((x) => x.a);
+
+/** The rarest answers that are not already in the most-famous list, so a short or one-tier list is not shown twice. */
+export const rarestOthers = (answers: readonly Answer[], n = 3): Answer[] => {
+  const shown = new Set(mostFamous(answers, n).map((a) => a.id));
+  return rarest(answers, answers.length).filter((a) => !shown.has(a.id)).slice(0, n);
+};
+
+/** Every valid answer, best known first. Built only when the list is opened: a prompt can have hundreds. */
+function AllAnswers({ answers }: { answers: readonly Answer[] }) {
+  const [open, setOpen] = useState(false);
+  const byTier = open ? [...answers].sort((a, b) => a.tier - b.tier) : [];
+  return (
+    <details className="all-answers" onToggle={(e) => setOpen(e.currentTarget.open)}>
+      <summary>All {answers.length} valid answers</summary>
+      {open && (
+        <ol className="answers answers--all">
+          {byTier.map((a) => (
+            <li key={a.id} className="answers__item">
+              <span className={`chip chip--t${a.tier}`} aria-hidden="true">{a.tier}</span>
+              <span className="answers__name">{a.name}</span>
+              <span className="answers__points">
+                <span className="visually-hidden">tier {a.tier}, </span>
+                {a.points}
+              </span>
+            </li>
+          ))}
+        </ol>
+      )}
+    </details>
+  );
+}
 
 function headline(result: PromptResult): string {
   switch (result.status) {
@@ -75,7 +106,6 @@ function AnswerList({ title, answers }: { title: string; answers: readonly Answe
 }
 
 export function Reveal({ prompt, result, isLast, headingRef, onNext, skipped, onSkip }: Props) {
-  const byTier = [...prompt.answers].sort((a, b) => a.tier - b.tier);
   const shot = shotForResult(result);
   const reduced = useReducedMotion();
   const announce = useAnnounce();
@@ -105,7 +135,7 @@ export function Reveal({ prompt, result, isLast, headingRef, onNext, skipped, on
         <ShotAnimation shot={shot} reduced={reduced} skipped={skipped} />
         <ShotLabel shot={shot} skipped={skipped} />
       </div>
-      <p className="eyebrow">{prompt.text}</p>
+      <h2 className="eyebrow reveal__prompt">{prompt.text}</h2>
       <h3
         id="result-heading"
         className={`result result--${result.status === 'valid' && result.tier ? `t${result.tier}` : result.status}${result.status === 'outside_range' ? ' shake shake--0' : ''}`}
@@ -118,23 +148,9 @@ export function Reveal({ prompt, result, isLast, headingRef, onNext, skipped, on
         <p>{explanation(prompt, result)}</p>
 
         <AnswerList title="The most famous valid answers" answers={mostFamous(prompt.answers)} />
-        <AnswerList title="The rarest valid answers" answers={rarest(prompt.answers)} />
+        {rarestOthers(prompt.answers).length > 0 && <AnswerList title="The rarest valid answers" answers={rarestOthers(prompt.answers)} />}
 
-        <details className="all-answers">
-          <summary>All {prompt.answers.length} valid answers</summary>
-          <ol className="answers answers--all">
-            {byTier.map((a) => (
-              <li key={a.id} className="answers__item">
-                <span className={`chip chip--t${a.tier}`} aria-hidden="true">{a.tier}</span>
-                <span className="answers__name">{a.name}</span>
-                <span className="answers__points">
-                  <span className="visually-hidden">tier {a.tier}, </span>
-                  {a.points}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </details>
+        <AllAnswers answers={prompt.answers} />
         <p className="caveat">
           Obscurity is estimated from how famous an answer is across the whole data set, not from what other players typed.
         </p>

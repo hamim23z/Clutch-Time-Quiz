@@ -70,7 +70,7 @@ export function Final({ prompts, results, diveNumber, headingRef, onHome, onArch
             </li>
           ))}
         </ol>
-        <p className="final__score" aria-label={`Total ${total} out of ${MAX_DIVE_POINTS}`}  >
+        <p className="final__score" role="group" aria-label={`Total ${total} out of ${MAX_DIVE_POINTS}`}  >
           <span aria-hidden="true">
             <RollingNumber value={total} from={0} delayMs={sequenceMs} durationMs={700} instant={reduced} />
           </span>

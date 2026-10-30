@@ -142,6 +142,23 @@
     "id": "pl-24",
     "name": "Dennis Heat",
     "aliases": []
+   },
+   {
+    "id": "pl-25",
+    "name": "Rondae Hollis-Jefferson",
+    "aliases": []
+   },
+   {
+    "id": "pl-26",
+    "name": "Dana Hollis-Smith",
+    "aliases": []
+   },
+   {
+    "id": "pl-27",
+    "name": "Karl-Anthony Towns",
+    "aliases": [
+     "KAT"
+    ]
    }
   ],
   "teams": [
@@ -876,10 +893,6 @@
    "expect": "none"
   },
   {
-   "input": "Gilgeous-Alexander",
-   "expect": "none"
-  },
-  {
    "input": "KDD",
    "expect": "none"
   },
@@ -890,6 +903,92 @@
   {
    "input": "LB",
    "expect": "none"
+  },
+  {
+   "input": "Gilgeous-Alexander",
+   "expect": "match",
+   "id": "pl-9",
+   "via": "last-name"
+  },
+  {
+   "input": "gilgeous alexander",
+   "expect": "match",
+   "id": "pl-9",
+   "via": "last-name"
+  },
+  {
+   "input": "Gilgeous",
+   "expect": "match",
+   "id": "pl-9",
+   "via": "last-name"
+  },
+  {
+   "input": "GILGEOUS–ALEXANDER",
+   "expect": "match",
+   "id": "pl-9",
+   "via": "last-name"
+  },
+  {
+   "input": "Hollis-Jefferson",
+   "expect": "match",
+   "id": "pl-25",
+   "via": "last-name"
+  },
+  {
+   "input": "Jefferson",
+   "expect": "match",
+   "id": "pl-25",
+   "via": "last-name"
+  },
+  {
+   "input": "Hollis-Smith",
+   "expect": "match",
+   "id": "pl-26",
+   "via": "last-name"
+  },
+  {
+   "input": "Smith",
+   "expect": "match",
+   "id": "pl-26",
+   "via": "last-name"
+  },
+  {
+   "input": "Hollis",
+   "expect": "ambiguous",
+   "ids": [
+    "pl-25",
+    "pl-26"
+   ]
+  },
+  {
+   "input": "Hollis Jefferson",
+   "expect": "match",
+   "id": "pl-25",
+   "via": "last-name"
+  },
+  {
+   "input": "Gilgeous-Alexandr",
+   "expect": "match",
+   "id": "pl-9",
+   "via": "typo"
+  },
+  {
+   "input": "Karl-Anthony Towns",
+   "expect": "match",
+   "id": "pl-27",
+   "via": "name"
+  },
+  {
+   "input": "Karl Anthony Towns",
+   "expect": "match",
+   "id": "pl-27",
+   "via": "name"
+  },
+  {
+   "input": "Towns",
+   "expect": "match",
+   "id": "pl-27",
+   "via": "last-name"
   }
  ]
 }

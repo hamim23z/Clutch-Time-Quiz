@@ -21,10 +21,21 @@ interface Props {
   onHowTo: () => void;
   /** Streak shown on the results screen, and whether it just went up. */
   streak?: { value: number; increased: boolean };
+  /** Resume a dive after a reload: the answers already given, and how much of the prompt on screen has gone. */
+  resume?: { results: PromptResult[]; elapsedMs: number };
+  /** Called after every answer and whenever a new prompt appears, so progress can be saved. startedAt is null on a result screen. */
+  onProgress?: (results: PromptResult[], startedAt: number | null) => void;
+  clock?: () => number;
 }
 
-export function Dive({ prompts, index, diveNumber, outsideNames, onFinish, onHome, onArchive, onHowTo, streak }: Props) {
-  const [state, dispatch] = useReducer(diveReducer, undefined, () => startDive([...prompts]));
+export function Dive({ prompts, index, diveNumber, outsideNames, onFinish, onHome, onArchive, onHowTo, streak, resume, onProgress, clock = Date.now }: Props) {
+  const [state, dispatch] = useReducer(diveReducer, undefined, () => {
+    const fresh = startDive([...prompts]);
+    return resume ? { ...fresh, results: resume.results, index: resume.results.length } : fresh;
+  });
+  const startedAt = useRef<number | null>(null);
+  const resumedElapsed = useRef(resume?.elapsedMs ?? 0);
+  const resumeIndex = useRef(resume ? resume.results.length : -1);
   const resultRef = useRef<HTMLHeadingElement>(null);
   const finalRef = useRef<HTMLHeadingElement>(null);
   const firstRender = useRef(true);
@@ -35,6 +46,15 @@ export function Dive({ prompts, index, diveNumber, outsideNames, onFinish, onHom
   const prompt = currentPrompt(state);
   const over = isOver(state);
   const revealed = isRevealed(state);
+
+  // Save after every answer, and note when each prompt appeared (a reload cannot give extra time).
+  useEffect(() => {
+    if (over) return;
+    if (!revealed && startedAt.current === null) startedAt.current = clock() - (state.index === resumeIndex.current ? resumedElapsed.current : 0);
+    if (revealed) startedAt.current = null;
+    onProgress?.(state.results, revealed ? null : startedAt.current);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once per answer or new prompt
+  }, [state.index, state.results.length, over]);
   const result = state.results[state.index];
   const points = useMemo(() => totalPoints(state.results), [state.results]);
 
@@ -96,6 +116,7 @@ export function Dive({ prompts, index, diveNumber, outsideNames, onFinish, onHom
         prompt={prompt}
         index={index}
         outsideNames={outsideNames}
+        elapsedMs={state.index === resumeIndex.current ? resumedElapsed.current : 0}
         onResult={(r: PromptResult) => dispatch({ type: 'submit', result: r })}
       />
     </>

@@ -2,7 +2,8 @@ import { mkdtempSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { describe, expect, it } from 'vitest';
-import { parseNames, sync } from '../scripts/sync-data.mjs';
+import { existsSync } from 'node:fs';
+import { parseNames, skipReason, sync } from '../scripts/sync-data.mjs';
 
 describe('parseNames', () => {
   it('reads the name column of the outside-range CSV', () => {
@@ -40,5 +41,44 @@ describe('sync', () => {
     const out = mkdtempSync(join(tmpdir(), 'deepcut-real-'));
     expect(sync(resolve(process.cwd(), '..'), out)).toBeGreaterThan(100);
     expect((JSON.parse(readFileSync(join(out, 'prompts.json'), 'utf8')) as unknown[]).length).toBeGreaterThanOrEqual(63);
+  });
+});
+
+describe('skipping the sync', () => {
+  it('skips, with a message, when ../data is missing (web/ alone) and does not fail', () => {
+    const lonely = mkdtempSync(join(tmpdir(), 'deepcut-web-only-'));
+    expect(skipReason(lonely, {})).toMatch(/not found: using the committed copies/);
+  });
+
+  it('never syncs on Vercel, even if ../data exists', () => {
+    expect(skipReason(resolve(process.cwd(), '..'), { VERCEL: '1' })).toMatch(/Vercel/);
+  });
+
+  it('syncs when the export is there and this is not Vercel', () => {
+    const repo = mkdtempSync(join(tmpdir(), 'deepcut-full-'));
+    mkdirSync(join(repo, 'data/export'), { recursive: true });
+    expect(skipReason(repo, {})).toBeNull();
+  });
+
+  it('is not part of the build: `npm run build` must work from web/ alone', () => {
+    const scripts = (JSON.parse(readFileSync(resolve(process.cwd(), 'package.json'), 'utf8')) as { scripts: Record<string, string> }).scripts;
+    expect(scripts['build']).not.toMatch(/sync/);
+    expect(scripts['dev']).toMatch(/sync-data/);
+  });
+});
+
+describe('the committed copies in web/public', () => {
+  const pub = resolve(process.cwd(), 'public');
+
+  it('exist, so the site builds from web/ alone', () => {
+    for (const file of ['prompts.json', 'universe.json', 'outside_range.json']) expect(existsSync(join(pub, file))).toBe(true);
+  });
+
+  it('are the pipeline export, when the pipeline output is next to them (run npm run sync-data if this fails)', () => {
+    const exportDir = resolve(process.cwd(), '../data/export');
+    if (!existsSync(exportDir)) return; // web/ alone: nothing to compare with
+    for (const file of ['prompts.json', 'universe.json']) {
+      expect(readFileSync(join(pub, file), 'utf8'), `${file} is out of date`).toBe(readFileSync(join(exportDir, file), 'utf8'));
+    }
   });
 });

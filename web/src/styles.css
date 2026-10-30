@@ -1390,3 +1390,125 @@ h2 {
 .final__show.is-reduced .final__score {
   animation: fade-in 0.3s ease both;
 }
+
+/* loading and error screens */
+.loading {
+  display: grid;
+  justify-items: center;
+  gap: 0.4rem;
+  padding: 2.5rem 1rem;
+}
+
+.loading__ball {
+  width: 2.2rem;
+  height: 2.2rem;
+  border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #ffa04a, var(--accent) 55%, #b84a00);
+  animation: ball-bounce 0.7s cubic-bezier(0.3, 0, 0.6, 1) infinite alternate;
+}
+
+.loading__shadow {
+  width: 1.6rem;
+  height: 0.35rem;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  animation: shadow-bounce 0.7s cubic-bezier(0.3, 0, 0.6, 1) infinite alternate;
+}
+
+.loading__text {
+  margin: 0.6rem 0 0;
+  color: var(--muted);
+}
+
+.boot {
+  margin: 3rem 1rem;
+  color: #a3afc1;
+  font-family: system-ui, sans-serif;
+  text-align: center;
+}
+
+.error-screen__detail {
+  color: var(--muted);
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+
+@keyframes ball-bounce {
+  from { transform: translateY(-1.8rem); }
+  to { transform: translateY(0); }
+}
+
+@keyframes shadow-bounce {
+  from { transform: scale(0.6); opacity: 0.3; }
+  to { transform: scale(1); opacity: 0.8; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading__ball,
+  .loading__shadow {
+    animation: none !important;
+  }
+}
+
+/* long text: wrap names and prompts instead of overflowing, whatever the screen */
+.prompt {
+  overflow-wrap: anywhere;
+}
+
+.prompt__era {
+  display: block;
+  margin-bottom: 0.2rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.answers__name,
+.suggestion__name,
+.recap__text,
+.eyebrow {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.suggestion {
+  flex-wrap: wrap;
+}
+
+.answers--all {
+  max-height: 24rem;
+  overflow-y: auto;
+  padding-right: 0.4rem;
+}
+
+/* the slide-in must never make the page scroll sideways */
+.app {
+  overflow-x: clip;
+}
+
+h2.eyebrow {
+  margin: 0.4rem 0;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.4;
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* archive strip: a number in every square, so a tier is never told by color alone */
+.mini {
+  gap: 4px;
+}
+
+.mini__square {
+  display: grid;
+  place-items: center;
+  width: 1.5rem;
+  height: 1.5rem;
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  font-weight: 800;
+  line-height: 1;
+}
