@@ -228,7 +228,7 @@ describe('the results screen', () => {
     const squares = within(screen.getByRole('list', { name: 'Your seven answers' })).getAllByRole('listitem');
     expect(squares).toHaveLength(7);
     for (const s of squares) {
-      expect(s.querySelector('svg.court-icon')).not.toBeNull();
+      expect(s.querySelector('.square__tier')?.textContent).toMatch(/^([1-6]|×)$/); // the tier colour always comes with its number
       expect(s.className).toMatch(/square--(t[1-6]|miss)/);
     }
     // staggered: each square starts a little later than the one before

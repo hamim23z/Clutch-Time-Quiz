@@ -42,7 +42,7 @@ describe('vercel.json', () => {
 
   it('caches hashed assets for a year, immutable', () => {
     expect(cacheFor('/assets/index-Dqc4jwmH.js')).toBe('public, max-age=31536000, immutable');
-    expect(cacheFor('/assets/barlow-latin-400-normal-qiz4-Cze.woff2')).toMatch(/immutable/);
+    expect(cacheFor('/assets/press-start-2p-latin-400-normal-qiz4-Cze.woff2')).toMatch(/immutable/);
   });
 
   it('always revalidates the page itself, so a new deploy is picked up', () => {

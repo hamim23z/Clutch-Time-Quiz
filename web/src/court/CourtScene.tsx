@@ -1,131 +1,141 @@
-import { useEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState, type CSSProperties } from 'react';
 import { RollingNumber } from '../components/RollingNumber';
 import { useReducedMotion } from '../motion';
 import type { ShotInfo, ShotName } from '../shots';
-import { Arena, Crowd, Floor, FloorGlow, Lights } from './art';
+import beamUrl from '../assets/pixel/beam.png';
+import ballUrl from '../assets/pixel/ball.png';
+import courtUrl from '../assets/pixel/court_bare.png';
+import crowdAUrl from '../assets/pixel/crowd_a.png';
+import crowdBUrl from '../assets/pixel/crowd_b.png';
+import dunkerUrl from '../assets/pixel/dunker.png';
+import net0Url from '../assets/pixel/net_0.png';
+import net1Url from '../assets/pixel/net_1.png';
+import net2Url from '../assets/pixel/net_2.png';
+import rimBackUrl from '../assets/pixel/rim_back.png';
+import rimFrontUrl from '../assets/pixel/rim_front.png';
+import shootUrl from '../assets/pixel/shooter_shoot.png';
+import standUrl from '../assets/pixel/shooter_stand.png';
 import { useCourtState } from './courtStore';
-import { HOOP, NEUTRAL, SPOTS, VIEWBOX, ballKeyframes, depthScale, hand, shooterKeyframes } from './geometry';
+import { BALL, DUNK_AT, HOOP, IDLE_BALL, LOW, NEUTRAL, SPOTS, SPRITE, ballKeyframes, burstVectors, netKeyframes, stageLeft, stageScale } from './geometry';
 import './court.css';
 
 export const REPLAY_STEP_MS = 480; // one shot every 480 ms in the replay of a finished dive
-const PARTICLES = 28; // capped (the brief says about 40)
 
-/** Directions of the dunk's burst, spread evenly round the rim with a fixed jitter. */
-export function burstVectors(count = PARTICLES): Array<{ dx: number; dy: number; r: number }> {
-  return Array.from({ length: Math.min(count, PARTICLES) }, (_, i) => {
-    const angle = (i / count) * Math.PI * 2 + (i % 3) * 0.17;
-    const reach = 44 + ((i * 37) % 40);
-    return { dx: Math.round(Math.cos(angle) * reach), dy: Math.round(Math.sin(angle) * reach * 0.8 - 14), r: 2.2 + (i % 3) * 1.2 };
-  });
-}
+export { burstVectors };
+
+/** Where the net and the rim sit on the court, in game pixels (the same box as the sprites from tools/pixel/gen_pixel.py). */
+const HOOP_BOX = { x: 74, y: 66, w: 24, h: 28 };
+const FALLBACK_SCALE = 4;
+
+/** A box in game pixels: the stage multiplies every one of these by the whole-number scale. */
+const box = (x: number, y: number, w?: number, h?: number): CSSProperties =>
+  ({ '--x': x, '--y': y, ...(w === undefined ? {} : { '--w': w }), ...(h === undefined ? {} : { '--h': h }) }) as CSSProperties;
 
 /** The CSS custom properties that start a shot from its own spot on the floor. */
 export function shotVars(name: ShotName): CSSProperties {
   const spot = SPOTS[name];
-  const release = hand(spot);
-  return {
-    '--sx': `${spot.x}px`, '--sy': `${spot.y}px`, '--ss': depthScale(spot.y),
-    '--nx': `${NEUTRAL.x}px`, '--ny': `${NEUTRAL.y}px`, '--ns': depthScale(NEUTRAL.y),
-    '--bx': `${release.x}px`, '--by': `${release.y}px`, '--bs': release.s,
-  } as CSSProperties;
+  return { '--sx': spot.x, '--sy': spot.y, '--nx': NEUTRAL.x, '--ny': NEUTRAL.y } as CSSProperties;
 }
 
-/** The ball's starting hand position for the neutral spot, used by the ball keyframes before the shooter reaches his spot. */
-function ballVars(name: ShotName): CSSProperties {
-  const n = hand(NEUTRAL);
-  return { ...shotVars(name), '--nx': `${n.x}px`, '--ny': `${n.y}px`, '--ns': n.s } as CSSProperties;
+/** The scale and the position of the stage in its pane. Measured in the browser; a still default where nothing can be measured. */
+function useStage(ref: React.RefObject<HTMLDivElement | null>): { k: number; left: number } {
+  const [size, setSize] = useState<{ w: number; h: number } | null>(null);
+  useLayoutEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const measure = (): void => {
+      const w = el.clientWidth;
+      const h = el.clientHeight;
+      if (w > 0 && h > 0) setSize((s) => (s && s.w === w && s.h === h ? s : { w, h }));
+    };
+    measure();
+    if (typeof ResizeObserver === 'undefined') return;
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [ref]);
+  if (!size) return { k: FALLBACK_SCALE, left: 0 };
+  const k = stageScale(size.w, size.h);
+  return { k, left: stageLeft(size.w, k) };
 }
 
-function Shooter() {
+function Sprite({ src, className, style }: { src: string; className: string; style?: CSSProperties }) {
+  return <img src={src} alt="" aria-hidden="true" draggable={false} className={`court__sprite ${className}`} style={style} />;
+}
+
+/** The ball, a 13 x 13 sprite. */
+function Ball({ className, style }: { className: string; style?: CSSProperties }) {
+  return <Sprite src={ballUrl} className={className} style={{ '--w': BALL, '--h': BALL, ...style } as CSSProperties} />;
+}
+
+/** The rim (two halves, so the ball passes between them) and the net (three frames) at the hoop. */
+function Hoop({ name, made }: { name: ShotName | null; made: boolean }) {
+  const size = { '--w': HOOP_BOX.w, '--h': HOOP_BOX.h } as CSSProperties;
+  const at = box(HOOP_BOX.x, HOOP_BOX.y);
   return (
-    <g className="court__shooter-fig">
-      <path d="M-9 -34 L-10 0 M9 -34 L11 -2" className="court__legs" />
-      <path d="M-13 -74 Q0 -80 13 -74 L10 -34 L-10 -34 Z" className="court__body" />
-      <circle cx="1" cy="-86" r="9" className="court__body" />
-      <path d="M-12 -70 L-2 -90 M12 -70 L8 -88" className="court__arms" />
-    </g>
+    <>
+      <div className={`court__hoop court__hoop--back${name ? ` court__hoop--${name}` : ''}`} style={{ ...at, ...size }}>
+        <Sprite src={rimBackUrl} className="court__rim court__rim--back" style={size} />
+      </div>
+      <div className={`court__hoop court__hoop--net${name ? ` court__hoop--${name}` : ''}${made ? ' is-made' : ''}`} style={{ ...at, ...size }}>
+        <Sprite src={net0Url} className="court__net court__net--0" style={size} />
+        <Sprite src={net1Url} className="court__net court__net--1" style={size} />
+        <Sprite src={net2Url} className="court__net court__net--2" style={size} />
+      </div>
+      <div className={`court__hoop court__hoop--front${name ? ` court__hoop--${name}` : ''}`} style={{ ...at, ...size }}>
+        <Sprite src={rimFrontUrl} className="court__rim court__rim--front" style={size} />
+      </div>
+    </>
   );
 }
 
-function Ball({ vars, className }: { vars?: CSSProperties; className: string }) {
-  return (
-    <g className={className} style={vars}>
-      <circle r="13" className="court__ball-body" />
-      <path d="M-13 0H13M0-13V13M-9.2-9.2Q0 0-9.2 9.2M9.2-9.2Q0 0 9.2 9.2" className="court__ball-seams" />
-    </g>
-  );
-}
-
-function Net() {
-  return (
-    <g className="court__net">
-      <path d="M376 260 L387 306 M386 260 L393 306 M396 260 L398 306 M404 260 L402 306 M414 260 L407 306 M424 260 L413 306 M381 276 H419 M385 290 H415 M388 302 H412" className="court__net-lines" />
-    </g>
-  );
-}
-
-/** Backboard, rim, net, shooter and ball. `shot` null is the idle state: a ball bouncing at centre court, or the shooter waiting. */
+/** Backboard-side action: `shot` null is the idle state, a ball bouncing at centre court, or the shooter waiting with the ball. */
 function Action({ shot, waiting, fast, reduced, skipped }: { shot: ShotInfo | null; waiting: boolean; fast: boolean; reduced: boolean; skipped: boolean }) {
   const name = shot?.name ?? null;
   const tier = shot?.tier == null ? 'miss' : `t${shot.tier}`;
+  const made = name !== null && name !== 'airball' && name !== 'clank';
   const classes = ['court__action', name ? `court__action--${name}` : waiting ? 'court__action--waiting' : 'court__action--idle', name ? `court__action--${tier}` : '', fast ? 'is-fast' : '', skipped ? 'is-skipped' : '', reduced ? 'is-reduced' : ''].filter(Boolean).join(' ');
-  const vars = name ? ballVars(name) : undefined;
+  const vars = name ? shotVars(name) : { '--nx': NEUTRAL.x, '--ny': NEUTRAL.y };
+  const spriteBox = { '--w': SPRITE.width, '--h': SPRITE.height } as CSSProperties;
+  const burst = useMemo(() => burstVectors(), []);
+  const stillAt = name === 'airball' ? { x: 44, y: 134 } : name === 'clank' ? { x: 120, y: 116 } : { x: HOOP.x, y: 128 };
   return (
-    <svg className="court__layer court__action-layer" viewBox={VIEWBOX} preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-      <g className={classes} style={vars}>
-        <g className="court__board">
-          <rect x="330" y="180" width="140" height="76" rx="3" className="court__board-body" />
-          <rect x="372" y="212" width="56" height="38" className="court__square" />
-          <rect x="395" y="250" width="10" height="9" className="court__bracket" />
-        </g>
-        <g className="court__rim">
-          <path d="M374 258 A26 6.5 0 0 1 426 258" className="court__rim-back" />
-        </g>
-        {name && !reduced ? <Ball vars={vars} className="court__ball court__ball--shot" /> : null}
-        <Net />
-        <g className="court__rim court__rim--front">
-          <path d="M374 258 A26 6.5 0 0 0 426 258" className="court__rim-front" />
-        </g>
-        {/* the ball dribbling at centre court (home, archive, results) and its shadow */}
-        {!name && !waiting && (
-          <g className="court__idle-ball" transform={`translate(${HOOP.x} 585)`}>
-            <ellipse className="court__idle-shadow" cx="0" cy="14" rx="16" ry="4.5" />
-            <g className="court__idle-bounce">
-              <circle r="15" className="court__ball-body" />
-              <path d="M-15 0H15M0-15V15M-10.6-10.6Q0 0-10.6 10.6M10.6-10.6Q0 0 10.6 10.6" className="court__ball-seams" />
-            </g>
-          </g>
-        )}
-        {/* the shooter, waiting with the ball while a question is on */}
-        {waiting && !name && (
-          <g className="court__shooter court__shooter--waiting" style={{ transform: `translate(${NEUTRAL.x}px, ${NEUTRAL.y}px) scale(${depthScale(NEUTRAL.y)})` }}>
-            <Shooter />
-            <g className="court__dribble" transform="translate(16 -26)">
-              <circle r="12" className="court__ball-body" />
-              <path d="M-12 0H12M0-12V12" className="court__ball-seams" />
-            </g>
-          </g>
-        )}
-        {name && (
-          <g className={`court__shooter court__shooter--${name === 'dunk' ? 'dunk' : 'shot'}`}>
-            <Shooter />
-          </g>
-        )}
-        {name === 'dunk' && !reduced && (
-          <g transform={`translate(${HOOP.x} ${HOOP.y})`}>
-            {burstVectors().map((v, i) => (
-              <circle key={i} r={v.r} className="court__particle" style={{ '--dx': `${v.dx}px`, '--dy': `${v.dy}px` } as CSSProperties} />
-            ))}
-          </g>
-        )}
-        {/* reduced motion: no flight, a still ball at the end of the shot */}
-        {name && reduced && (
-          <g className="court__still-ball" transform={name === 'airball' ? 'translate(300 560)' : name === 'clank' ? 'translate(560 360)' : `translate(${HOOP.x} 330)`}>
-            <circle r="11" className="court__ball-body" />
-          </g>
-        )}
-      </g>
-    </svg>
+    <div className={classes} style={vars as CSSProperties}>
+      <Hoop name={name} made={made && !reduced} />
+      {/* the ball dribbling at centre court (home, archive, results) and its shadow */}
+      {!name && !waiting && (
+        <div className="court__idle" style={box(IDLE_BALL.x - 6, IDLE_BALL.y - 6, BALL, BALL)}>
+          <span className="court__idle-shadow" />
+          <Ball className="court__idle-bounce" />
+        </div>
+      )}
+      {/* the shooter, waiting with the ball while a question is on */}
+      {waiting && !name && (
+        <div className="court__shooter court__shooter--waiting" style={{ ...box(NEUTRAL.x - 28, NEUTRAL.y - 76), ...spriteBox }}>
+          <Sprite src={standUrl} className="court__pose" style={spriteBox} />
+          <div className="court__dribble" style={box(36, 30, BALL, BALL)}>
+            <Ball className="court__dribble-ball" />
+          </div>
+        </div>
+      )}
+      {name && (
+        <div className={`court__shooter court__shooter--${name === 'dunk' ? 'dunk' : 'shot'}`} style={spriteBox}>
+          <Sprite src={standUrl} className="court__pose court__pose--stand" style={spriteBox} />
+          {name !== 'dunk' && <Sprite src={shootUrl} className="court__pose court__pose--shoot" style={spriteBox} />}
+        </div>
+      )}
+      {name === 'dunk' && <Sprite src={dunkerUrl} className="court__dunker" style={{ ...box(DUNK_AT.x, DUNK_AT.y), ...spriteBox }} />}
+      {name && !reduced && <Ball className="court__ball court__ball--shot" />}
+      {name === 'dunk' && !reduced && (
+        <div className="court__burst" style={box(HOOP.x, HOOP.y)}>
+          {burst.map((v, i) => (
+            <span key={i} className={`court__particle court__particle--${i % 3}`} style={{ '--dx': v.dx, '--dy': v.dy } as CSSProperties} />
+          ))}
+        </div>
+      )}
+      {/* reduced motion: no flight, a still ball at the end of the shot */}
+      {name && reduced && <Ball className="court__still-ball" style={box(stillAt.x - 6, stillAt.y - 6)} />}
+    </div>
   );
 }
 
@@ -134,36 +144,38 @@ function Hud({ phase, headline, promptNumber, total, pointsBefore, points, diveN
 }) {
   const urgent = clock !== null && clock <= 5;
   const counting = phase === 'prompt' || phase === 'shot';
+  const results = phase === 'results';
   return (
-    <svg className="court__layer court__hud" viewBox={VIEWBOX} preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
-      <g className="court__cables">
-        <line x1="300" y1="0" x2="318" y2="46" />
-        <line x1="500" y1="0" x2="482" y2="46" />
-      </g>
-      <rect x="236" y="44" width="328" height="94" rx="11" className="court__jumbo" />
-      <rect x="244" y="52" width="312" height="78" rx="7" className="court__jumbo-screen" />
-      {counting || phase === 'results' ? (
-        <g className="court__jumbo-text">
-          <text x="306" y="74" className="court__jumbo-label">{phase === 'results' ? 'DIVE' : 'PROMPT'}</text>
-          <text x="306" y="112" className="court__jumbo-value">{phase === 'results' ? `#${diveNumber ?? ''}` : `${promptNumber} / ${total}`}</text>
-          <text x="400" y="74" className="court__jumbo-label">{phase === 'results' ? 'FINAL' : 'POINTS'}</text>
-          <text x="400" y="112" className="court__jumbo-value court__jumbo-value--points">
-            <RollingNumber value={points} from={pointsBefore} delayMs={rollDelay} instant={instant} />
-          </text>
-          <text x="494" y="74" className="court__jumbo-label">{phase === 'results' ? 'OUT OF' : 'DIVE'}</text>
-          <text x="494" y="112" className="court__jumbo-value">{phase === 'results' ? '700' : `#${diveNumber ?? ''}`}</text>
-        </g>
-      ) : (
-        <g className="court__jumbo-text">
-          <text x="400" y="94" className="court__jumbo-value court__jumbo-value--wide">{headline}</text>
-          {diveNumber !== null && <text x="400" y="118" className="court__jumbo-label">DIVE #{diveNumber}</text>}
-        </g>
-      )}
-      <g className={`court__clock${urgent ? ' court__clock--danger' : ''}`}>
-        <rect x="364" y="146" width="72" height="30" rx="5" className="court__clock-box" />
-        <text x="400" y="170" className="court__clock-digits">{clock === null ? '25' : String(clock).padStart(2, '0')}</text>
-      </g>
-    </svg>
+    <>
+      <div className="court__jumbo" style={box(36, 3, 100, 17)}>
+        {counting || results ? (
+          <div className="court__jumbo-text">
+            <span className="court__cell">
+              <span className="court__jumbo-label">{results ? 'DIVE' : 'PROMPT'}</span>
+              <span className="court__jumbo-value">{results ? `#${diveNumber ?? ''}` : `${promptNumber} / ${total}`}</span>
+            </span>
+            <span className="court__cell court__cell--points">
+              <span className="court__jumbo-label">{results ? 'FINAL' : 'POINTS'}</span>
+              <span className="court__jumbo-value court__jumbo-value--points">
+                <RollingNumber value={points} from={pointsBefore} delayMs={rollDelay} instant={instant} />
+              </span>
+            </span>
+            <span className="court__cell">
+              <span className="court__jumbo-label">{results ? 'OUT OF' : 'DIVE'}</span>
+              <span className="court__jumbo-value">{results ? '700' : `#${diveNumber ?? ''}`}</span>
+            </span>
+          </div>
+        ) : (
+          <div className="court__jumbo-text court__jumbo-text--idle">
+            <span className="court__jumbo-value court__jumbo-value--wide">{headline}</span>
+            {diveNumber !== null && <span className="court__jumbo-label">DIVE #{diveNumber}</span>}
+          </div>
+        )}
+      </div>
+      <div className={`court__clock${urgent ? ' court__clock--danger' : ''}`} style={box(75, 21, 22, 7)}>
+        <span className="court__clock-digits">{clock === null ? '25' : String(clock).padStart(2, '0')}</span>
+      </div>
+    </>
   );
 }
 
@@ -173,19 +185,21 @@ function CourtLabel({ shot }: { shot: ShotInfo }) {
   return (
     <div className={`court__label court__label--${tier}`} aria-hidden="true">
       <span className="court__label-points">{shot.points}</span>
-      <span className="court__label-name">{shot.label}</span>
+      <span className="court__label-name">{shot.tier === null ? shot.label : `T${shot.tier} ${shot.label}`}</span>
     </div>
   );
 }
 
 /**
- * The persistent court. It is decoration (aria-hidden): the panel on the left carries every word and number. It stays mounted
- * as the player moves between screens, and draws whatever the court store says.
+ * The persistent court: a pixel picture shown at a whole-number scale. It is decoration (aria-hidden): the panel on the left
+ * carries every word and number. It stays mounted as the player moves between screens, and draws whatever the court store says.
  */
 export default function CourtScene() {
   const state = useCourtState();
   const reduced = useReducedMotion();
-  const keyframes = useMemo(() => `${ballKeyframes()}\n\n${shooterKeyframes()}`, []);
+  const keyframes = useMemo(() => `${ballKeyframes()}\n\n${netKeyframes()}`, []);
+  const root = useRef<HTMLDivElement>(null);
+  const { k, left } = useStage(root);
   const [replayIndex, setReplayIndex] = useState(-1);
   const pointsBefore = useRef(0);
   const lastPoints = useRef(0);
@@ -218,32 +232,38 @@ export default function CourtScene() {
   const flash = (shot?.name === 'deep-swish' || shot?.name === 'dunk') && !reduced && !replaying;
   const shotKey = replaying ? `r${state.replayKey}-${replayIndex}` : `s${state.shotKey}`;
 
-  const classes = ['court', `court--${state.phase}`, shake ? 'court--shake' : '', reduced ? 'is-reduced' : '', state.skipped ? 'is-skipped' : ''].filter(Boolean).join(' ');
+  const classes = ['court', `court--${state.phase}`, shake ? 'court--shake' : '', replaying ? 'court--replaying' : '', reduced ? 'is-reduced' : '', state.skipped ? 'is-skipped' : ''].filter(Boolean).join(' ');
+  const stage = { '--k': k, '--u': `${k}px`, width: LOW.width * k, height: LOW.height * k, left } as CSSProperties;
   return (
-    <div className={classes} aria-hidden="true" data-testid="court" data-phase={state.phase} data-shot={shot?.name ?? ''}>
+    <div ref={root} className={classes} aria-hidden="true" data-testid="court" data-phase={state.phase} data-shot={shot?.name ?? ''} data-scale={k}>
       <style>{keyframes}</style>
-      <Arena />
-      <Crowd />
-      <Lights />
-      <Floor />
-      <FloorGlow />
-      <Hud
-        phase={state.phase}
-        headline={state.headline}
-        promptNumber={state.promptNumber}
-        total={state.total}
-        pointsBefore={state.phase === 'results' ? 0 : pointsBefore.current}
-        points={displayPoints}
-        diveNumber={state.diveNumber}
-        clock={state.phase === 'prompt' ? state.clock : null}
-        rollDelay={reduced || state.skipped || state.phase === 'results' ? 0 : 950}
-        instant={reduced || state.skipped || state.phase === 'prompt' || state.phase === 'idle' || state.phase === 'results'}
-      />
-      <Action key={shotKey} shot={shot} waiting={state.phase === 'prompt'} fast={replaying} reduced={reduced} skipped={state.skipped && !replaying} />
-      {flash && shot && !state.skipped && <div key={`f${shotKey}`} className="court__flash" />}
-      {shot && (state.phase === 'shot' || replaying) && <CourtLabel key={`l${shotKey}`} shot={shot} />}
-      <div className="court__vignette" />
+      <div className="court__stage" style={stage}>
+        <img src={courtUrl} alt="" aria-hidden="true" draggable={false} className="court__sprite court__floor" style={{ '--w': LOW.width, '--h': LOW.height } as CSSProperties} />
+        <div className="court__crowd" style={box(0, 6, LOW.width, 74)}>
+          <Sprite src={crowdAUrl} className="court__crowd-frame court__crowd-frame--a" style={{ '--w': LOW.width, '--h': 74 } as CSSProperties} />
+          <Sprite src={crowdBUrl} className="court__crowd-frame court__crowd-frame--b" style={{ '--w': LOW.width, '--h': 74 } as CSSProperties} />
+        </div>
+        <div className="court__lights" style={box(0, 0, LOW.width, 90)}>
+          <Sprite src={beamUrl} className="court__beam court__beam--a" style={{ ...box(-4, 0, 60, 90) }} />
+          <Sprite src={beamUrl} className="court__beam court__beam--b" style={{ ...box(116, 0, 60, 90) }} />
+        </div>
+        <Hud
+          phase={state.phase}
+          headline={state.headline}
+          promptNumber={state.promptNumber}
+          total={state.total}
+          pointsBefore={state.phase === 'results' ? 0 : pointsBefore.current}
+          points={displayPoints}
+          diveNumber={state.diveNumber}
+          clock={state.phase === 'prompt' ? state.clock : null}
+          rollDelay={reduced || state.skipped || state.phase === 'results' ? 0 : 950}
+          instant={reduced || state.skipped || state.phase === 'prompt' || state.phase === 'idle' || state.phase === 'results'}
+        />
+        <Action key={shotKey} shot={shot} waiting={state.phase === 'prompt'} fast={replaying} reduced={reduced} skipped={state.skipped && !replaying} />
+        {flash && shot && !state.skipped && <div key={`f${shotKey}`} className="court__flash" style={box(0, 6, LOW.width, 74)} />}
+        {shot && (state.phase === 'shot' || replaying) && <CourtLabel key={`l${shotKey}`} shot={shot} />}
+      </div>
+      <div className="court__scan" />
     </div>
   );
 }
-
