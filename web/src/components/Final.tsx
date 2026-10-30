@@ -10,7 +10,6 @@ import { copyText, shareLine } from '../share';
 import { MAX_DIVE_POINTS, TIERS, TIER_POINTS, TIER_RANGES } from '../tiers';
 import type { Prompt, PromptResult } from '../types';
 import { Confetti } from './Confetti';
-import { CourtIcon } from './CourtIcon';
 import { RollingNumber } from './RollingNumber';
 import { StreakBadge } from './StreakBadge';
 
@@ -98,7 +97,6 @@ export function Final({ prompts, results, diveNumber, headingRef, onHome, onArch
               aria-label={`Prompt ${i + 1}: ${describe(r)}`}
               title={shotForResult(r).label}
             >
-              <CourtIcon miss={r.tier === null} />
               <span className="square__tier" aria-hidden="true">{r.tier ?? '×'}</span>
             </li>
           ))}

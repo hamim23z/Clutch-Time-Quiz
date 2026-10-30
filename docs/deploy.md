@@ -51,7 +51,7 @@ Run this on the real URL, on a phone and on a desktop:
 - [ ] Reload in the middle of a dive: it resumes at the next prompt with the same score.
 - [ ] Reload after finishing: it opens on the results screen. The archive lists past dives, and playing one does not change the streak.
 - [ ] Share the link in a chat app or a social post: the card shows the title, description and the social image.
-- [ ] `/prompts.json`, `/universe.json` and `/outside_range.json` load (open them in the browser) and `/favicon.svg` shows an icon.
+- [ ] `/prompts.json`, `/universe.json` and `/outside_range.json` load (open them in the browser) and `/favicon.png` shows an icon.
 - [ ] Turn on a system "reduce motion" setting: shots become a plain fade.
 - [ ] The browser console shows no errors.
 - [ ] Block site data (a private window with cookies blocked): the game still plays and says it is not saving anything.

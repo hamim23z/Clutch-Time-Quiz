@@ -1,16 +1,16 @@
 # Deep Cut
 
-A daily basketball trivia game where the obvious answer loses. Every day there is a new **dive** of seven prompts, 25 seconds each, for example "Since 2001-02, name a player who played for both the Philadelphia 76ers and the Phoenix Suns". Name any valid answer: the more obscure it is, the more it scores. Share your total and seven colored squares.
+A daily basketball trivia game where the obvious answer loses, in pixel art. Every day there is a new **dive** of seven prompts, 25 seconds each, for example "Since 2001-02, name a player who played for both the Philadelphia 76ers and the Phoenix Suns". Name any valid answer: the more obscure it is, the more it scores. Share your total and seven colored squares.
 
 It is a static website (Vite, React, TypeScript) with no backend, no accounts, no analytics and no cookies. The prompts come from an offline Python pipeline that turns real NBA box scores (2001-02 to 2025-26) into two JSON files.
 
-![The home screen on desktop: the panel on the left, the court on the right](docs/screenshots/court/1280-1-home.jpg)
+![The home screen on desktop: the panel on the left, the court on the right](docs/screenshots/pixel/1280-1-home.png)
 
 | Phone: home | Phone: a prompt | Phone: a deep cut reveal | Phone: results |
 | --- | --- | --- | --- |
-| ![](docs/screenshots/court/360-1-home.jpg) | ![](docs/screenshots/court/360-2-prompt.jpg) | ![](docs/screenshots/court/360-3-reveal-high.jpg) | ![](docs/screenshots/court/360-4-results.jpg) |
+| ![](docs/screenshots/pixel/360-1-home.png) | ![](docs/screenshots/pixel/360-2-prompt.png) | ![](docs/screenshots/pixel/360-3-reveal-high.png) | ![](docs/screenshots/pixel/360-4-results.png) |
 
-On a screen 900 px wide or more the game is a split screen: the questions on the left, a persistent basketball court on the right (the jumbotron shows the prompt, points and dive; the shot clock counts the 25 seconds; every answer is a shot on that court). On a phone the court is a strip at the top. More screenshots at four widths are in [docs/screenshots/court](docs/screenshots/court), and [docs/design.md](docs/design.md) explains the design.
+On a screen 900 px wide or more the game is a split screen: the questions on the left, a persistent pixel-art basketball court on the right (the jumbotron shows the prompt, points and dive; the shot clock counts the 25 seconds; every answer is a shot on that court). On a phone the court is a strip at the top. More screenshots at four widths, and a contact sheet of the seven shots, are in [docs/screenshots/pixel](docs/screenshots/pixel). [docs/design.md](docs/design.md) explains the design and [docs/pixel-art.md](docs/pixel-art.md) how the pictures are made (`python3 tools/pixel/gen_pixel.py`).
 
 ## How it plays
 

@@ -27,7 +27,7 @@ describe('vercel.json', () => {
     expect(rewrite.destination).toBe('/index.html');
     const re = new RegExp(`^${rewrite.source}$`);
     for (const page of ['/', '/archive', '/some/page']) expect(re.test(page), page).toBe(true);
-    for (const file of ['/prompts.json', '/universe.json', '/outside_range.json', '/social.png', '/favicon.svg', '/assets/index-abc.js', '/assets/font.woff2', '/apple-touch-icon.png']) {
+    for (const file of ['/prompts.json', '/universe.json', '/outside_range.json', '/social.png', '/favicon.png', '/assets/index-abc.js', '/assets/font.woff2', '/apple-touch-icon.png']) {
       expect(re.test(file), file).toBe(false);
     }
   });
@@ -42,7 +42,7 @@ describe('vercel.json', () => {
 
   it('caches hashed assets for a year, immutable', () => {
     expect(cacheFor('/assets/index-Dqc4jwmH.js')).toBe('public, max-age=31536000, immutable');
-    expect(cacheFor('/assets/barlow-latin-400-normal-qiz4-Cze.woff2')).toMatch(/immutable/);
+    expect(cacheFor('/assets/press-start-2p-latin-400-normal-qiz4-Cze.woff2')).toMatch(/immutable/);
   });
 
   it('always revalidates the page itself, so a new deploy is picked up', () => {
