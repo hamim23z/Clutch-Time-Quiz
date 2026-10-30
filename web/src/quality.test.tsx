@@ -5,7 +5,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { describe, expect, it } from 'vitest';
 import { suggest } from './autocomplete';
-import { PromptText, splitEra } from './components/PromptText';
+import { PromptText, displayText, splitEra } from './components/PromptText';
 import { Reveal, mostFamous, rarestOthers } from './components/Reveal';
 import { parsePrompts, parseUniverse } from './loadData';
 import { buildIndex, matchAnswer } from './matching';
@@ -26,7 +26,8 @@ describe('the era in a prompt', () => {
     expect(splitEra('No era here')).toBeNull();
     const text = 'Since 2001-02 (through 2025-26), name a player who scored 50 or more points in a regular-season game.';
     const { container } = render(<h2><PromptText text={text} /></h2>);
-    expect(container.textContent).toBe(text);
+    expect(container.textContent).toBe(displayText(text)); // the words are the prompt's; only the first letter of the task is capitalised
+    expect(container.textContent?.toLowerCase()).toBe(text.toLowerCase());
   });
 
   it('every real prompt splits that way and none is so long that it cannot fit a phone (under 200 characters)', () => {

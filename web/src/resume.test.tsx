@@ -1,3 +1,4 @@
+import { displayText } from './components/PromptText';
 import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -67,7 +68,7 @@ describe('reloading in the middle of a dive', () => {
 
     open(store);
     await screen.findByRole('combobox');
-    expect(promptText()).toBe(dive()[3]!.text);
+    expect(promptText()).toBe(displayText(dive()[3]!.text));
     expect(screen.getByText(/Prompt 4 of 7/)).toBeInTheDocument();
     expect(screen.getByTestId('scoreboard-points')).toHaveTextContent(String(first.points));
     expect(within(screen.getByRole('group', { name: 'Scoreboard' })).getByText('#1')).toBeInTheDocument();
@@ -84,7 +85,7 @@ describe('reloading in the middle of a dive', () => {
     for (let i = 2; i < 7; i++) {
       const a = dive()[i]!.answers[0]!;
       total += a.points;
-      expect(promptText()).toBe(dive()[i]!.text);
+      expect(promptText()).toBe(displayText(dive()[i]!.text));
       await answerWith(user, a.name);
       await screen.findByRole('heading', { level: 3, name: /points/ });
       await user.click(await nextButton(i === 6));
@@ -103,7 +104,7 @@ describe('reloading in the middle of a dive', () => {
     expect(before.results).toHaveLength(3);
     open(store);
     await screen.findByRole('combobox');
-    expect(promptText()).toBe(dive()[3]!.text);
+    expect(promptText()).toBe(displayText(dive()[3]!.text));
     expect(loadProgress(store, PROGRESS_KEY)!.results).toEqual(before.results);
     expect(screen.getByTestId('scoreboard-points')).toHaveTextContent(String(first.points));
   });
@@ -143,7 +144,7 @@ describe('reloading in the middle of a dive', () => {
     await user.click(await screen.findByRole('button', { name: /^Play today/ }));
     await screen.findByRole('combobox');
     expect(screen.getByText(/Prompt 3 of 7/)).toBeInTheDocument();
-    expect(promptText()).toBe(dive()[2]!.text);
+    expect(promptText()).toBe(displayText(dive()[2]!.text));
   });
 });
 

@@ -1,22 +1,22 @@
 # Deep Cut
 
-A daily basketball trivia game where the obvious answer loses, in pixel art. Every day there is a new **dive** of seven prompts, 25 seconds each, for example "Since 2001-02, name a player who played for both the Philadelphia 76ers and the Phoenix Suns". Name any valid answer: the more obscure it is, the more it scores. Share your total and seven colored squares.
+A daily basketball trivia game where the obvious answer loses. Every day there is a new **dive** of seven prompts, 25 seconds each, for example "Since 2001-02, name a player who played for both the Philadelphia 76ers and the Phoenix Suns". Name any valid answer: the more obscure it is, the more it scores. Share your total and seven colored squares.
 
 It is a static website (Vite, React, TypeScript) with no backend, no accounts, no analytics and no cookies. The prompts come from an offline Python pipeline that turns real NBA box scores (2001-02 to 2025-26) into two JSON files.
 
-![The home screen on desktop: the panel on the left, the court on the right](docs/screenshots/pixel/1280-1-home.png)
+![The home screen on desktop: the panel on the left, the shot chart on the right](docs/screenshots/chart/1440-1-home.png)
 
 | Phone: home | Phone: a prompt | Phone: a deep cut reveal | Phone: results |
 | --- | --- | --- | --- |
-| ![](docs/screenshots/pixel/360-1-home.png) | ![](docs/screenshots/pixel/360-2-prompt.png) | ![](docs/screenshots/pixel/360-3-reveal-high.png) | ![](docs/screenshots/pixel/360-4-results.png) |
+| ![](docs/screenshots/chart/390-1-home.png) | ![](docs/screenshots/chart/390-2-prompt1.png) | ![](docs/screenshots/chart/390-5-correct-end.png) | ![](docs/screenshots/chart/390-7-results.png) |
 
-On a screen 900 px wide or more the game is a split screen: the questions on the left, a persistent pixel-art basketball court on the right (the jumbotron shows the prompt, points and dive; the shot clock counts the 25 seconds; every answer is a shot on that court). On a phone the court is a strip at the top. More screenshots at four widths, and a contact sheet of the seven shots, are in [docs/screenshots/pixel](docs/screenshots/pixel). [docs/design.md](docs/design.md) explains the design and [docs/pixel-art.md](docs/pixel-art.md) how the pictures are made (`python3 tools/pixel/gen_pixel.py`).
+On a screen 900 px wide or more the game is a split screen: the questions on the left, a flat top-down **shot chart** on the right. The deeper from the basket a marker lands, the rarer the answer: six zones, one per tier, with a depth gauge, a marker per answer, and an airball zone for wrong or late ones. On a phone the chart is above the questions. More screenshots at two sizes are in [docs/screenshots/chart](docs/screenshots/chart); [docs/design.md](docs/design.md) explains the design.
 
 ## How it plays
 
 - **A dive** is 7 prompts, 25 seconds each. Type a name (autocomplete suggests from the whole list of players and teams, so it never gives an answer away) and press Enter.
 - **Scoring** is by tier: 10, 20, 35, 55, 75 or 100 points for a valid answer, 0 for a wrong or late one. A dive is worth at most 700.
-- **The reveal** plays a short basketball shot on the court for your tier (an airball for 0, a clank for 10, a rim rattle, a bank shot, a swish, a deep swish, and a slam dunk for 100), taken from a spot on the floor that gets deeper as the points go up, then shows the most famous and the rarest valid answers. At the end the seven shots are replayed, with a rank label for your total.
+- **The reveal** sends a ball from the bottom of the chart to a marker in your tier's zone (rarer answers fly longer and land deeper; T6 earns a flash and a "DEEP CUT" stamp; a wrong or late answer falls short into the airball zone), then shows the most famous and the rarest valid answers. At the end all seven markers are on the chart, with a rank label for your total.
 - **Streaks and the archive:** finish each day's dive to keep your streak; past dives are in the archive and do not count for the streak. Everything is kept in your browser (localStorage); there is no account.
 - A real player from before 2001-02 gets an "outside the data range" message, not a miss.
 
@@ -41,7 +41,7 @@ Other commands, all in `web/`:
 | `npm run preview` | serve the production build locally |
 | `npm run sync-data` | copy `data/export/*.json` and the outside-range list into `web/public/` |
 
-Useful URLs while developing: `/?preview=1` shows a Play-test before launch, `/?preview=1&today=2026-11-10` pretends it is that day (with its own saved progress), and `/?animations=1` (development) or `/?preview=1&animations=1` (a build) shows every shot on the court, on a loop or one at a time.
+Useful URLs while developing: `/?preview=1` shows a Play-test before launch, `/?preview=1&today=2026-11-10` pretends it is that day (with its own saved progress), and `/?animations=1` (development) or `/?preview=1&animations=1` (a build) shows every outcome on the chart, on a loop or one at a time.
 
 ## Regenerate the data
 
