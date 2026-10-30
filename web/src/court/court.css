@@ -1,0 +1,505 @@
+/* The court: layers of SVG in one 800 x 640 picture, all scaled the same way, so they line up whatever the pane's shape. */
+.court {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #05070c;
+  --shot: 1.2s;
+  contain: layout paint;
+}
+
+.court__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.court__vignette {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(120% 95% at 50% 55%, transparent 55%, rgba(2, 4, 9, 0.55) 100%);
+}
+
+/* alive when idle: the crowd shimmers, a spotlight sweeps, the floor glows */
+.court__fans {
+  animation: court-shimmer 2.8s ease-in-out infinite alternate;
+}
+
+.court__fans--1 {
+  animation-delay: -0.9s;
+  animation-duration: 3.4s;
+}
+
+.court__fans--2 {
+  animation-delay: -1.8s;
+  animation-duration: 2.3s;
+}
+
+.court__lights {
+  animation: court-sweep 9s ease-in-out infinite alternate;
+  will-change: transform;
+}
+
+.court__glow {
+  animation: court-glow 3.4s ease-in-out infinite alternate;
+  will-change: opacity;
+}
+
+/* the jumbotron and the shot clock */
+.court__cables line {
+  stroke: #3a4a6b;
+  stroke-width: 3;
+}
+
+.court__jumbo {
+  fill: #070b14;
+  stroke: #43557d;
+  stroke-width: 3;
+}
+
+.court__jumbo-screen {
+  fill: #0b1426;
+}
+
+.court__jumbo-label,
+.court__jumbo-value,
+.court__clock-digits {
+  font-family: var(--font-display);
+  text-anchor: middle;
+}
+
+.court__jumbo-label {
+  fill: #8fa3c7;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 2.6px;
+}
+
+.court__jumbo-value {
+  fill: #ffd37a;
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.court__jumbo-value--points {
+  fill: #ffb23f;
+  font-size: 36px;
+}
+
+.court__jumbo-value--wide {
+  font-size: 34px;
+  letter-spacing: 3px;
+}
+
+.court__clock-box {
+  fill: #080000;
+  stroke: #3a1812;
+  stroke-width: 2;
+}
+
+.court__clock-digits {
+  fill: #ff5a36;
+  font-size: 27px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+.court__clock--danger {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: court-clock-pulse 0.5s ease-in-out infinite;
+}
+
+.court__clock--danger .court__clock-digits {
+  fill: #ff2a1a;
+}
+
+/* hoop, shooter, ball */
+.court__board-body {
+  fill: #eef2f8;
+  stroke: #9fb0cc;
+  stroke-width: 2;
+}
+
+.court__square {
+  fill: none;
+  stroke: #ff7a1a;
+  stroke-width: 2.5;
+}
+
+.court__bracket {
+  fill: #7b879b;
+}
+
+.court__rim-back,
+.court__rim-front {
+  fill: none;
+  stroke: #ff7a1a;
+  stroke-width: 4.5;
+  stroke-linecap: round;
+}
+
+.court__net-lines {
+  fill: none;
+  stroke: #f5f7fb;
+  stroke-width: 1.4;
+  opacity: 0.88;
+}
+
+.court__ball-body {
+  fill: #f28a2b;
+  stroke: #7a3a00;
+  stroke-width: 1.4;
+}
+
+.court__ball-seams {
+  fill: none;
+  stroke: #5b2a00;
+  stroke-width: 1.1;
+}
+
+.court__body {
+  fill: #0a1020;
+  stroke: #a9bde6;
+  stroke-width: 1.6;
+}
+
+.court__legs,
+.court__arms {
+  fill: none;
+  stroke: #0a1020;
+  stroke-width: 7;
+  stroke-linecap: round;
+}
+
+.court__arms {
+  stroke: #1a2742;
+  stroke-width: 6;
+}
+
+.court__net,
+.court__rim,
+.court__board,
+.court__ball,
+.court__shooter {
+  transform-box: view-box;
+}
+
+.court__net {
+  transform-box: fill-box;
+  transform-origin: 50% 0;
+}
+
+.court__rim,
+.court__board {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.court__shooter {
+  transform: translate(var(--nx, 400px), var(--ny, 505px)) scale(var(--ns, 1));
+}
+
+.court__action--idle .court__shooter,
+.court__action--waiting .court__shooter {
+  transform: translate(400px, 505px) scale(var(--ns, 0.9));
+}
+
+.court__ball--shot {
+  transform: translate(var(--nx), var(--ny)) scale(var(--ns));
+  animation: var(--shot) linear forwards;
+}
+
+.court__action--airball .court__ball--shot { animation-name: court-ball-airball; }
+.court__action--clank .court__ball--shot { animation-name: court-ball-clank; }
+.court__action--rattle .court__ball--shot { animation-name: court-ball-rattle; }
+.court__action--bank .court__ball--shot { animation-name: court-ball-bank; }
+.court__action--swish .court__ball--shot { animation-name: court-ball-swish; }
+.court__action--deep-swish .court__ball--shot { animation-name: court-ball-deep-swish; }
+.court__action--dunk .court__ball--shot { animation-name: court-ball-dunk; }
+
+.court__shooter--shot { animation: court-shooter-shot var(--shot) forwards; }
+.court__shooter--dunk { animation: court-shooter-dunk var(--shot) forwards; }
+
+.court__action--clank .court__board,
+.court__action--bank .court__board { animation: court-board-hit var(--shot) ease-out forwards; }
+.court__action--rattle .court__rim { animation: court-rim-rattle var(--shot) ease-out forwards; }
+.court__action--dunk .court__rim { animation: court-rim-shake var(--shot) ease-out forwards; }
+.court__action--dunk .court__board { animation: court-board-shake var(--shot) ease-out forwards; }
+.court__action--swish .court__net { animation: court-net-swish var(--shot) ease-out forwards; }
+.court__action--bank .court__net { animation: court-net-bank var(--shot) ease-out forwards; }
+.court__action--rattle .court__net { animation: court-net-rattle var(--shot) ease-out forwards; }
+.court__action--deep-swish .court__net { animation: court-net-snap-deep var(--shot) ease-out forwards; }
+.court__action--dunk .court__net { animation: court-net-snap-dunk var(--shot) ease-out forwards; }
+
+.court__action.is-fast { --shot: 0.46s; }
+
+/* the idle ball bouncing at centre court, and the shooter dribbling while a question is on */
+.court__idle-bounce {
+  animation: court-bounce 1.1s cubic-bezier(0.33, 0, 0.67, 1) infinite;
+}
+
+.court__idle-shadow {
+  fill: rgba(0, 0, 0, 0.45);
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: court-shadow 1.1s cubic-bezier(0.33, 0, 0.67, 1) infinite;
+}
+
+.court__dribble {
+  animation: court-dribble 0.7s cubic-bezier(0.33, 0, 0.67, 1) infinite;
+}
+
+.court__particle {
+  fill: var(--t6);
+  opacity: 0;
+  animation: court-burst 0.75s ease-out calc(var(--shot) * 0.62) forwards;
+}
+
+.court__flash {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(70% 60% at 50% 38%, rgba(255, 224, 140, 0.75), transparent 75%);
+  animation: court-flash 0.9s ease-out calc(var(--shot) * 0.6) forwards;
+}
+
+/* the court says the points too, as a pop near the hoop */
+.court__label {
+  position: absolute;
+  left: 50%;
+  top: 60%;
+  display: grid;
+  justify-items: center;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  animation: court-label 0.5s cubic-bezier(0.2, 1.5, 0.4, 1) 0.95s forwards;
+  pointer-events: none;
+  text-shadow: 0 2px 0 rgba(0, 0, 0, 0.7), 0 0 14px rgba(0, 0, 0, 0.6);
+}
+
+.court--results .court__label {
+  animation-delay: 0.1s;
+  animation-duration: 0.3s;
+}
+
+.court__label-points {
+  font-family: var(--font-display);
+  font-size: clamp(2.6rem, 9cqmin, 5rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.court__label-name {
+  font-family: var(--font-display);
+  font-size: clamp(1rem, 3cqmin, 1.6rem);
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.court__label--t1 { color: var(--t1); }
+.court__label--t2 { color: var(--t2); }
+.court__label--t3 { color: var(--t3); }
+.court__label--t4 { color: var(--t4); }
+.court__label--t5 { color: var(--t5); }
+.court__label--t6 { color: var(--t6); }
+.court__label--miss { color: #8995a8; }
+
+.court__action--t1 .court__ball-body,
+.court__action--miss .court__ball-body { filter: none; }
+
+.court--shake {
+  animation: court-shake 0.4s ease-in-out 0.75s;
+}
+
+/* a skipped shot jumps to its end */
+.court__action.is-skipped,
+.court__action.is-skipped *,
+.court.is-skipped .court__label,
+.court.is-skipped .court__flash {
+  animation-duration: 0.001s !important;
+  animation-delay: 0s !important;
+}
+
+.court.is-skipped.court--shake {
+  animation: none;
+}
+
+.court.is-skipped .court__particle {
+  display: none;
+}
+
+/* the court is idle between shots: after a shot it rests where it ended */
+@keyframes court-shimmer {
+  from { opacity: 0.35; }
+  to { opacity: 0.95; }
+}
+
+@keyframes court-sweep {
+  from { transform: translateX(-5%); }
+  to { transform: translateX(5%); }
+}
+
+@keyframes court-glow {
+  from { opacity: 0.45; }
+  to { opacity: 1; }
+}
+
+@keyframes court-clock-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
+}
+
+@keyframes court-bounce {
+  0% { transform: translateY(-78px); }
+  50% { transform: translateY(0) scaleY(0.88); }
+  100% { transform: translateY(-78px); }
+}
+
+@keyframes court-shadow {
+  0%, 100% { transform: scale(0.55); opacity: 0.25; }
+  50% { transform: scale(1); opacity: 0.6; }
+}
+
+@keyframes court-dribble {
+  0%, 100% { transform: translate(16px, -44px); }
+  50% { transform: translate(16px, -12px); }
+}
+
+@keyframes court-board-hit {
+  0%, 64% { transform: translateX(0); }
+  70% { transform: translateX(3px); }
+  78% { transform: translateX(-2px); }
+  88%, 100% { transform: translateX(0); }
+}
+
+@keyframes court-board-shake {
+  0%, 60% { transform: translate(0, 0); }
+  66% { transform: translate(2px, 3px); }
+  74% { transform: translate(-2px, -1px); }
+  86%, 100% { transform: translate(0, 0); }
+}
+
+@keyframes court-rim-rattle {
+  0%, 55% { transform: translateY(0); }
+  61% { transform: translateY(3px); }
+  66% { transform: translateY(-1px); }
+  77% { transform: translateY(3px); }
+  85%, 100% { transform: translateY(0); }
+}
+
+@keyframes court-rim-shake {
+  0%, 60% { transform: translateY(0) rotate(0); }
+  66% { transform: translateY(6px) rotate(2deg); }
+  74% { transform: translateY(-3px) rotate(-1.5deg); }
+  86% { transform: translateY(2px); }
+  100% { transform: translateY(0); }
+}
+
+@keyframes court-net-swish {
+  0%, 74% { transform: scale(1, 1) skewX(0); }
+  84% { transform: scale(1.08, 1.16) skewX(-4deg); }
+  93% { transform: scale(0.97, 0.95) skewX(3deg); }
+  100% { transform: scale(1, 1) skewX(0); }
+}
+
+@keyframes court-net-bank {
+  0%, 80% { transform: scale(1, 1) skewX(0); }
+  89% { transform: scale(1.07, 1.14) skewX(-4deg); }
+  96% { transform: scale(0.97, 0.96) skewX(2deg); }
+  100% { transform: scale(1, 1) skewX(0); }
+}
+
+@keyframes court-net-rattle {
+  0%, 86% { transform: scale(1, 1) skewX(0); }
+  93% { transform: scale(1.07, 1.12) skewX(-3deg); }
+  100% { transform: scale(1, 1) skewX(0); }
+}
+
+@keyframes court-net-snap-deep {
+  0%, 74% { transform: scale(1, 1) skewX(0); }
+  82% { transform: scale(1.18, 1.45) skewX(-8deg); }
+  91% { transform: scale(0.9, 0.86) skewX(6deg); }
+  100% { transform: scale(1, 1) skewX(0); }
+}
+
+@keyframes court-net-snap-dunk {
+  0%, 62% { transform: scale(1, 1) skewX(0); }
+  70% { transform: scale(1.2, 1.5) skewX(-7deg); }
+  82% { transform: scale(0.9, 0.85) skewX(5deg); }
+  100% { transform: scale(1, 1) skewX(0); }
+}
+
+@keyframes court-burst {
+  0% { opacity: 1; transform: translate(0, 0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx), var(--dy)) scale(0.3); }
+}
+
+@keyframes court-flash {
+  0% { opacity: 0; }
+  30% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@keyframes court-label {
+  from { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
+  to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+
+@keyframes court-shake {
+  0%, 100% { transform: translate(0, 0); }
+  15% { transform: translate(-6px, 3px); }
+  30% { transform: translate(6px, -3px); }
+  45% { transform: translate(-4px, -2px); }
+  60% { transform: translate(4px, 2px); }
+  80% { transform: translate(-2px, 1px); }
+}
+
+@keyframes court-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* less motion: a still court, and the label and the ball at the end of the shot fade in */
+@media (prefers-reduced-motion: reduce) {
+  .court *,
+  .court {
+    animation: none !important;
+  }
+
+  .court__particle,
+  .court__flash {
+    display: none !important;
+  }
+
+  .court .court__label,
+  .court .court__still-ball {
+    animation: court-fade 0.3s ease both !important;
+    opacity: 1;
+  }
+
+  .court .court__label {
+    transform: translate(-50%, -50%);
+  }
+}
+
+.court.is-reduced *,
+.court.is-reduced {
+  animation: none !important;
+}
+
+.court.is-reduced .court__label,
+.court.is-reduced .court__still-ball {
+  animation: court-fade 0.3s ease both !important;
+  opacity: 1;
+}
+
+.court.is-reduced .court__label {
+  transform: translate(-50%, -50%);
+}

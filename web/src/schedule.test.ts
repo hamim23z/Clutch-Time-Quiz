@@ -1,14 +1,13 @@
 import { describe, expect, it } from 'vitest';
-import { LAUNCH_DATE, TIME_ZONE } from './config';
+import { TIME_ZONE } from './config';
 import { dateInZone, daysBetween, diveCount, diveIndex, diveNumberOn, divePrompts, isDateString, longDate } from './schedule';
 import { mockPrompts } from './testUtils';
 import type { Prompt } from './types';
 
 const fake = (n: number): Prompt[] => Array.from({ length: n }, (_, i) => ({ id: `p-${i}`, answerType: 'player', text: 'Since 2001-02, x', answers: [], difficulty: 'easy' }));
 
-describe('the launch date', () => {
-  it('is 3 November 2026 in New York time', () => {
-    expect(LAUNCH_DATE).toBe('2026-11-03');
+describe('the time zone', () => {
+  it('is New York (the real launch date is checked in launch.test.tsx)', () => {
     expect(TIME_ZONE).toBe('America/New_York');
   });
 });

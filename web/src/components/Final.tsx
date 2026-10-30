@@ -1,7 +1,10 @@
-import { useState, type CSSProperties, type Ref } from 'react';
+import { useEffect, useState, type CSSProperties, type Ref } from 'react';
 import { useAnnounce } from '../announcer';
 import { totalPoints } from '../dive2';
+import { useCourtStore } from '../court/courtStore';
 import { useReducedMotion } from '../motion';
+import { rankFor } from '../ranks';
+import { ARM_MS } from './Reveal';
 import { shotForResult } from '../shots';
 import { copyText, shareLine } from '../share';
 import { MAX_DIVE_POINTS, TIERS, TIER_POINTS, TIER_RANGES } from '../tiers';
@@ -31,16 +34,46 @@ function describe(r: PromptResult): string {
 
 /** A total of at least this share of the maximum earns confetti. */
 export const STRONG_SHARE = 0.6;
-const STEP_MS = 170; // one shot every 170 ms in the playback
+export const STEP_MS = 480; // one shot every 480 ms, in step with the replay on the court
 
 export function Final({ prompts, results, diveNumber, headingRef, onHome, onArchive, onHowTo, streak }: Props) {
   const announce = useAnnounce();
   const [copyFailed, setCopyFailed] = useState(false);
   const reduced = useReducedMotion();
+  const court = useCourtStore();
+  const [skipped, setSkipped] = useState(false);
   const [replay, setReplay] = useState(0); // bumped by the replay button to play the seven shots again
   const total = totalPoints(results);
   const strong = total >= STRONG_SHARE * MAX_DIVE_POINTS;
-  const sequenceMs = reduced ? 0 : results.length * STEP_MS + 150;
+  const sequenceMs = reduced || skipped ? 0 : results.length * STEP_MS + 150;
+  const rank = rankFor(total);
+
+  // The court replays the seven shots in order while the squares appear one by one. A tap or Enter skips to the total.
+  useEffect(() => {
+    court.set({ phase: 'results', replay: results.map(shotForResult), replayKey: court.get().replayKey + 1, points: total, diveNumber, shot: null, clock: null, skipped: false });
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once per results screen
+  }, [diveNumber]);
+  useEffect(() => {
+    if (skipped || reduced) return;
+    const onKey = (e: KeyboardEvent): void => {
+      if (e.key === 'Enter' && !e.repeat) skip();
+    };
+    const arm = setTimeout(() => document.addEventListener('keydown', onKey), ARM_MS);
+    return () => {
+      clearTimeout(arm);
+      document.removeEventListener('keydown', onKey);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [skipped, reduced]);
+  const skip = (): void => {
+    setSkipped(true);
+    court.set({ skipped: true });
+  };
+  const replayShots = (): void => {
+    setReplay((n) => n + 1);
+    setSkipped(false);
+    court.set({ phase: 'results', replay: results.map(shotForResult), replayKey: court.get().replayKey + 1, skipped: false });
+  };
   const line = shareLine(diveNumber, results);
 
   const share = async (): Promise<void> => {
@@ -55,7 +88,7 @@ export function Final({ prompts, results, diveNumber, headingRef, onHome, onArch
         Dive complete
       </h2>
       <p className="final__number">Dive #{diveNumber}</p>
-      <div className={`final__show${reduced ? ' is-reduced' : ''}`} key={replay} style={{ '--after': `${sequenceMs}ms` } as CSSProperties}>
+      <div className={`final__show${reduced ? ' is-reduced' : ''}${skipped ? ' is-skipped' : ''}`} key={replay} onPointerDown={skipped ? undefined : skip} style={{ '--after': `${sequenceMs}ms` } as CSSProperties}>
         <ol className="squares" aria-label="Your seven answers">
           {results.map((r, i) => (
             <li
@@ -78,6 +111,9 @@ export function Final({ prompts, results, diveNumber, headingRef, onHome, onArch
         </p>
         {strong && !reduced && <Confetti />}
       </div>
+      <p className="final__rank" style={{ '--after': `${sequenceMs}ms` } as CSSProperties}>
+        {rank}
+      </p>
       {strong && <p className="final__praise">Strong dive: {Math.round((100 * total) / MAX_DIVE_POINTS)}% of the maximum.</p>}
       <div className="final__streak">
         {streak && (
@@ -85,7 +121,7 @@ export function Final({ prompts, results, diveNumber, headingRef, onHome, onArch
             Streak: <StreakBadge value={streak.value} increased={streak.increased} testId="final-streak" />
           </p>
         )}
-        <button type="button" className="secondary" onClick={() => setReplay((n) => n + 1)}>
+        <button type="button" className="secondary" onClick={replayShots}>
           Replay the shots
         </button>
       </div>

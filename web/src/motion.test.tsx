@@ -1,13 +1,11 @@
 import { act, render, screen } from '@testing-library/react';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { Confetti, CONFETTI_COUNT } from './components/Confetti';
-import { MAX_PARTICLES, ShotAnimation, particleStyles } from './components/ShotAnimation';
 import { ShotLabel } from './components/ShotLabel';
 import { RollingNumber } from './components/RollingNumber';
 import { prefersReducedMotion, useReducedMotion } from './motion';
-import { SHOT_NAMES, shotForPoints } from './shots';
+import { shotForPoints } from './shots';
 
-const POINTS = [0, 10, 20, 35, 55, 75, 100];
 
 function mockMatchMedia(reduce: boolean) {
   const listeners = new Set<() => void>();
@@ -17,61 +15,6 @@ function mockMatchMedia(reduce: boolean) {
 }
 
 afterEach(() => vi.unstubAllGlobals());
-
-describe('ShotAnimation', () => {
-  it.each(POINTS)('draws the shot for %i points with a ball, a hoop and a net', (points) => {
-    const shot = shotForPoints(points);
-    const { container } = render(<ShotAnimation shot={shot} />);
-    expect(container.querySelector(`.shot--${shot.name}`)).not.toBeNull();
-    expect(container.querySelector('.shot__ball')).not.toBeNull();
-    expect(container.querySelector('.shot__rim')).not.toBeNull();
-    expect(container.querySelector('.shot__net')).not.toBeNull();
-    expect(container.querySelector('.shot__board')).not.toBeNull();
-    expect(container.firstElementChild).toHaveAttribute('aria-hidden', 'true'); // decoration: the result is in the text
-  });
-
-  it('gives only the slam dunk a player and a burst of particles, capped at 40', () => {
-    for (const name of SHOT_NAMES) {
-      const points = POINTS[SHOT_NAMES.indexOf(name)]!;
-      const { container, unmount } = render(<ShotAnimation shot={shotForPoints(points)} />);
-      const particles = container.querySelectorAll('.particle').length;
-      expect(container.querySelector('.shot__player') !== null).toBe(name === 'dunk');
-      expect(particles).toBe(name === 'dunk' ? MAX_PARTICLES : 0);
-      expect(particles).toBeLessThanOrEqual(40);
-      unmount();
-    }
-    expect(particleStyles(500)).toHaveLength(MAX_PARTICLES);
-  });
-
-  it('gives only the deep swish a crowd flash', () => {
-    for (const name of SHOT_NAMES) {
-      const { container, unmount } = render(<ShotAnimation shot={shotForPoints(POINTS[SHOT_NAMES.indexOf(name)]!)} />);
-      expect(container.querySelector('.shot__crowd') !== null).toBe(name === 'deep-swish');
-      unmount();
-    }
-  });
-
-  it('marks a skipped shot so every animation jumps to its end', () => {
-    const { container } = render(<ShotAnimation shot={shotForPoints(55)} skipped />);
-    expect(container.querySelector('.shot')).toHaveClass('is-skipped');
-  });
-
-  it.each(POINTS)('reduced motion (%i points): no ball, no player, no particles, no crowd: just the still hoop', (points) => {
-    const { container } = render(<ShotAnimation shot={shotForPoints(points)} reduced />);
-    expect(container.querySelector('.shot')).toHaveClass('is-reduced');
-    for (const sel of ['.shot__ball', '.shot__player', '.particle', '.shot__crowd']) expect(container.querySelector(sel)).toBeNull();
-    expect(container.querySelector('.shot__rim')).not.toBeNull();
-  });
-
-  it('uses the tier color class for every tier and a muted one for a miss', () => {
-    for (const [points, cls] of [[0, 'miss'], [10, 't1'], [20, 't2'], [35, 't3'], [55, 't4'], [75, 't5'], [100, 't6']] as const) {
-      const { container, unmount } = render(<><ShotAnimation shot={shotForPoints(points)} /><ShotLabel shot={shotForPoints(points)} /></>);
-      expect(container.querySelector(`.shot--${cls}`)).not.toBeNull();
-      expect(container.querySelector(`.shot-label--${cls}`)).not.toBeNull();
-      unmount();
-    }
-  });
-});
 
 describe('ShotLabel', () => {
   it('shows the points and the tier name', () => {

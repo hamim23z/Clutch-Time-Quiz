@@ -56,7 +56,7 @@ function renderApp(day: Date = DAY.launch, props: AppProps = {}) {
 
 async function start(user: User, day: Date = DAY.launch, props: AppProps = {}) {
   const r = renderApp(day, props);
-  await user.click(await screen.findByRole('button', { name: 'Play' }));
+  await user.click(await screen.findByRole('button', { name: /^Play today/ }));
   await screen.findByRole('combobox');
   return r;
 }
@@ -103,7 +103,7 @@ describe('loading and the screens around the game', () => {
   it('shows the home screen with Play, Archive and How to play, today\'s dive number, and no demo note about real data', async () => {
     const user = setup();
     renderApp();
-    expect(await screen.findByRole('button', { name: 'Play' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /^Play today/ })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Archive' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'How to play' })).toBeInTheDocument();
     expect(screen.getByText('#1')).toBeInTheDocument();
@@ -114,7 +114,7 @@ describe('loading and the screens around the game', () => {
 
   it('labels the made-up fixture data clearly (only the fixtures are made up)', async () => {
     renderApp();
-    await screen.findByRole('button', { name: 'Play' });
+    await screen.findByRole('button', { name: /^Play today/ });
     expect(screen.getByText(/made up for the tests/i)).toBeInTheDocument();
   });
 
@@ -131,7 +131,7 @@ describe('loading and the screens around the game', () => {
     expect(screen.getByText(/approximation/i)).toBeInTheDocument();
     expect(screen.getByText(/2001-02 season onward/)).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Back' }));
-    expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /^Play today/ })).toBeInTheDocument();
   });
 
   it('says so when the data cannot be loaded or does not follow the schema', async () => {
@@ -155,7 +155,7 @@ describe('loading and the screens around the game', () => {
       return new Response(JSON.stringify(u.endsWith('universe.json') ? readJson(UNIVERSE_PATH) : readJson(PROMPTS_PATH)), { status: 200 });
     }));
     renderApp();
-    expect(await screen.findByRole('button', { name: 'Play' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /^Play today/ })).toBeInTheDocument();
   });
 });
 
@@ -356,8 +356,8 @@ describe('a full dive', () => {
     expect((box as HTMLTextAreaElement).value).toMatch(/^Deep Cut #1: \d+\n/);
     expect(screen.getByTestId('announcer')).toHaveTextContent(/Could not copy/);
     await user.click(screen.getByRole('button', { name: 'Home' }));
-    expect(await screen.findByRole('button', { name: /Today.s results/ })).toBeInTheDocument(); // no replaying today's dive
-    expect(screen.queryByRole('button', { name: 'Play' })).not.toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /^View results/ })).toBeInTheDocument(); // no replaying today's dive
+    expect(screen.queryByRole('button', { name: /^Play today/ })).not.toBeInTheDocument();
   });
 });
 
@@ -391,7 +391,7 @@ describe('before the launch', () => {
     renderApp(DAY.beforeLaunch);
     expect(await screen.findByRole('heading', { name: 'Coming soon' })).toBeInTheDocument();
     expect(screen.getByText('3 November 2026')).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Play' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /^Play today/ })).not.toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Play-test' })).not.toBeInTheDocument();
   });
 
@@ -411,7 +411,7 @@ describe('before the launch', () => {
     const user = setup();
     const { storage } = renderApp(DAY.beforeLaunch, { search: '?preview=1&today=2026-11-04' });
     expect(await screen.findByText('#2')).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Play' }));
+    await user.click(screen.getByRole('button', { name: /^Play today/ }));
     await screen.findByRole('combobox');
     await playWholeDive(user, divePrompts(mockPrompts(), 2));
     const keys = [...(storage as ReturnType<typeof memory>).data.keys()];
@@ -448,7 +448,7 @@ describe('already played today', () => {
     await playWholeDive(user, expectedDive());
     first.unmount();
     renderApp(DAY.second, { storage: store });
-    expect(await screen.findByRole('button', { name: 'Play' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /^Play today/ })).toBeInTheDocument();
     expect(screen.getByText('#2')).toBeInTheDocument();
   });
 });
@@ -542,7 +542,7 @@ describe('the archive', () => {
     await user.click(screen.getByRole('button', { name: 'Back' }));
     expect(screen.getByTestId('streak-current')).toHaveTextContent('0 days');
     expect(screen.getByTestId('streak-best')).toHaveTextContent('0 days');
-    expect(screen.getByRole('button', { name: 'Play' })).toBeInTheDocument(); // today's dive is still waiting
+    expect(screen.getByRole('button', { name: /^Play today/ })).toBeInTheDocument(); // today's dive is still waiting
   });
 
   it("playing today's dive from the archive counts as the daily play", async () => {
@@ -562,12 +562,12 @@ describe('storage that does not work', () => {
     const user = setup();
     renderApp(DAY.launch, { storage: null });
     expect(await screen.findByText(/not saving anything/i)).toBeInTheDocument();
-    await user.click(screen.getByRole('button', { name: 'Play' }));
+    await user.click(screen.getByRole('button', { name: /^Play today/ }));
     await screen.findByRole('combobox');
     await playWholeDive(user, expectedDive());
     expect(screen.getByRole('heading', { name: 'Dive complete' })).toBeInTheDocument();
     await user.click(screen.getByRole('button', { name: 'Home' }));
-    expect(screen.getByRole('button', { name: /Today.s results/ })).toBeInTheDocument(); // kept for this visit
+    expect(screen.getByRole('button', { name: /^View results/ })).toBeInTheDocument(); // kept for this visit
     expect(screen.getByTestId('streak-current')).toHaveTextContent('1 day');
   });
 
@@ -582,7 +582,7 @@ describe('storage that does not work', () => {
       },
     };
     renderApp(DAY.launch, { storage: broken });
-    await user.click(await screen.findByRole('button', { name: 'Play' }));
+    await user.click(await screen.findByRole('button', { name: /^Play today/ }));
     await screen.findByRole('combobox');
     await playWholeDive(user, expectedDive());
     await user.click(screen.getByRole('button', { name: 'Home' }));
@@ -593,6 +593,6 @@ describe('storage that does not work', () => {
     const store = memory();
     store.data.set('deepcut.v1', '{not json');
     renderApp(DAY.launch, { storage: store });
-    expect(await screen.findByRole('button', { name: 'Play' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /^Play today/ })).toBeInTheDocument();
   });
 });

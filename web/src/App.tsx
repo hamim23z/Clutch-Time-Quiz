@@ -1,5 +1,7 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { AnnouncerProvider } from './announcer';
+import { CourtProvider, useCourtStore } from './court/courtStore';
+import { useLayout } from './layout';
 import { SoundProvider, useSound } from './sound';
 import { Dive } from './Dive';
 import { Archive } from './components/Archive';
@@ -21,6 +23,9 @@ import type { Prompt, PromptResult } from './types';
 
 type Load = { status: 'loading' } | { status: 'error'; message: string } | ({ status: 'ready' } & GameData);
 /** daily: today's dive, counts for the streak. archive: a past dive. test: the preview play-test, never saved. */
+// The court is the heavy art: it loads after the panel, so the home screen is quick.
+const CourtScene = lazy(() => import('./court/CourtScene'));
+
 type Mode = 'daily' | 'archive' | 'test';
 type View = { name: 'home' } | { name: 'howto' } | { name: 'archive' } | { name: 'results'; number: number } | { name: 'dive'; number: number; mode: Mode; resume?: { results: PromptResult[]; elapsedMs: number } };
 
@@ -36,7 +41,17 @@ interface Props {
   outsideNames?: readonly string[];
 }
 
-export default function App({ now = () => new Date(), storage, search, launchDate = LAUNCH_DATE, outsideNames }: Props) {
+export default function App(props: Props) {
+  return (
+    <CourtProvider>
+      <Game {...props} />
+    </CourtProvider>
+  );
+}
+
+function Game({ now = () => new Date(), storage, search, launchDate = LAUNCH_DATE, outsideNames }: Props) {
+  const courtStore = useCourtStore();
+  const layout = useLayout();
   const params = useMemo(() => new URLSearchParams(search ?? (typeof window === 'undefined' ? '' : window.location.search)), [search]);
   const preview = params.get('preview') === '1';
   const store = useMemo(() => (storage === undefined ? browserStorage() : storage), [storage]);
@@ -145,6 +160,13 @@ export default function App({ now = () => new Date(), storage, search, launchDat
     setLoad({ status: 'loading' });
     setAttempt((n) => n + 1);
   };
+  // The court on the right follows the screen on the left. A dive and the results publish their own state.
+  useEffect(() => {
+    if (!view || view.name === 'dive' || view.name === 'results') return;
+    const headline = view.name === 'howto' ? 'HOW TO PLAY' : view.name === 'archive' ? 'ARCHIVE' : launched ? 'NBA DEEP CUT' : 'COMING SOON';
+    courtStore.set({ phase: 'idle', headline, diveNumber: launched ? today : null, points: 0, promptNumber: 0, clock: null, shot: null, replay: null, skipped: false });
+  }, [view, launched, today, courtStore]);
+
   const go = (next: View): void => setView(next);
   const startDive = (number: number): void => {
     const mode = number === today ? 'daily' : 'archive';
@@ -156,16 +178,19 @@ export default function App({ now = () => new Date(), storage, search, launchDat
 
   const nav = { onHome: () => go({ name: 'home' }), onArchive: () => go({ name: 'archive' }), onHowTo: () => go({ name: 'howto' }) };
 
+  const heroHome = view?.name === 'home' && launched; // the home screen's wordmark is the page's h1
   return (
     <AnnouncerProvider>
       <SoundProvider storage={store}>
-      <main className="app">
-        <header className="top">
-          <h1 className="title">
-            <button type="button" className="title__button" onClick={nav.onHome} aria-label="Deep Cut, home">
-              Deep Cut
+      <div className={`shell shell--${layout}`} data-layout={layout}>
+      <main className="panel">
+        <header className={`top${heroHome ? ' top--home' : ''}`}>
+          {!heroHome && (
+            <button type="button" className="brand" onClick={nav.onHome} aria-label="Deep Cut, home">
+              <span className="brand__nba">NBA</span> Deep Cut
             </button>
-          </h1>
+          )}
+          {!heroHome && <h1 className="visually-hidden">NBA Deep Cut</h1>}
           <SoundToggle />
         </header>
         {(load.status === 'loading' || (load.status === 'ready' && !view)) && <LoadingScreen />}
@@ -233,7 +258,14 @@ export default function App({ now = () => new Date(), storage, search, launchDat
           </>
         )}
         {isMock && <p className="mock-note">Test data: the players, teams and prompts in this version are made up for the tests.</p>}
+        <footer className="fineprint">Unofficial fan game. Not affiliated with the NBA.</footer>
       </main>
+      <div className="court-pane" aria-hidden="true">
+        <Suspense fallback={<div className="court-fallback" />}>
+          <CourtScene />
+        </Suspense>
+      </div>
+      </div>
       </SoundProvider>
     </AnnouncerProvider>
   );

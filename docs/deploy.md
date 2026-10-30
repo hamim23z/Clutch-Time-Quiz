@@ -4,8 +4,8 @@ Deep Cut is a static site: `web/` builds to `web/dist` and needs no server, data
 
 ## Before the first deploy
 
-1. Open `web/src/config.ts` and set **`SITE_URL`** to the address the site will have (for example `https://deep-cut.vercel.app` or your own domain, with no trailing slash). It is used in the share line ("Deep Cut #12: 385", the squares, then this address) and in the social-card tags. It ships as a placeholder.
-2. Check `LAUNCH_DATE` in the same file (`2026-11-03`). Before that date (New York time) visitors see a "Coming soon" screen.
+1. Check **`SITE_URL`** in `web/src/config.ts`: it is `https://nba-deep-cut.vercel.app` (change it, with no trailing slash, if the site is given another address or a custom domain). It is used in the share line ("Deep Cut #12: 385", the squares, then this address) and in the social-card tags.
+2. `LAUNCH_DATE` in the same file is `2026-10-29`: that day (New York time) is dive #1 and the site is playable from then on. Before it visitors see a "Coming soon" screen.
 3. Commit and push.
 
 ## First deploy
@@ -47,7 +47,7 @@ Run this on the real URL, on a phone and on a desktop:
 - [ ] The home screen loads, with the right dive number for today in New York time (before launch: "Coming soon" with the launch date).
 - [ ] `/?preview=1` before launch shows a Play-test, and a test play is not saved.
 - [ ] Play a full dive: answers score, the shot animations play, Enter skips a shot, the results screen shows the total and the share button.
-- [ ] Copy result: the pasted text is `Deep Cut #N: score`, seven squares and the live address (not the placeholder).
+- [ ] Copy result: the pasted text is `Deep Cut #N: score`, seven squares and the live address (`https://nba-deep-cut.vercel.app`, not another address).
 - [ ] Reload in the middle of a dive: it resumes at the next prompt with the same score.
 - [ ] Reload after finishing: it opens on the results screen. The archive lists past dives, and playing one does not change the streak.
 - [ ] Share the link in a chat app or a social post: the card shows the title, description and the social image.

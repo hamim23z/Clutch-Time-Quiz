@@ -1,7 +1,7 @@
 /** Settings that change when the game launches or moves. Everything else reads them from here. */
 
 /** The first day of the game: dive #1 is played on this calendar date in TIME_ZONE (YYYY-MM-DD). */
-export const LAUNCH_DATE = '2026-11-03';
+export const LAUNCH_DATE = '2026-10-29';
 
 /** Everyone in this time zone gets the same dive on the same calendar day. */
 export const TIME_ZONE = 'America/New_York';
@@ -14,6 +14,6 @@ export const PREVIEW_PROGRESS_KEY = 'deepcut.preview.v1.progress';
 
 /**
  * The address of the live site, added to the share line and to the page's social tags (Open Graph and Twitter).
- * This is a PLACEHOLDER: set it to the real Vercel address (or custom domain) before launch. It is the only place to change.
+ * Change it here (and only here) if the site moves to another address or a custom domain.
  */
-export const SITE_URL = 'https://deep-cut.vercel.app';
+export const SITE_URL = 'https://nba-deep-cut.vercel.app';

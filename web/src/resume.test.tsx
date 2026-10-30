@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react';
+import { act, render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import App from './App';
@@ -45,7 +45,7 @@ const nextButton = (last = false) => screen.findByRole('button', { name: last ? 
 /** Start today's dive and answer the first n prompts with their best-known answer (staying on the result of the last one when stay). */
 async function playFirst(user: User, store: StorageLike, n: number, stay = false) {
   const r = open(store);
-  await user.click(await screen.findByRole('button', { name: 'Play' }));
+  await user.click(await screen.findByRole('button', { name: /^Play today/ }));
   await screen.findByRole('combobox');
   let points = 0;
   for (let i = 0; i < n; i++) {
@@ -70,7 +70,7 @@ describe('reloading in the middle of a dive', () => {
     expect(promptText()).toBe(dive()[3]!.text);
     expect(screen.getByText(/Prompt 4 of 7/)).toBeInTheDocument();
     expect(screen.getByTestId('scoreboard-points')).toHaveTextContent(String(first.points));
-    expect(screen.getByText('#1')).toBeInTheDocument();
+    expect(within(screen.getByRole('group', { name: 'Scoreboard' })).getByText('#1')).toBeInTheDocument();
   });
 
   it('plays the rest of the dive to the same total as an unbroken dive', async () => {
@@ -140,7 +140,7 @@ describe('reloading in the middle of a dive', () => {
     const store = memory();
     await playFirst(user, store, 2);
     await user.click(screen.getByRole('button', { name: 'Deep Cut, home' }));
-    await user.click(await screen.findByRole('button', { name: 'Play' }));
+    await user.click(await screen.findByRole('button', { name: /^Play today/ }));
     await screen.findByRole('combobox');
     expect(screen.getByText(/Prompt 3 of 7/)).toBeInTheDocument();
     expect(promptText()).toBe(dive()[2]!.text);
@@ -205,10 +205,10 @@ describe('stale or damaged saved progress', () => {
     vi.setSystemTime(new Date(DAY2));
     const user = setup();
     open(store);
-    expect(await screen.findByRole('button', { name: 'Play' })).toBeInTheDocument(); // home, not a resumed dive
+    expect(await screen.findByRole('button', { name: /^Play today/ })).toBeInTheDocument(); // home, not a resumed dive
     expect(screen.getByText('#2')).toBeInTheDocument();
     expect(store.data.get(PROGRESS_KEY)).toBe('');
-    await user.click(screen.getByRole('button', { name: 'Play' }));
+    await user.click(screen.getByRole('button', { name: /^Play today/ }));
     await screen.findByRole('combobox');
     expect(screen.getByText(/Prompt 1 of 7/)).toBeInTheDocument();
   });
@@ -217,7 +217,7 @@ describe('stale or damaged saved progress', () => {
     const store = memory();
     saveProgress(store, PROGRESS_KEY, progress({ promptIds: ['a', 'b', 'c', 'd', 'e', 'f', 'g'] }));
     open(store);
-    expect(await screen.findByRole('button', { name: 'Play' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /^Play today/ })).toBeInTheDocument();
     expect(store.data.get(PROGRESS_KEY)).toBe('');
   });
 
@@ -236,7 +236,7 @@ describe('stale or damaged saved progress', () => {
     const store = memory();
     store.data.set(PROGRESS_KEY, '{nope');
     open(store);
-    expect(await screen.findByRole('button', { name: 'Play' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /^Play today/ })).toBeInTheDocument();
   });
 
   it('resumes an archive dive too', async () => {
@@ -252,7 +252,7 @@ describe('stale or damaged saved progress', () => {
     const user = setup();
     const broken: StorageLike = { getItem: () => null, setItem: () => { throw new Error('QuotaExceededError'); } };
     open(broken);
-    await user.click(await screen.findByRole('button', { name: 'Play' }));
+    await user.click(await screen.findByRole('button', { name: /^Play today/ }));
     await screen.findByRole('combobox');
     await answerWith(user, dive()[0]!.answers[0]!.name);
     await screen.findByRole('heading', { level: 3, name: /points/ });

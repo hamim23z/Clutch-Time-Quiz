@@ -1,11 +1,11 @@
 import { useEffect, useState, type Ref } from 'react';
 import { useAnnounce } from '../announcer';
+import { useCourtStore } from '../court/courtStore';
 import { useReducedMotion } from '../motion';
 import { shotForResult } from '../shots';
 import { useSound } from '../sound';
 import { TIER_RANGES } from '../tiers';
 import type { Answer, Prompt, PromptResult } from '../types';
-import { ShotAnimation } from './ShotAnimation';
 import { ShotLabel } from './ShotLabel';
 
 interface Props {
@@ -18,6 +18,9 @@ interface Props {
   skipped: boolean;
   onSkip: () => void;
 }
+
+/** How long after a screen appears Enter starts to skip its animation. */
+export const ARM_MS = 120;
 
 /** The three most famous valid answers: lowest tier first, then the order of the file. */
 export const mostFamous = (answers: readonly Answer[], n = 3): Answer[] =>
@@ -110,29 +113,35 @@ export function Reveal({ prompt, result, isLast, headingRef, onNext, skipped, on
   const reduced = useReducedMotion();
   const announce = useAnnounce();
   const { play } = useSound();
+  const court = useCourtStore();
 
   // Say the result once, and play its sound. The page text below carries the same words for everyone else.
   useEffect(() => {
     announce(`${headline(result)}. ${shot.label}.`);
+    court.set({ phase: 'shot', shot, shotKey: court.get().shotKey + 1, skipped: false });
     if (!reduced) play(shot.name);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- once per result
   }, [result.promptId]);
 
   // A tap anywhere, or Enter, skips to the end of the shot. Neither blocks anything: buttons and typing work as before.
+  // The listener is armed a moment after the result appears: in a browser, the Enter that submitted the answer is still
+  // bubbling when this screen mounts, and it must not count as a request to skip the shot.
   useEffect(() => {
     if (skipped) return;
     const onKey = (e: KeyboardEvent): void => {
-      if (e.key === 'Enter') onSkip();
+      if (e.key === 'Enter' && !e.repeat) onSkip();
     };
-    document.addEventListener('keydown', onKey);
-    return () => document.removeEventListener('keydown', onKey);
+    const arm = setTimeout(() => document.addEventListener('keydown', onKey), ARM_MS);
+    return () => {
+      clearTimeout(arm);
+      document.removeEventListener('keydown', onKey);
+    };
   }, [skipped, onSkip]);
 
   const classes = ['card', 'reveal', `reveal--${shot.name}`, skipped ? 'is-skipped' : '', reduced ? 'is-reduced' : ''].filter(Boolean).join(' ');
   return (
     <section className={classes} aria-labelledby="result-heading" onPointerDown={skipped ? undefined : onSkip}>
-      <div className="reveal__stage">
-        <ShotAnimation shot={shot} reduced={reduced} skipped={skipped} />
+      <div className="reveal__banner">
         <ShotLabel shot={shot} skipped={skipped} />
       </div>
       <h2 className="eyebrow reveal__prompt">{prompt.text}</h2>
