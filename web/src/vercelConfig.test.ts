@@ -27,7 +27,7 @@ describe('vercel.json', () => {
     expect(rewrite.destination).toBe('/index.html');
     const re = new RegExp(`^${rewrite.source}$`);
     for (const page of ['/', '/archive', '/some/page']) expect(re.test(page), page).toBe(true);
-    for (const file of ['/prompts.json', '/universe.json', '/outside_range.json', '/social.png', '/favicon.svg', '/assets/index-abc.js', '/assets/font.woff2', '/apple-touch-icon.png']) {
+    for (const file of ['/prompts.json', '/universe.json', '/outside_range.json', '/social.png', '/favicon.png', '/assets/index-abc.js', '/assets/font.woff2', '/apple-touch-icon.png']) {
       expect(re.test(file), file).toBe(false);
     }
   });

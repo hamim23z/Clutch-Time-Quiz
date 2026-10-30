@@ -22,7 +22,7 @@ describe('page metadata', () => {
   });
 
   it('has a favicon, a touch icon and a social image that exist, the image at 1200x630', () => {
-    for (const f of ['favicon.svg', 'apple-touch-icon.png', 'social.png']) expect(existsSync(resolve(web, 'public', f)), f).toBe(true);
+    for (const f of ['favicon.png', 'apple-touch-icon.png', 'social.png']) expect(existsSync(resolve(web, 'public', f)), f).toBe(true);
     const png = readFileSync(resolve(web, 'public/social.png'));
     expect(png.subarray(1, 4).toString()).toBe('PNG');
     expect(png.readUInt32BE(16)).toBe(1200);
@@ -30,9 +30,12 @@ describe('page metadata', () => {
     expect(statSync(resolve(web, 'public/social.png')).size).toBeLessThan(600_000);
   });
 
-  it('draws no logos or marks: the favicon is a plain basketball', () => {
-    const svg = readFileSync(resolve(web, 'public/favicon.svg'), 'utf8');
-    expect(svg).not.toMatch(/<image|<text/);
+  it('draws no logos or marks: the favicon is the pixel basketball, made by tools/pixel/gen_pixel.py', () => {
+    const png = readFileSync(resolve(web, 'public/favicon.png'));
+    expect(png.subarray(1, 4).toString()).toBe('PNG');
+    expect(png.readUInt32BE(16)).toBe(64);
+    expect(png.readUInt32BE(20)).toBe(64);
+    expect(statSync(resolve(web, 'public/favicon.png')).size).toBeLessThan(5_000);
   });
 
   it('loads no third-party scripts, styles or fonts', () => {

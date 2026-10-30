@@ -2,8 +2,8 @@ import type { PromptResult, Tier } from './types';
 import { SITE_URL } from './config';
 import { totalPoints } from './dive2';
 
-/** One square per tier, from the common answers (grey) up through white and yellow to the deepest cuts (orange, then red); a miss is black. */
-export const TIER_SQUARES: Record<Tier, string> = { 1: '◾', 2: '🔳', 3: '⬜', 4: '🟨', 5: '🟧', 6: '🟥' };
+/** One square per tier, from the common answers (black and white buttons for the greys, then white and yellow) to the deepest cuts (orange, then red); a miss is black. */
+export const TIER_SQUARES: Record<Tier, string> = { 1: '🔲', 2: '🔳', 3: '⬜', 4: '🟨', 5: '🟧', 6: '🟥' };
 export const MISS_SQUARE = '⬛';
 
 export function squareFor(result: PromptResult): string {

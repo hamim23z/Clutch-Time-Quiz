@@ -176,7 +176,7 @@ a {
   position: relative;
   order: -1;
   width: 100%;
-  height: 284px; /* two screen pixels per game pixel, 142 rows (src/court/geometry.ts) */
+  height: 288px; /* two screen pixels per game pixel for the 142 rows every shot needs (src/court/geometry.ts), plus the 4px border */
   overflow: hidden;
   background: var(--ink);
   border-bottom: 4px solid var(--orange);
@@ -189,6 +189,22 @@ a {
 }
 
 @media (max-width: 899px) {
+  .top {
+    margin-bottom: 0.4rem;
+  }
+
+  .home__tagline {
+    font-size: 1.45rem;
+  }
+
+  .home__rules {
+    font-size: 1.2rem;
+  }
+
+  .wordmark {
+    margin-bottom: 0.6rem;
+  }
+
   .court-pane {
     position: sticky;
     top: 0;
@@ -198,19 +214,19 @@ a {
   .panel h2,
   .panel h3,
   .panel :focus {
-    scroll-margin-top: 300px;
+    scroll-margin-top: 304px;
   }
 }
 
 @media (min-width: 520px) and (max-width: 899px) {
   .court-pane {
-    height: 426px;
+    height: 430px; /* three screen pixels per game pixel */
   }
 
   .panel h2,
   .panel h3,
   .panel :focus {
-    scroll-margin-top: 440px;
+    scroll-margin-top: 446px;
   }
 }
 
@@ -259,6 +275,14 @@ a {
 @media (min-width: 1600px) {
   .panel > * {
     max-width: 40rem;
+  }
+
+  .wordmark {
+    font-size: 4.6rem;
+  }
+
+  .home__tagline {
+    font-size: 1.9rem;
   }
 }
 
@@ -319,6 +343,25 @@ a {
   --bc: var(--orange);
 }
 
+/* a speaker drawn in 2px squares: a box for the cone, then two bars of sound when it is on */
+.sound-toggle__icon {
+  display: inline-block;
+  width: 2px;
+  height: 2px;
+  margin: 0 12px 6px 2px;
+  background: currentColor;
+  box-shadow: 0 2px 0 currentColor, 0 4px 0 currentColor, 0 6px 0 currentColor, 2px 2px 0 currentColor, 2px 4px 0 currentColor,
+    4px 0 0 currentColor, 4px 2px 0 currentColor, 4px 4px 0 currentColor, 4px 6px 0 currentColor, 6px -2px 0 currentColor, 6px 0 0 currentColor,
+    6px 2px 0 currentColor, 6px 4px 0 currentColor, 6px 6px 0 currentColor, 6px 8px 0 currentColor;
+}
+
+.sound-toggle[aria-pressed='true'] .sound-toggle__icon {
+  box-shadow: 0 2px 0 currentColor, 0 4px 0 currentColor, 0 6px 0 currentColor, 2px 2px 0 currentColor, 2px 4px 0 currentColor,
+    4px 0 0 currentColor, 4px 2px 0 currentColor, 4px 4px 0 currentColor, 4px 6px 0 currentColor, 6px -2px 0 currentColor, 6px 0 0 currentColor,
+    6px 2px 0 currentColor, 6px 4px 0 currentColor, 6px 6px 0 currentColor, 6px 8px 0 currentColor, 10px 0 0 currentColor, 10px 6px 0 currentColor,
+    12px 2px 0 currentColor, 12px 4px 0 currentColor;
+}
+
 .sound-toggle[aria-pressed='true'] {
   --bc: var(--amber);
   color: var(--amber);
@@ -335,7 +378,7 @@ a {
 }
 
 .card {
-  margin: var(--p);
+  margin-block: var(--p);
   padding: 1.1rem 1.25rem 1.25rem;
   background: var(--panel);
   box-shadow: var(--notch);
@@ -351,7 +394,7 @@ a {
 }
 
 .mock-note {
-  margin: 0.75rem var(--p);
+  margin-block: 0.75rem;
   padding: 0.5rem 0.75rem;
   background: var(--panel);
   color: var(--amber);
@@ -415,7 +458,13 @@ button {
   --bc: var(--line);
   background: var(--panel);
   color: var(--cream);
-  box-shadow: var(--notch), 0 calc(2 * var(--p)) 0 0 #000;
+  box-shadow: var(--notch), 0 calc(2 * var(--p)) 0 0 var(--line);
+}
+
+/* on a card (already panel grey) the button goes darker, so it never disappears into it */
+.card .secondary,
+.archive__item .secondary {
+  background: var(--ink);
 }
 
 .secondary:hover {
@@ -730,6 +779,21 @@ h2.eyebrow {
   flex: none;
 }
 
+@media (max-width: 29.99rem) {
+  .answer__row {
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .answer__submit {
+    margin-top: 0;
+  }
+
+  .prompt {
+    font-size: 1.7rem;
+  }
+}
+
 .answer__hint {
   min-height: 1.4em;
   margin: 0.5rem 0 0;
@@ -834,6 +898,10 @@ h2.eyebrow {
   color: var(--muted);
 }
 
+.shot-label--miss .shot-label__points {
+  text-shadow: 4px 4px 0 var(--line);
+}
+
 .shot-label--t2 .shot-label__points { color: var(--t2); }
 .shot-label--t3 .shot-label__points { color: var(--t3); }
 .shot-label--t4 .shot-label__points { color: var(--t4); }
@@ -850,7 +918,7 @@ h2.eyebrow {
 }
 
 .result {
-  margin: 0.4rem 0 0.6rem;
+  margin: 0.9rem 0 0.6rem;
   font-size: 0.8rem;
   line-height: 1.6;
 }
@@ -1124,7 +1192,7 @@ h2.eyebrow {
 
 /* ---------- the archive ---------- */
 .archive {
-  margin: 0 var(--p);
+  margin-block: 0;
 }
 
 .archive__list {
@@ -1336,7 +1404,7 @@ h2.eyebrow {
 
 .animations__court {
   position: relative;
-  height: 284px;
+  height: 288px;
   border-bottom: 4px solid var(--orange);
   overflow: hidden;
 }

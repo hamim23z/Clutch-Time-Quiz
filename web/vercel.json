@@ -17,7 +17,7 @@
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=60, must-revalidate" }]
     },
     {
-      "source": "/(social.png|favicon.svg|apple-touch-icon.png)",
+      "source": "/(social.png|favicon.png|apple-touch-icon.png)",
       "headers": [{ "key": "Cache-Control", "value": "public, max-age=86400" }]
     },
     {

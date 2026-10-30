@@ -34,8 +34,8 @@ export const SPOTS: Record<ShotName, { x: number; y: number }> = {
   clank: { x: 112, y: 108 },
   rattle: { x: 58, y: 116 },
   bank: { x: 40, y: 122 },
-  swish: { x: 144, y: 128 },
-  'deep-swish': { x: 28, y: 140 },
+  swish: { x: 136, y: 128 },
+  'deep-swish': { x: 36, y: 140 },
   dunk: { x: 64, y: 118 },
 };
 

@@ -396,11 +396,93 @@ for name, seed in (("crowd_a.png", 5), ("crowd_b.png", 9)):
                 spp[x, y] = (r.choice([ORANGE, AMBER, CREAM]) + (255,))
     save(sp, name)
 
-# ======================================================================================================== the icon
-icon = Image.new("RGBA", (16, 16), INK + (255,))
-idr = ImageDraw.Draw(icon)
-idr.rectangle((0, 0, 15, 15), outline=ORANGE + (255,))
-b16 = ball.resize((13, 13), Image.NEAREST)
-icon.paste(b16, (1, 1), b16)
-save(icon, "icon.png", 16)
-print("wrote", OUT)
+# ======================================================================================================== the icons
+# The site's own pictures (favicon, touch icon, share image) go to web/public, next to the page, or to OUTDIR when one is given.
+PUBLIC = OUT if len(sys.argv) > 1 else os.path.abspath(os.path.join(HERE, "..", "..", "web", "public")) + os.sep
+FONTS = os.path.join(HERE, "..", "..", "web", "node_modules", "@fontsource")
+
+
+def save_to(im, folder, name, scale):
+    im.resize((im.width * scale, im.height * scale), Image.NEAREST).save(folder + name)
+
+
+def icon_art(size):
+    """A ball in a notched orange frame on black, size x size game pixels."""
+    im = Image.new("RGBA", (size, size), INK + (255,))
+    d = ImageDraw.Draw(im)
+    d.rectangle((1, 1, size - 2, size - 2), outline=ORANGE + (255,))
+    for c in ((1, 1), (size - 2, 1), (1, size - 2), (size - 2, size - 2)):  # cut the corners
+        d.point(c, fill=INK + (255,))
+    return im
+
+
+fav = icon_art(16)
+fav.paste(ball, (2, 2), ball)  # the 13 x 13 ball fills the frame
+save_to(fav, PUBLIC, "favicon.png", 4)  # 64 x 64
+
+touch = icon_art(60)
+big = ball.resize((39, 39), Image.NEAREST)  # the ball at 3x inside a 60-pixel icon, shown at 3x: 180 x 180
+touch.paste(big, (10, 10), big)
+save_to(touch, PUBLIC, "apple-touch-icon.png", 3)
+
+# ======================================================================================================== the share image
+# 1200 x 630 from a 400 x 210 canvas shown at 3x. Needs the site's fonts: run `npm install` in web/ first.
+
+
+def social():
+    from PIL import ImageFont
+
+    press = lambda n: ImageFont.truetype(os.path.join(FONTS, "press-start-2p", "files", "press-start-2p-latin-400-normal.woff"), n)
+    vt = lambda n: ImageFont.truetype(os.path.join(FONTS, "vt323", "files", "vt323-latin-400-normal.woff"), n)
+    im = Image.new("RGB", (400, 210), INK)
+    p = im.load()
+    for y in range(210):
+        for x in range(400):
+            if y % 2:
+                p[x, y] = hx("#0e0e0e")
+    d = ImageDraw.Draw(im)
+    # the floor
+    for y in range(172, 210):
+        for x in range(400):
+            t = (y - 172) / 38.0
+            p[x, y] = dither(hx("#7a3f14"), hx("#4a240a"), t, x, y)
+    d.line((0, 172, 400, 172), fill=CREAM)
+    # the beam
+    b = beam.copy()
+    im.paste(b, (250, 0), b)
+    # the hoop, the dunker and the ball
+    d.rectangle((300, 20, 346, 56), outline=CREAM)
+    d.rectangle((314, 36, 332, 50), outline=ORANGE)
+    d.rectangle((300, 54, 346, 56), fill=ORANGE)
+    im.paste(rim_back, (311, 56), rim_back)
+    ball_ = ball
+    im.paste(ball_, (317, 40), ball_)
+    dk = sprite(dunker)
+    im.paste(dk, (281, 49), dk)
+    im.paste(rim_front, (311, 56), rim_front)
+    im.paste(net(0, 0), (311, 56), net(0, 0))
+    # the frame
+    d.rectangle((3, 3, 396, 206), outline=ORANGE)
+    # the words
+    d.text((22, 20), "NBA", font=press(16), fill=ORANGE)
+    d.text((24, 44), "DEEP", font=press(32), fill=DEEP)
+    d.text((22, 42), "DEEP", font=press(32), fill=CREAM)
+    d.text((24, 82), "CUT", font=press(32), fill=DEEP)
+    d.text((22, 80), "CUT", font=press(32), fill=AMBER)
+    d.text((22, 122), "THE OBVIOUS ANSWER LOSES", font=press(8), fill=AMBER)
+    d.text((22, 134), "A daily basketball trivia game.", font=vt(16), fill=CREAM)
+    d.text((22, 148), "Seven prompts, 25 seconds each.", font=vt(16), fill=hx("#a8a8a8"))
+    tiers = ("#6e6e6e", "#a8a8a8", "#ededed", "#ffb020", "#ff6a13", "#ff3b1f")
+    for i, c in enumerate(tiers):
+        x = 22 + i * 26
+        d.rectangle((x + 2, 180 + 2, x + 21 + 2, 199 + 2), fill=INK)
+        d.rectangle((x, 180, x + 21, 199), fill=hx(c))
+        d.text((x + 6, 187), str(i + 1), font=press(8), fill=(255, 255, 255) if i == 0 else INK)
+    return im
+
+
+if os.path.isdir(FONTS):
+    save_to(social(), PUBLIC, "social.png", 3)
+else:
+    print("skipped social.png: run `npm install` in web/ for the fonts")
+print("wrote", OUT, "and", PUBLIC)

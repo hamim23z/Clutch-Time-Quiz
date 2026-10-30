@@ -281,7 +281,7 @@ function SoundToggle() {
   const { enabled, toggle } = useSound();
   return (
     <button type="button" className="sound-toggle" aria-pressed={enabled} onClick={toggle}>
-      <span aria-hidden="true">{enabled ? '🔊' : '🔈'}</span> Sound {enabled ? 'on' : 'off'}
+      <span className="sound-toggle__icon" aria-hidden="true" /> Sound {enabled ? 'on' : 'off'}
     </button>
   );
 }
